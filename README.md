@@ -1,0 +1,1 @@
+SCMS (Smart Complaint Management System) is a full-stack web application that simplifies complaint registration, tracking, and management. It provides a responsive user interface, secure complaint handling, and an efficient workflow for users and administrators. Built using HTML, CSS, JavaScript, PHP, and MySQL.
