@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart College Complaint Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">SCMS</span>
+        <div>
+          <h1>Smart College Complaint System</h1>
+          <p>Campus maintenance made simple, fast, and transparent.</p>
+        </div>
+      </div>
+      <button class="mode-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span>🌙</span>
+      </button>
+    </header>
+
+    <nav class="navbar" id="navbar">
+      <div class="nav-brand">SCMS</div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#complaint-form">Register</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-copy glass-card">
+          <span class="badge">College Maintenance Portal</span>
+          <h2>Smart College Complaint Management System</h2>
+          <p>Students can report campus-related issues easily and track resolutions from a single dashboard. Fast, clear, and efficient.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#complaint-form">Register Complaint</a>
+            <a class="btn btn-secondary" href="#dashboard">View Dashboard</a>
+          </div>
+        </div>
+        <div class="hero-visual glass-card">
+          <div class="status-card">
+            <span class="status-label">Live Overview</span>
+            <div class="status-item">
+              <strong id="liveTotal">0</strong>
+              <small>Total complaints</small>
+            </div>
+            <div class="status-item">
+              <strong id="livePending">0</strong>
+              <small>Pending</small>
+            </div>
+            <div class="status-item">
+              <strong id="liveResolved">0</strong>
+              <small>Resolved</small>
+            </div>
+          </div>
+          <div class="hero-illustration" aria-hidden="true">
+            <div class="illustration-layer"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section stats-section">
+        <div class="section-header">
+          <h2>Campus Maintenance at a Glance</h2>
+          <p>Track issue status and understand campus repair needs instantly.</p>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card glass-card">
+            <p>Total Complaints</p>
+            <strong id="statTotal">0</strong>
+          </article>
+          <article class="stat-card glass-card">
+            <p>Pending</p>
+            <strong id="statPending">0</strong>
+          </article>
+          <article class="stat-card glass-card">
+            <p>In Progress</p>
+            <strong id="statProgress">0</strong>
+          </article>
+          <article class="stat-card glass-card">
+            <p>Resolved</p>
+            <strong id="statResolved">0</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="section form-section" id="complaint-form">
+        <div class="section-header">
+          <h2>Register a Complaint</h2>
+          <p>Fill in the details below so our maintenance team can respond quickly.</p>
+        </div>
+        <form class="complaint-form glass-card" id="complaintForm" novalidate>
+          <div class="form-grid">
+            <label>
+              Student Name
+              <input type="text" id="studentName" name="studentName" placeholder="Jane Doe" required />
+            </label>
+            <label>
+              Student ID
+              <input type="text" id="studentId" name="studentId" placeholder="C123456" required />
+            </label>
+            <label>
+              Email
+              <input type="email" id="email" name="email" placeholder="jane.doe@college.edu" required />
+            </label>
+            <label>
+              Department
+              <input type="text" id="department" name="department" placeholder="Science" required />
+            </label>
+            <label>
+              Complaint Category
+              <select id="category" name="category" required>
+                <option value="">Select category</option>
+                <option value="Fan Not Working">Fan Not Working</option>
+                <option value="Light Not Working">Light Not Working</option>
+                <option value="Classroom Cleaning Issue">Classroom Cleaning Issue</option>
+                <option value="Washroom Cleaning Issue">Washroom Cleaning Issue</option>
+                <option value="Water Supply Problem">Water Supply Problem</option>
+                <option value="Wi-Fi Issue">Wi-Fi Issue</option>
+                <option value="Electrical Issue">Electrical Issue</option>
+                <option value="Furniture Damage">Furniture Damage</option>
+                <option value="Classroom Maintenance">Classroom Maintenance</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+            <label class="full-width">
+              Complaint Description
+              <textarea id="description" name="description" rows="4" placeholder="Describe the issue in detail" required></textarea>
+            </label>
+            <label>
+              Building Name
+              <input type="text" id="building" name="building" placeholder="Main Block" required />
+            </label>
+            <label>
+              Floor Number
+              <input type="number" id="floor" name="floor" placeholder="2" min="0" required />
+            </label>
+            <label>
+              Room Number
+              <input type="text" id="room" name="room" placeholder="204" required />
+            </label>
+            <label class="full-width">
+              Upload Image (optional)
+              <input type="file" id="image" name="image" accept="image/*" />
+            </label>
+            <fieldset class="priority-fieldset">
+              <legend>Priority</legend>
+              <label><input type="radio" name="priority" value="Low" checked /> Low</label>
+              <label><input type="radio" name="priority" value="Medium" /> Medium</label>
+              <label><input type="radio" name="priority" value="High" /> High</label>
+            </fieldset>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Submit Complaint</button>
+            <div class="alert-message" id="formAlert" role="alert"></div>
+          </div>
+        </form>
+      </section>
+
+      <section class="section dashboard-section" id="dashboard">
+        <div class="section-header">
+          <h2>Complaint Dashboard</h2>
+          <p>Search, filter, and review the latest campus maintenance requests.</p>
+        </div>
+        <div class="dashboard-controls glass-card">
+          <div class="control-group">
+            <label for="searchInput">Search by Complaint ID</label>
+            <input type="search" id="searchInput" placeholder="Enter complaint ID..." />
+          </div>
+          <div class="control-group">
+            <label for="statusFilter">Filter by Status</label>
+            <select id="statusFilter">
+              <option value="all">All</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="categoryFilter">Filter by Category</label>
+            <select id="categoryFilter">
+              <option value="all">All</option>
+              <option value="Fan Not Working">Fan Not Working</option>
+              <option value="Light Not Working">Light Not Working</option>
+              <option value="Classroom Cleaning Issue">Classroom Cleaning Issue</option>
+              <option value="Washroom Cleaning Issue">Washroom Cleaning Issue</option>
+              <option value="Water Supply Problem">Water Supply Problem</option>
+              <option value="Wi-Fi Issue">Wi-Fi Issue</option>
+              <option value="Electrical Issue">Electrical Issue</option>
+              <option value="Furniture Damage">Furniture Damage</option>
+              <option value="Classroom Maintenance">Classroom Maintenance</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="priorityFilter">Filter by Priority</label>
+            <select id="priorityFilter">
+              <option value="all">All</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+        </div>
+        <div class="complaint-grid" id="complaintGrid"></div>
+      </section>
+
+      <section class="section about-section" id="about">
+        <div class="section-header">
+          <h2>About the System</h2>
+          <p>Smart complaint management helps improve campus maintenance by allowing students to quickly report issues and monitor progress.</p>
+        </div>
+        <div class="about-cards">
+          <article class="about-card glass-card">
+            <h3>Faster Issue Resolution</h3>
+            <p>Students can report broken fans, lights, and furniture damage directly from their device, helping maintenance teams act quickly.</p>
+          </article>
+          <article class="about-card glass-card">
+            <h3>Complete Visibility</h3>
+            <p>Track the status of complaints from submission to resolution, with clear progress updates for every issue.</p>
+          </article>
+          <article class="about-card glass-card">
+            <h3>Campus Hygiene & Safety</h3>
+            <p>Maintain classroom cleanliness, washroom hygiene, water supply and Wi-Fi access so the campus remains safe and functional.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section contact-section" id="contact">
+        <div class="section-header">
+          <h2>Contact Maintenance Office</h2>
+          <p>Reach out to the college maintenance office for urgent campus support or follow-up.</p>
+        </div>
+        <div class="contact-grid glass-card">
+          <div class="contact-card">
+            <h3>College Maintenance Office</h3>
+            <p>123 Campus Drive<br />Greenfield College</p>
+          </div>
+          <div class="contact-card">
+            <h3>Email</h3>
+            <p><a href="mailto:maintenance@college.edu">maintenance@college.edu</a></p>
+          </div>
+          <div class="contact-card">
+            <h3>Phone Number</h3>
+            <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+          </div>
+          <div class="contact-card">
+            <h3>Office Hours</h3>
+            <p>Monday - Friday<br />8:00 AM - 6:00 PM</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content glass-card">
+        <p>© 2026 Smart College Complaint Management System. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#home">Home</a>
+          <a href="#complaint-form">Register</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="LinkedIn">💼</a>
+          <a href="#" aria-label="Instagram">📸</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
