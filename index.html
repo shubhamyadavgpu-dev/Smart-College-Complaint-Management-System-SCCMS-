@@ -1,281 +1,2727 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart College Complaint Management System</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SCCMS | Smart College Complaint Management System</title>
+
+    <style>
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: #f6faff;
+            color: #102a43;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #eef5fc;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8db9e6;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4c8ed0;
+        }
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+
+        :root {
+            --navy: #071d35;
+            --dark-blue: #0b3159;
+            --blue: #1261a6;
+            --bright-blue: #1e82d7;
+            --cyan: #39b9e8;
+
+            --text: #102a43;
+            --muted: #657d96;
+
+            --white: #ffffff;
+            --bg: #f6faff;
+
+            --border: rgba(44, 105, 160, 0.13);
+
+            --shadow:
+                0 20px 60px rgba(21, 78, 121, 0.10);
+        }
+
+        /* =========================================================
+           NAVBAR
+        ========================================================= */
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 78px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(30, 100, 160, 0.08);
+
+            z-index: 1000;
+
+            transition: 0.35s ease;
+        }
+
+        .navbar:hover {
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        /* LOGO */
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            font-size: 22px;
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+
+            color: var(--navy);
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 11px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b4f8a,
+                    #1684d7
+                );
+
+            box-shadow:
+                0 8px 22px rgba(18, 97, 166, 0.28);
+
+            transition: 0.4s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(-8deg) scale(1.08);
+            box-shadow:
+                0 12px 30px rgba(18, 97, 166, 0.4);
+        }
+
+        .logo span {
+            color: var(--blue);
+        }
+
+        /* NAV LINKS */
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+
+            list-style: none;
+        }
+
+        .nav-links a {
+            position: relative;
+
+            color: #4e6882;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            padding: 10px 0;
+
+            transition: 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: "";
+
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+
+            width: 0;
+            height: 2px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--blue),
+                    var(--cyan)
+                );
+
+            transform: translateX(-50%);
+
+            transition: 0.35s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links .active::after {
+            width: 100%;
+        }
+
+        .nav-links .active {
+            color: var(--blue);
+        }
+
+        /* NAV CTA */
+
+        .nav-cta {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 12px 20px;
+
+            border-radius: 10px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0d5594,
+                    #1679c9
+                );
+
+            font-size: 13px;
+            font-weight: 700;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 10px 25px rgba(18, 97, 166, 0.23);
+
+            transition: 0.35s ease;
+        }
+
+        .nav-cta::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -100%;
+
+            width: 70%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.25),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition: 0.6s ease;
+        }
+
+        .nav-cta:hover::before {
+            left: 140%;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 16px 32px rgba(18, 97, 166, 0.32);
+        }
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            position: relative;
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+
+            padding:
+                150px 7%
+                90px;
+
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 80% 20%,
+                    rgba(56, 175, 231, 0.14),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 15% 80%,
+                    rgba(36, 117, 197, 0.10),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #f9fcff 0%,
+                    #eef7ff 100%
+                );
+        }
+
+        /* BACKGROUND GRID */
+
+        .grid {
+            position: absolute;
+
+            inset: 0;
+
+            opacity: 0.32;
+
+            background-image:
+                linear-gradient(
+                    rgba(18, 97, 166, 0.045) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(18, 97, 166, 0.045) 1px,
+                    transparent 1px
+                );
+
+            background-size: 50px 50px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent
+                );
+        }
+
+        /* FLOATING ORBS */
+
+        .orb {
+            position: absolute;
+
+            border-radius: 50%;
+
+            filter: blur(1px);
+
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 250px;
+            height: 250px;
+
+            right: -80px;
+            top: 100px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(30, 130, 215, 0.18),
+                    transparent 68%
+                );
+
+            animation: floatOrb 7s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 190px;
+            height: 190px;
+
+            left: -60px;
+            bottom: 70px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(57, 185, 232, 0.14),
+                    transparent 68%
+                );
+
+            animation:
+                floatOrb 9s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+
+            50% {
+                transform:
+                    translateY(-25px)
+                    translateX(15px);
+            }
+        }
+
+        /* HERO CONTENT */
+
+        .hero-content {
+            position: relative;
+
+            width: 54%;
+
+            z-index: 5;
+
+            animation:
+                heroReveal 0.9s ease forwards;
+        }
+
+        @keyframes heroReveal {
+
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* BADGE */
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 8px 13px;
+
+            margin-bottom: 22px;
+
+            border:
+                1px solid
+                rgba(30, 130, 215, 0.16);
+
+            border-radius: 30px;
+
+            color: #1261a6;
+
+            background:
+                rgba(255,255,255,0.72);
+
+            box-shadow:
+                0 8px 25px rgba(30, 100, 160, 0.06);
+
+            font-size: 12px;
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #24a9df;
+
+            box-shadow:
+                0 0 0 5px
+                rgba(36,169,223,0.10);
+
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0% {
+                box-shadow:
+                    0 0 0 0
+                    rgba(36,169,223,0.35);
+            }
+
+            70% {
+                box-shadow:
+                    0 0 0 8px
+                    rgba(36,169,223,0);
+            }
+
+            100% {
+                box-shadow:
+                    0 0 0 0
+                    rgba(36,169,223,0);
+            }
+        }
+
+        /* HEADING */
+
+        .hero h1 {
+            max-width: 760px;
+
+            font-size: clamp(45px, 5vw, 70px);
+
+            line-height: 1.04;
+
+            letter-spacing: -3px;
+
+            color: var(--navy);
+
+            margin-bottom: 24px;
+        }
+
+        .gradient-text {
+            display: inline-block;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #0b4f8a,
+                    #1484d4,
+                    #2ab2df
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+
+            background-size: 200% auto;
+
+            animation:
+                gradientMove 5s ease infinite;
+        }
+
+        @keyframes gradientMove {
+
+            0% {
+                background-position: 0% center;
+            }
+
+            50% {
+                background-position: 100% center;
+            }
+
+            100% {
+                background-position: 0% center;
+            }
+        }
+
+        .hero-description {
+            max-width: 590px;
+
+            color: #637c95;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+
+            margin-bottom: 32px;
+        }
+
+        /* HERO BUTTONS */
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            margin-bottom: 40px;
+        }
+
+        .primary-btn {
+            position: relative;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 15px 22px;
+
+            color: white;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b5596,
+                    #1781d2
+                );
+
+            font-size: 14px;
+            font-weight: 700;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 13px 28px
+                rgba(18, 97, 166, 0.24);
+
+            transition: 0.35s ease;
+        }
+
+        .primary-btn::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -100%;
+
+            width: 70%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.25),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition: 0.65s ease;
+        }
+
+        .primary-btn:hover::before {
+            left: 140%;
+        }
+
+        .primary-btn:hover {
+            transform:
+                translateY(-5px)
+                scale(1.02);
+
+            box-shadow:
+                0 20px 38px
+                rgba(18, 97, 166, 0.34);
+        }
+
+        .arrow {
+            transition: 0.3s ease;
+        }
+
+        .primary-btn:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        .secondary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 14px 20px;
+
+            color: #1d527f;
+
+            border:
+                1px solid
+                rgba(38, 111, 170, 0.18);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.72);
+
+            font-size: 14px;
+            font-weight: 700;
+
+            transition: 0.35s ease;
+        }
+
+        .secondary-btn:hover {
+            transform: translateY(-5px);
+
+            color: #0d5e9f;
+
+            border-color:
+                rgba(38,111,170,0.35);
+
+            background: white;
+
+            box-shadow:
+                0 15px 35px
+                rgba(30, 90, 140, 0.10);
+        }
+
+        /* TRUST */
+
+        .trust-line {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            color: #7890a8;
+
+            font-size: 12px;
+        }
+
+        .trust-line::before {
+            content: "";
+
+            width: 32px;
+            height: 1px;
+
+            background: #9cb8d0;
+        }
+
+        /* =========================================================
+           DASHBOARD VISUAL
+        ========================================================= */
+
+        .hero-visual {
+            position: absolute;
+
+            right: 5.5%;
+            top: 50%;
+
+            width: 440px;
+
+            transform:
+                translateY(-50%);
+
+            z-index: 4;
+
+            animation:
+                dashboardReveal 1s
+                0.2s
+                ease
+                forwards;
+
+            opacity: 0;
+        }
+
+        @keyframes dashboardReveal {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(-45%)
+                    translateX(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(-50%)
+                    translateX(0);
+            }
+        }
+
+        .dashboard {
+            position: relative;
+
+            padding: 22px;
+
+            border:
+                1px solid
+                rgba(67, 130, 180, 0.16);
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,0.72);
+
+            backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 35px 80px
+                rgba(28, 88, 136, 0.14);
+
+            transition: 0.45s ease;
+        }
+
+        .dashboard:hover {
+            transform:
+                translateY(-10px)
+                rotateX(2deg);
+
+            box-shadow:
+                0 45px 90px
+                rgba(28, 88, 136, 0.20);
+        }
+
+        /* DASHBOARD TOP */
+
+        .dashboard-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding-bottom: 18px;
+
+            border-bottom:
+                1px solid
+                rgba(55, 110, 160, 0.09);
+        }
+
+        .dashboard-title {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .dashboard-icon {
+            width: 37px;
+            height: 37px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0d5a99,
+                    #1d91d6
+                );
+        }
+
+        .dashboard-title h3 {
+            font-size: 13px;
+            color: #183c60;
+        }
+
+        .dashboard-title p {
+            margin-top: 3px;
+
+            font-size: 10px;
+            color: #8298ac;
+        }
+
+        .live {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            color: #1683b5;
+
+            background: #eaf8ff;
+
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .live-dot {
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: #24a9df;
+        }
+
+        /* STAT GRID */
+
+        .stat-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-top: 18px;
+        }
+
+        .stat-card {
+            padding: 15px 12px;
+
+            border:
+                1px solid
+                rgba(46, 112, 167, 0.09);
+
+            border-radius: 13px;
+
+            background:
+                rgba(247,251,255,0.85);
+
+            transition: 0.35s ease;
+
+            cursor: default;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+
+            background: white;
+
+            border-color:
+                rgba(42,132,202,0.25);
+
+            box-shadow:
+                0 12px 25px
+                rgba(30,100,150,0.09);
+        }
+
+        .stat-card span {
+            color: #8094a8;
+
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .stat-number {
+            display: block;
+
+            margin-top: 7px;
+
+            color: #154c7b;
+
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .stat-change {
+            display: block;
+
+            margin-top: 4px;
+
+            color: #2d9dc7;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        /* CHART */
+
+        .chart-card {
+            margin-top: 13px;
+
+            padding: 17px;
+
+            border:
+                1px solid
+                rgba(46, 112, 167, 0.09);
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,0.75);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+        .chart-header h4 {
+            color: #315575;
+            font-size: 11px;
+        }
+
+        .chart-header span {
+            color: #8499ad;
+            font-size: 9px;
+        }
+
+        .chart {
+            height: 105px;
+
+            position: relative;
+
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+
+            padding:
+                10px 5px
+                0;
+        }
+
+        .chart::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent 0,
+                    transparent 25px,
+                    rgba(62,120,165,0.06) 26px
+                );
+        }
+
+        .bar {
+            position: relative;
+
+            flex: 1;
+
+            max-width: 28px;
+
+            border-radius:
+                6px 6px 3px 3px;
+
+            background:
+                linear-gradient(
+                    to top,
+                    #1464a8,
+                    #45b9e2
+                );
+
+            transform-origin: bottom;
+
+            animation:
+                barGrow
+                1.2s
+                ease
+                forwards;
+
+            transition: 0.3s ease;
+        }
+
+        .bar:hover {
+            filter: brightness(1.12);
+
+            transform:
+                scaleX(1.12);
+        }
+
+        @keyframes barGrow {
+
+            from {
+                transform: scaleY(0);
+            }
+
+            to {
+                transform: scaleY(1);
+            }
+        }
+
+        .bar:nth-child(1) {
+            height: 48%;
+        }
+
+        .bar:nth-child(2) {
+            height: 65%;
+            animation-delay: .1s;
+        }
+
+        .bar:nth-child(3) {
+            height: 54%;
+            animation-delay: .2s;
+        }
+
+        .bar:nth-child(4) {
+            height: 78%;
+            animation-delay: .3s;
+        }
+
+        .bar:nth-child(5) {
+            height: 68%;
+            animation-delay: .4s;
+        }
+
+        .bar:nth-child(6) {
+            height: 88%;
+            animation-delay: .5s;
+        }
+
+        .bar:nth-child(7) {
+            height: 94%;
+            animation-delay: .6s;
+        }
+
+        /* RECENT COMPLAINT */
+
+        .recent {
+            margin-top: 13px;
+
+            padding: 15px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f3f9ff,
+                    #ffffff
+                );
+
+            border:
+                1px solid
+                rgba(46,112,167,0.08);
+        }
+
+        .recent-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+        .recent-top h4 {
+            font-size: 10px;
+            color: #55718c;
+        }
+
+        .view {
+            color: #1975b8;
+            font-size: 9px;
+            font-weight: 700;
+
+            transition: 0.25s ease;
+        }
+
+        .view:hover {
+            color: #0b4f8a;
+            transform: translateX(3px);
+        }
+
+        .complaint-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 10px 0;
+
+            border-top:
+                1px solid
+                rgba(55,110,160,0.07);
+        }
+
+        .complaint-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .complaint-icon {
+            width: 27px;
+            height: 27px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background: #e8f4ff;
+
+            color: #1874ba;
+
+            font-size: 11px;
+        }
+
+        .complaint-name strong {
+            display: block;
+
+            color: #41627e;
+
+            font-size: 9px;
+        }
+
+        .complaint-name small {
+            color: #91a2b2;
+            font-size: 8px;
+        }
+
+        .pending {
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            color: #2875a7;
+
+            background: #e8f5ff;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        /* FLOATING MINI CARD */
+
+        .floating-card {
+            position: absolute;
+
+            right: -45px;
+            bottom: -35px;
+
+            width: 145px;
+
+            padding: 14px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.7);
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.88);
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 20px 40px
+                rgba(26,87,130,0.14);
+
+            animation:
+                floatingCard
+                4s
+                ease-in-out
+                infinite;
+        }
+
+        @keyframes floatingCard {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .floating-card-top {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            margin-bottom: 10px;
+        }
+
+        .check {
+            width: 24px;
+            height: 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1681c6,
+                    #39b9e8
+                );
+
+            font-size: 11px;
+        }
+
+        .floating-card span {
+            color: #5c758d;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .floating-card h4 {
+            color: #194c72;
+
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           FEATURES
+        ========================================================= */
+
+        .features {
+            position: relative;
+
+            padding: 100px 7%;
+
+            background: white;
+        }
+
+        .section-heading {
+            max-width: 650px;
+
+            margin: 0 auto 55px;
+
+            text-align: center;
+        }
+
+        .section-label {
+            display: inline-block;
+
+            margin-bottom: 12px;
+
+            color: #1774b8;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 1.5px;
+        }
+
+        .section-heading h2 {
+            color: #102a43;
+
+            font-size: 38px;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 14px;
+        }
+
+        .section-heading p {
+            color: #71869b;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+        }
+
+        .feature-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+        .feature-card {
+            position: relative;
+
+            padding: 30px;
+
+            border:
+                1px solid
+                rgba(36,105,160,0.10);
+
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #f7fbff
+                );
+
+            overflow: hidden;
+
+            transition:
+                transform 0.4s ease,
+                box-shadow 0.4s ease,
+                border-color 0.4s ease;
+        }
+
+        .feature-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: -80px;
+            right: -80px;
+
+            width: 170px;
+            height: 170px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(37,145,210,0.10),
+                    transparent 68%
+                );
+
+            transition: 0.5s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+
+            border-color:
+                rgba(36,117,180,0.25);
+
+            box-shadow:
+                0 25px 55px
+                rgba(26,91,135,0.11);
+        }
+
+        .feature-card:hover::before {
+            transform: scale(1.4);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 20px;
+
+            border-radius: 13px;
+
+            color: #1261a6;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e4f3ff,
+                    #d5edff
+                );
+
+            transition: 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform:
+                rotate(-7deg)
+                scale(1.08);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #cceaff,
+                    #b9e5ff
+                );
+
+            box-shadow:
+                0 10px 25px
+                rgba(24,121,190,0.13);
+        }
+
+        .feature-card h3 {
+            color: #173f62;
+
+            font-size: 17px;
+
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #71869b;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =========================================================
+           STUDENT PROFILE PREVIEW
+        ========================================================= */
+
+        .student-profile-section {
+            position: relative;
+            padding: 100px 7%;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    circle at 85% 45%,
+                    rgba(57,185,232,0.09),
+                    transparent 28%
+                ),
+                #f8fbff;
+        }
+
+        .profile-preview-grid {
+            max-width: 1180px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 430px;
+            align-items: center;
+            gap: 70px;
+        }
+
+        .profile-preview-content {
+            animation: heroReveal 0.8s ease both;
+        }
+
+        .profile-preview-content h2 {
+            max-width: 600px;
+            margin: 10px 0 17px;
+            color: #102a43;
+            font-size: 40px;
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+        }
+
+        .profile-preview-content p {
+            max-width: 570px;
+            color: #71869b;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 26px;
+        }
+
+        .profile-preview-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-preview-card {
+            position: relative;
+            min-height: 285px;
+            padding: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(67,130,180,0.14);
+            border-radius: 22px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.90),
+                    rgba(240,248,255,0.84)
+                );
+            box-shadow: 0 25px 65px rgba(28,88,136,0.13);
+            backdrop-filter: blur(18px);
+            transition: 0.45s ease;
+            animation: dashboardReveal 0.9s 0.15s ease both;
+        }
+
+        .profile-preview-card:hover {
+            transform:
+                translateY(-12px)
+                rotateX(2deg)
+                scale(1.015);
+            border-color: rgba(42,132,202,0.30);
+            box-shadow: 0 40px 85px rgba(28,88,136,0.20);
+        }
+
+        .profile-glow {
+            position: absolute;
+            width: 210px;
+            height: 210px;
+            right: -100px;
+            top: -110px;
+            border-radius: 50%;
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(57,185,232,0.22),
+                    transparent 68%
+                );
+            transition: 0.6s ease;
+            pointer-events: none;
+        }
+
+        .profile-preview-card:hover .profile-glow {
+            transform: scale(1.45);
+        }
+
+        .profile-preview-top {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(55,110,160,0.09);
+        }
+
+        .mini-avatar {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 17px;
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b4f8a,
+                    #1684d7,
+                    #39b9e8
+                );
+            box-shadow:
+                0 12px 27px
+                rgba(18,97,166,0.24);
+            transition: 0.4s ease;
+        }
+
+        .profile-preview-card:hover .mini-avatar {
+            transform:
+                rotate(-7deg)
+                scale(1.08);
+            box-shadow:
+                0 17px 34px
+                rgba(18,97,166,0.32);
+        }
+
+        .profile-preview-top strong {
+            display: block;
+            color: #173f62;
+            font-size: 15px;
+        }
+
+        .profile-preview-top small {
+            display: block;
+            color: #8195a8;
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .profile-status {
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 9px;
+            border-radius: 20px;
+            color: #1683b5;
+            background: #eaf8ff;
+            font-size: 8px;
+            font-weight: 800;
+        }
+
+        .profile-status i {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #24a9df;
+            animation: pulse 2s infinite;
+        }
+
+        .profile-preview-details {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1.3fr 1.3fr .7fr;
+            gap: 12px;
+            padding: 23px 0;
+        }
+
+        .profile-preview-details div {
+            padding: 13px;
+            border: 1px solid rgba(46,112,167,0.08);
+            border-radius: 12px;
+            background: rgba(247,251,255,0.78);
+            transition: 0.3s ease;
+        }
+
+        .profile-preview-details div:hover {
+            transform: translateY(-4px);
+            background: white;
+            border-color: rgba(42,132,202,0.20);
+            box-shadow: 0 10px 22px rgba(30,100,150,0.08);
+        }
+
+        .profile-preview-details span {
+            display: block;
+            color: #8499ad;
+            font-size: 8px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .profile-preview-details strong {
+            color: #315575;
+            font-size: 10px;
+        }
+
+        .profile-preview-bottom {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 15px;
+            border-top: 1px solid rgba(55,110,160,0.07);
+            color: #1975b8;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .profile-preview-bottom b {
+            transition: 0.3s ease;
+        }
+
+        .profile-preview-card:hover .profile-preview-bottom b {
+            transform: translateX(6px);
+        }
+
+        @media (max-width: 900px) {
+            .profile-preview-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .profile-preview-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .profile-preview-actions {
+                justify-content: center;
+            }
+
+            .profile-preview-card {
+                max-width: 550px;
+                width: 100%;
+                margin: auto;
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .student-profile-section {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .profile-preview-content h2 {
+                font-size: 30px;
+            }
+
+            .profile-preview-actions {
+                flex-direction: column;
+            }
+
+            .profile-preview-actions .primary-btn,
+            .profile-preview-actions .secondary-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .profile-preview-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =========================================================
+           CTA SECTION
+        ========================================================= */
+
+        .cta-section {
+            padding: 80px 7%;
+            background: #ffffff;
+        }
+
+        .cta {
+            position: relative;
+
+            padding: 55px;
+
+            border-radius: 25px;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    125deg,
+                    #082e52,
+                    #0b4d80,
+                    #1076b5
+                );
+
+            box-shadow:
+                0 30px 70px
+                rgba(14,76,122,0.18);
+        }
+
+        .cta::before {
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+            height: 300px;
+
+            right: -80px;
+            top: -140px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(61,196,235,0.18);
+
+            filter: blur(4px);
+        }
+
+        .cta::after {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            left: 45%;
+            bottom: -130px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.05);
+        }
+
+        .cta-content {
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 650px;
+        }
+
+        .cta h2 {
+            color: white;
+
+            font-size: 34px;
+
+            letter-spacing: -1px;
+
+            margin-bottom: 12px;
+        }
+
+        .cta p {
+            color: rgba(255,255,255,0.72);
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            margin-bottom: 25px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 13px 20px;
+
+            border-radius: 9px;
+
+            color: #0b4f80;
+
+            background: white;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            transition: 0.35s ease;
+        }
+
+        .cta-btn:hover {
+            transform:
+                translateY(-4px)
+                scale(1.02);
+
+            box-shadow:
+                0 15px 30px
+                rgba(0,0,0,0.15);
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        footer {
+            padding: 35px 7%;
+
+            background: #071d35;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-logo {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .footer-logo span {
+            color: #41b9e7;
+        }
+
+        footer p {
+            color: rgba(255,255,255,0.52);
+
+            font-size: 11px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.55);
+
+            font-size: 11px;
+
+            transition: 0.25s ease;
+        }
+
+        .footer-links a:hover {
+            color: #52c6ed;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .hero-visual {
+                right: 2%;
+                width: 400px;
+            }
+
+            .hero-content {
+                width: 58%;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 900px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding:
+                    130px 5%
+                    80px;
+            }
+
+            .hero-content {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .trust-line {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .features,
+            .cta-section {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                max-width: 550px;
+                width: 100%;
+                margin: auto;
+            }
+
+            footer {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .navbar {
+                height: 68px;
+            }
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .logo-icon {
+                width: 34px;
+                height: 34px;
+            }
+
+            .nav-cta {
+                padding: 10px 13px;
+                font-size: 11px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+                letter-spacing: -2px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .primary-btn,
+            .secondary-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-heading h2 {
+                font-size: 30px;
+            }
+
+            .cta {
+                padding: 35px 25px;
+            }
+
+            .cta h2 {
+                font-size: 27px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 18px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <div class="page-shell">
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark">SCMS</span>
-        <div>
-          <h1>Smart College Complaint System</h1>
-          <p>Campus maintenance made simple, fast, and transparent.</p>
-        </div>
-      </div>
-      <button class="mode-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        <span>🌙</span>
-      </button>
+
+    <!-- =========================================================
+         NAVBAR
+    ========================================================== -->
+
+    <header class="navbar">
+
+        <a href="index.html" class="logo">
+
+            <div class="logo-icon">
+                ✦
+            </div>
+
+            <span>SCCMS</span>
+
+        </a>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="index.html" class="active">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="complaints.html">
+                    Complaints
+                </a>
+            </li>
+
+            <li>
+                <a href="track-complaint.html">
+                    Track Complaint
+                </a>
+            </li>
+
+            <li>
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="about.html">
+                    About
+                </a>
+            </li>
+
+            <li>
+                <a href="contact.html">
+                    Contact
+                </a>
+            </li>
+
+        </ul>
+
+        <a
+            href="submit-complaint.html"
+            class="nav-cta"
+        >
+            Submit Complaint
+            <span>↗</span>
+        </a>
+
     </header>
 
-    <nav class="navbar" id="navbar">
-      <div class="nav-brand">SCMS</div>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">☰</button>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#complaint-form">Register</a></li>
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
+
+    <!-- =========================================================
+         HERO
+    ========================================================== -->
 
     <main>
-      <section class="hero" id="home">
-        <div class="hero-copy glass-card">
-          <span class="badge">College Maintenance Portal</span>
-          <h2>Smart College Complaint Management System</h2>
-          <p>Students can report campus-related issues easily and track resolutions from a single dashboard. Fast, clear, and efficient.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#complaint-form">Register Complaint</a>
-            <a class="btn btn-secondary" href="#dashboard">View Dashboard</a>
-          </div>
-        </div>
-        <div class="hero-visual glass-card">
-          <div class="status-card">
-            <span class="status-label">Live Overview</span>
-            <div class="status-item">
-              <strong id="liveTotal">0</strong>
-              <small>Total complaints</small>
+
+        <section class="hero">
+
+            <div class="grid"></div>
+
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+
+
+            <!-- HERO TEXT -->
+
+            <div class="hero-content">
+
+                <div class="hero-badge">
+
+                    <span class="status-dot"></span>
+
+                    SMART COLLEGE COMPLAINT MANAGEMENT SYSTEM
+
+                </div>
+
+
+                <h1>
+
+                    Speak Up.
+                    <br>
+
+                    <span class="gradient-text">
+                        Get It Resolved.
+                    </span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    SCCMS makes college complaint management
+                    simple, transparent and accountable.
+                    Submit an issue, follow its progress and
+                    stay informed until it gets resolved.
+
+                </p>
+
+
+                <div class="hero-actions">
+
+                    <a
+                        href="submit-complaint.html"
+                        class="primary-btn"
+                    >
+
+                        Submit Complaint
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="track-complaint.html"
+                        class="secondary-btn"
+                    >
+
+                        Track Complaint
+
+                        <span>
+                            ↗
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="trust-line">
+
+                    Designed for a smarter,
+                    more responsive campus
+
+                </div>
+
             </div>
-            <div class="status-item">
-              <strong id="livePending">0</strong>
-              <small>Pending</small>
+
+
+            <!-- DASHBOARD -->
+
+            <div class="hero-visual">
+
+                <div class="dashboard">
+
+
+                    <!-- DASHBOARD HEADER -->
+
+                    <div class="dashboard-top">
+
+                        <div class="dashboard-title">
+
+                            <div class="dashboard-icon">
+                                ◈
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Complaint Overview
+                                </h3>
+
+                                <p>
+                                    Campus activity
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="live">
+
+                            <span class="live-dot"></span>
+
+                            LIVE
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATS -->
+
+                    <div class="stat-grid">
+
+                        <div class="stat-card">
+
+                            <span>
+                                TOTAL
+                            </span>
+
+                            <strong class="stat-number">
+                                128
+                            </strong>
+
+                            <small class="stat-change">
+                                ↑ 12% this month
+                            </small>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <span>
+                                PENDING
+                            </span>
+
+                            <strong class="stat-number">
+                                24
+                            </strong>
+
+                            <small class="stat-change">
+                                Needs attention
+                            </small>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <span>
+                                RESOLVED
+                            </span>
+
+                            <strong class="stat-number">
+                                86
+                            </strong>
+
+                            <small class="stat-change">
+                                ↑ 18 this week
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CHART -->
+
+                    <div class="chart-card">
+
+                        <div class="chart-header">
+
+                            <h4>
+                                Complaint Activity
+                            </h4>
+
+                            <span>
+                                Last 7 days
+                            </span>
+
+                        </div>
+
+
+                        <div class="chart">
+
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RECENT COMPLAINTS -->
+
+                    <div class="recent">
+
+                        <div class="recent-top">
+
+                            <h4>
+                                Recent complaints
+                            </h4>
+
+                            <a
+                                href="complaints.html"
+                                class="view"
+                            >
+                                View all →
+                            </a>
+
+                        </div>
+
+
+                        <div class="complaint-row">
+
+                            <div class="complaint-name">
+
+                                <div class="complaint-icon">
+                                    !
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Classroom Projector
+                                    </strong>
+
+                                    <small>
+                                        SCCMS-1024
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <span class="pending">
+                                Pending
+                            </span>
+
+                        </div>
+
+
+                        <div class="complaint-row">
+
+                            <div class="complaint-name">
+
+                                <div class="complaint-icon">
+                                    Wi
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Wi-Fi Connectivity
+                                    </strong>
+
+                                    <small>
+                                        SCCMS-1022
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <span class="pending">
+                                Resolved
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FLOATING CARD -->
+
+                <div class="floating-card">
+
+                    <div class="floating-card-top">
+
+                        <div class="check">
+                            ✓
+                        </div>
+
+                        <span>
+                            STATUS UPDATED
+                        </span>
+
+                    </div>
+
+                    <h4>
+                        Complaint resolved
+                    </h4>
+
+                </div>
+
             </div>
-            <div class="status-item">
-              <strong id="liveResolved">0</strong>
-              <small>Resolved</small>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             STUDENT PROFILE PREVIEW
+        ====================================================== -->
+
+        <section class="student-profile-section">
+
+            <div class="profile-preview-grid">
+
+                <div class="profile-preview-content">
+                    <span class="section-label">YOUR SCCMS PROFILE</span>
+
+                    <h2>
+                        Everything you need,
+                        <span class="gradient-text">in one place.</span>
+                    </h2>
+
+                    <p>
+                        View your student profile, monitor complaint activity,
+                        check recent submissions and access your complete
+                        dashboard without leaving SCCMS.
+                    </p>
+
+                    <div class="profile-preview-actions">
+                        <a href="dashboard.html" class="primary-btn">
+                            Open Student Dashboard
+                            <span class="arrow">→</span>
+                        </a>
+
+                        <a href="complaints.html" class="secondary-btn">
+                            View My Complaints
+                            <span>↗</span>
+                        </a>
+                    </div>
+                </div>
+
+                <a href="dashboard.html" class="profile-preview-card">
+
+                    <div class="profile-preview-top">
+                        <div class="mini-avatar">S</div>
+
+                        <div>
+                            <strong>Student Name</strong>
+                            <small>Computer Science · 5th Semester</small>
+                        </div>
+
+                        <span class="profile-status">
+                            <i></i> Active
+                        </span>
+                    </div>
+
+                    <div class="profile-preview-details">
+                        <div>
+                            <span>Student ID</span>
+                            <strong>SCCMS-2026-001</strong>
+                        </div>
+
+                        <div>
+                            <span>Department</span>
+                            <strong>Computer Science</strong>
+                        </div>
+
+                        <div>
+                            <span>Complaints</span>
+                            <strong>08</strong>
+                        </div>
+                    </div>
+
+                    <div class="profile-preview-bottom">
+                        <span>Open full profile</span>
+                        <b>→</b>
+                    </div>
+
+                    <div class="profile-glow"></div>
+                </a>
+
             </div>
-          </div>
-          <div class="hero-illustration" aria-hidden="true">
-            <div class="illustration-layer"></div>
-          </div>
-        </div>
-      </section>
 
-      <section class="section stats-section">
-        <div class="section-header">
-          <h2>Campus Maintenance at a Glance</h2>
-          <p>Track issue status and understand campus repair needs instantly.</p>
-        </div>
-        <div class="stats-grid">
-          <article class="stat-card glass-card">
-            <p>Total Complaints</p>
-            <strong id="statTotal">0</strong>
-          </article>
-          <article class="stat-card glass-card">
-            <p>Pending</p>
-            <strong id="statPending">0</strong>
-          </article>
-          <article class="stat-card glass-card">
-            <p>In Progress</p>
-            <strong id="statProgress">0</strong>
-          </article>
-          <article class="stat-card glass-card">
-            <p>Resolved</p>
-            <strong id="statResolved">0</strong>
-          </article>
-        </div>
-      </section>
+        </section>
 
-      <section class="section form-section" id="complaint-form">
-        <div class="section-header">
-          <h2>Register a Complaint</h2>
-          <p>Fill in the details below so our maintenance team can respond quickly.</p>
-        </div>
-        <form class="complaint-form glass-card" id="complaintForm" novalidate>
-          <div class="form-grid">
-            <label>
-              Student Name
-              <input type="text" id="studentName" name="studentName" placeholder="Jane Doe" required />
-            </label>
-            <label>
-              Student ID
-              <input type="text" id="studentId" name="studentId" placeholder="C123456" required />
-            </label>
-            <label>
-              Email
-              <input type="email" id="email" name="email" placeholder="jane.doe@college.edu" required />
-            </label>
-            <label>
-              Department
-              <input type="text" id="department" name="department" placeholder="Science" required />
-            </label>
-            <label>
-              Complaint Category
-              <select id="category" name="category" required>
-                <option value="">Select category</option>
-                <option value="Fan Not Working">Fan Not Working</option>
-                <option value="Light Not Working">Light Not Working</option>
-                <option value="Classroom Cleaning Issue">Classroom Cleaning Issue</option>
-                <option value="Washroom Cleaning Issue">Washroom Cleaning Issue</option>
-                <option value="Water Supply Problem">Water Supply Problem</option>
-                <option value="Wi-Fi Issue">Wi-Fi Issue</option>
-                <option value="Electrical Issue">Electrical Issue</option>
-                <option value="Furniture Damage">Furniture Damage</option>
-                <option value="Classroom Maintenance">Classroom Maintenance</option>
-                <option value="Other">Other</option>
-              </select>
-            </label>
-            <label class="full-width">
-              Complaint Description
-              <textarea id="description" name="description" rows="4" placeholder="Describe the issue in detail" required></textarea>
-            </label>
-            <label>
-              Building Name
-              <input type="text" id="building" name="building" placeholder="Main Block" required />
-            </label>
-            <label>
-              Floor Number
-              <input type="number" id="floor" name="floor" placeholder="2" min="0" required />
-            </label>
-            <label>
-              Room Number
-              <input type="text" id="room" name="room" placeholder="204" required />
-            </label>
-            <label class="full-width">
-              Upload Image (optional)
-              <input type="file" id="image" name="image" accept="image/*" />
-            </label>
-            <fieldset class="priority-fieldset">
-              <legend>Priority</legend>
-              <label><input type="radio" name="priority" value="Low" checked /> Low</label>
-              <label><input type="radio" name="priority" value="Medium" /> Medium</label>
-              <label><input type="radio" name="priority" value="High" /> High</label>
-            </fieldset>
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Submit Complaint</button>
-            <div class="alert-message" id="formAlert" role="alert"></div>
-          </div>
-        </form>
-      </section>
+        <!-- =====================================================
+             FEATURES
+        ====================================================== -->
 
-      <section class="section dashboard-section" id="dashboard">
-        <div class="section-header">
-          <h2>Complaint Dashboard</h2>
-          <p>Search, filter, and review the latest campus maintenance requests.</p>
-        </div>
-        <div class="dashboard-controls glass-card">
-          <div class="control-group">
-            <label for="searchInput">Search by Complaint ID</label>
-            <input type="search" id="searchInput" placeholder="Enter complaint ID..." />
-          </div>
-          <div class="control-group">
-            <label for="statusFilter">Filter by Status</label>
-            <select id="statusFilter">
-              <option value="all">All</option>
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-            </select>
-          </div>
-          <div class="control-group">
-            <label for="categoryFilter">Filter by Category</label>
-            <select id="categoryFilter">
-              <option value="all">All</option>
-              <option value="Fan Not Working">Fan Not Working</option>
-              <option value="Light Not Working">Light Not Working</option>
-              <option value="Classroom Cleaning Issue">Classroom Cleaning Issue</option>
-              <option value="Washroom Cleaning Issue">Washroom Cleaning Issue</option>
-              <option value="Water Supply Problem">Water Supply Problem</option>
-              <option value="Wi-Fi Issue">Wi-Fi Issue</option>
-              <option value="Electrical Issue">Electrical Issue</option>
-              <option value="Furniture Damage">Furniture Damage</option>
-              <option value="Classroom Maintenance">Classroom Maintenance</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="control-group">
-            <label for="priorityFilter">Filter by Priority</label>
-            <select id="priorityFilter">
-              <option value="all">All</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-          </div>
-        </div>
-        <div class="complaint-grid" id="complaintGrid"></div>
-      </section>
+        <section class="features">
 
-      <section class="section about-section" id="about">
-        <div class="section-header">
-          <h2>About the System</h2>
-          <p>Smart complaint management helps improve campus maintenance by allowing students to quickly report issues and monitor progress.</p>
-        </div>
-        <div class="about-cards">
-          <article class="about-card glass-card">
-            <h3>Faster Issue Resolution</h3>
-            <p>Students can report broken fans, lights, and furniture damage directly from their device, helping maintenance teams act quickly.</p>
-          </article>
-          <article class="about-card glass-card">
-            <h3>Complete Visibility</h3>
-            <p>Track the status of complaints from submission to resolution, with clear progress updates for every issue.</p>
-          </article>
-          <article class="about-card glass-card">
-            <h3>Campus Hygiene & Safety</h3>
-            <p>Maintain classroom cleanliness, washroom hygiene, water supply and Wi-Fi access so the campus remains safe and functional.</p>
-          </article>
-        </div>
-      </section>
+            <div class="section-heading">
 
-      <section class="section contact-section" id="contact">
-        <div class="section-header">
-          <h2>Contact Maintenance Office</h2>
-          <p>Reach out to the college maintenance office for urgent campus support or follow-up.</p>
-        </div>
-        <div class="contact-grid glass-card">
-          <div class="contact-card">
-            <h3>College Maintenance Office</h3>
-            <p>123 Campus Drive<br />Greenfield College</p>
-          </div>
-          <div class="contact-card">
-            <h3>Email</h3>
-            <p><a href="mailto:maintenance@college.edu">maintenance@college.edu</a></p>
-          </div>
-          <div class="contact-card">
-            <h3>Phone Number</h3>
-            <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
-          </div>
-          <div class="contact-card">
-            <h3>Office Hours</h3>
-            <p>Monday - Friday<br />8:00 AM - 6:00 PM</p>
-          </div>
-        </div>
-      </section>
+                <span class="section-label">
+                    WHY SCCMS
+                </span>
+
+                <h2>
+                    Built around your campus experience.
+                </h2>
+
+                <p>
+                    A streamlined system that connects students,
+                    administration and complaint resolution in
+                    one place.
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+
+                <!-- CARD 1 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ↗
+                    </div>
+
+                    <h3>
+                        Easy Complaint Submission
+                    </h3>
+
+                    <p>
+                        Submit a complaint in just a few steps
+                        without unnecessary paperwork or
+                        complicated processes.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 2 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ◷
+                    </div>
+
+                    <h3>
+                        Real-Time Tracking
+                    </h3>
+
+                    <p>
+                        Track the current status of your complaint
+                        and know whether it is pending, in progress
+                        or resolved.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 3 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+                    <h3>
+                        Transparent Resolution
+                    </h3>
+
+                    <p>
+                        Every complaint follows a clear process,
+                        making campus issue resolution more
+                        accountable and transparent.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CTA
+        ====================================================== -->
+
+        <section class="cta-section">
+
+            <div class="cta">
+
+                <div class="cta-content">
+
+                    <h2>
+                        Have an issue on campus?
+                    </h2>
+
+                    <p>
+                        Don't let it stay unheard. Submit your
+                        complaint through SCCMS and let the right
+                        department take care of it.
+                    </p>
+
+                    <a
+                        href="submit-complaint.html"
+                        class="cta-btn"
+                    >
+
+                        Submit a Complaint
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
-    <footer class="footer">
-      <div class="footer-content glass-card">
-        <p>© 2026 Smart College Complaint Management System. All rights reserved.</p>
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
+    <footer>
+
+        <div class="footer-logo">
+            SC<span>CMS</span>
+        </div>
+
+        <p>
+            © 2026 Smart College Complaint Management System
+        </p>
+
         <div class="footer-links">
-          <a href="#home">Home</a>
-          <a href="#complaint-form">Register</a>
-          <a href="#dashboard">Dashboard</a>
-          <a href="#contact">Contact</a>
+
+            <a href="about.html">
+                About
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
+
+            <a href="complaints.html">
+                Complaints
+            </a>
+
         </div>
-        <div class="social-icons">
-          <a href="#" aria-label="Twitter">🐦</a>
-          <a href="#" aria-label="LinkedIn">💼</a>
-          <a href="#" aria-label="Instagram">📸</a>
-        </div>
-      </div>
+
     </footer>
-  </div>
-  <script src="app.js"></script>
+
 </body>
 </html>
