@@ -1,505 +1,692 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>About SCCMS</title>
+    <title>About SCCMS</title>
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
 
-body{
-    font-family:Inter,"Segoe UI",Arial,sans-serif;
-    background:#f6faff;
-    color:#102a43
-}
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: #f6faff;
+            color: #102a43
+        }
 
-a{text-decoration:none;color:inherit}
+        a {
+            text-decoration: none;
+            color: inherit
+        }
 
-:root{
-    --navy:#071d35;
-    --blue:#1261a6;
-    --cyan:#39b9e8;
-    --muted:#657d96
-}
+        :root {
+            --navy: #071d35;
+            --blue: #1261a6;
+            --cyan: #39b9e8;
+            --muted: #657d96
+        }
 
-.navbar{
-    position:fixed;
-    top:0;left:0;
-    width:100%;
-    height:78px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 7%;
-    background:rgba(255,255,255,.8);
-    backdrop-filter:blur(18px);
-    border-bottom:1px solid rgba(30,100,160,.08);
-    z-index:1000
-}
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: rgba(255, 255, 255, .8);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(30, 100, 160, .08);
+            z-index: 1000
+        }
 
-.logo{
-    display:flex;
-    align-items:center;
-    gap:11px;
-    font-size:22px;
-    font-weight:800;
-    color:var(--navy)
-}
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--navy)
+        }
 
-.logo-icon{
-    width:38px;height:38px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:11px;
-    color:white;
-    background:linear-gradient(135deg,#0b4f8a,#1684d7);
-    transition:.4s
-}
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(135deg, #0b4f8a, #1684d7);
+            transition: .4s
+        }
 
-.logo:hover .logo-icon{
-    transform:rotate(-8deg) scale(1.08)
-}
+        .logo:hover .logo-icon {
+            transform: rotate(-8deg) scale(1.08)
+        }
 
-.logo span{color:var(--blue)}
+        .logo span {
+            color: var(--blue)
+        }
 
-.nav-links{
-    display:flex;
-    gap:32px;
-    list-style:none
-}
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none
+        }
 
-.nav-links a{
-    position:relative;
-    color:#4e6882;
-    font-size:14px;
-    font-weight:600;
-    padding:10px 0;
-    transition:.3s
-}
+        .nav-links a {
+            position: relative;
+            color: #4e6882;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 0;
+            transition: .3s
+        }
 
-.nav-links a::after{
-    content:"";
-    position:absolute;
-    left:50%;bottom:0;
-    width:0;height:2px;
-    background:linear-gradient(90deg,var(--blue),var(--cyan));
-    transform:translateX(-50%);
-    transition:.35s
-}
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blue), var(--cyan));
+            transform: translateX(-50%);
+            transition: .35s
+        }
 
-.nav-links a:hover,
-.nav-links .active{color:var(--blue)}
+        .nav-links a:hover,
+        .nav-links .active {
+            color: var(--blue)
+        }
 
-.nav-links a:hover::after,
-.nav-links .active::after{width:100%}
+        .nav-links a:hover::after,
+        .nav-links .active::after {
+            width: 100%
+        }
 
-.nav-cta{
-    padding:12px 20px;
-    border-radius:10px;
-    color:white;
-    background:linear-gradient(135deg,#0d5594,#1679c9);
-    font-size:13px;
-    font-weight:700;
-    transition:.35s
-}
+        .nav-cta {
+            margin-right: -205px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: white;
+            background: linear-gradient(135deg, #0d5594, #1679c9);
+            font-size: 13px;
+            font-weight: 700;
+            transition: .35s
+        }
 
-.nav-cta:hover{
-    transform:translateY(-3px);
-    box-shadow:0 15px 30px rgba(18,97,166,.3)
-}
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(18, 97, 166, .3)
+        }
 
-/* HERO */
+        /* HERO */
 
-.about-hero{
-    padding:155px 7% 80px;
-    background:
-        radial-gradient(circle at 85% 25%,rgba(57,185,232,.15),transparent 30%),
-        linear-gradient(135deg,#f8fcff,#eaf5ff)
-}
+        .about-hero {
+            padding: 155px 7% 80px;
+            background:
+                radial-gradient(circle at 85% 25%, rgba(57, 185, 232, .15), transparent 30%),
+                linear-gradient(135deg, #f8fcff, #eaf5ff)
+        }
 
-.label{
-    display:block;
-    color:#1774b8;
-    font-size:11px;
-    font-weight:800;
-    letter-spacing:1.5px;
-    margin-bottom:12px
-}
+        .label {
+            display: block;
+            color: #1774b8;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px
+        }
 
-.about-hero h1{
-    font-size:52px;
-    letter-spacing:-2.5px;
-    color:var(--navy);
-    max-width:750px;
-    margin-bottom:17px;
-    animation:show .7s ease
-}
+        .about-hero h1 {
+            font-size: 52px;
+            letter-spacing: -2.5px;
+            color: var(--navy);
+            max-width: 750px;
+            margin-bottom: 17px;
+            animation: show .7s ease
+        }
 
-.about-hero h1 span{
-    background:linear-gradient(100deg,#0b4f8a,#1484d4,#2ab2df);
-    -webkit-background-clip:text;
-    color:transparent
-}
+        .about-hero h1 span {
+            background: linear-gradient(100deg, #0b4f8a, #1484d4, #2ab2df);
+            -webkit-background-clip: text;
+            color: transparent
+        }
 
-.about-hero p{
-    max-width:680px;
-    color:var(--muted);
-    font-size:15px;
-    line-height:1.8;
-    animation:show .7s .1s both
-}
+        .about-hero p {
+            max-width: 680px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.8;
+            animation: show .7s .1s both
+        }
 
-@keyframes show{
-    from{opacity:0;transform:translateY(25px)}
-    to{opacity:1;transform:translateY(0)}
-}
+        @keyframes show {
+            from {
+                opacity: 0;
+                transform: translateY(25px)
+            }
 
-/* CONTENT */
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
 
-.content{
-    padding:80px 7%
-}
+        /* CONTENT */
 
-.intro{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:50px;
-    align-items:center;
-    margin-bottom:90px
-}
+        .content {
+            padding: 80px 7%
+        }
 
-.intro h2{
-    font-size:33px;
-    color:#153b5c;
-    letter-spacing:-1px;
-    margin-bottom:17px
-}
+        .intro {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            margin-bottom: 90px
+        }
 
-.intro p{
-    color:#71869b;
-    font-size:14px;
-    line-height:1.9;
-    margin-bottom:12px
-}
+        .intro h2 {
+            font-size: 33px;
+            color: #153b5c;
+            letter-spacing: -1px;
+            margin-bottom: 17px
+        }
 
-/* VISUAL */
+        .intro p {
+            color: #71869b;
+            font-size: 14px;
+            line-height: 1.9;
+            margin-bottom: 12px
+        }
 
-.visual{
-    position:relative;
-    height:330px;
-    border-radius:22px;
-    background:linear-gradient(145deg,#082e52,#0c5c91,#1685c6);
-    overflow:hidden;
-    box-shadow:0 30px 60px rgba(13,75,120,.18)
-}
+        /* VISUAL */
 
-.visual::before,
-.visual::after{
-    content:"";
-    position:absolute;
-    border-radius:50%;
-    background:rgba(61,196,235,.12)
-}
+        .visual {
+            position: relative;
+            height: 330px;
+            border-radius: 22px;
+            background: linear-gradient(145deg, #082e52, #0c5c91, #1685c6);
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(13, 75, 120, .18)
+        }
 
-.visual::before{
-    width:300px;height:300px;
-    right:-100px;top:-100px
-}
+        .visual::before,
+        .visual::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(61, 196, 235, .12)
+        }
 
-.visual::after{
-    width:200px;height:200px;
-    left:-80px;bottom:-100px
-}
+        .visual::before {
+            width: 300px;
+            height: 300px;
+            right: -100px;
+            top: -100px
+        }
 
-.visual-center{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center
-}
+        .visual::after {
+            width: 200px;
+            height: 200px;
+            left: -80px;
+            bottom: -100px
+        }
 
-.visual-box{
-    width:220px;
-    padding:25px;
-    border:1px solid rgba(255,255,255,.16);
-    border-radius:18px;
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(15px);
-    text-align:center;
-    transition:.4s
-}
+        .visual-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
 
-.visual:hover .visual-box{
-    transform:translateY(-10px) scale(1.03)
-}
+        .visual-box {
+            width: 220px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, .16);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(15px);
+            text-align: center;
+            transition: .4s
+        }
 
-.visual-box-icon{
-    width:50px;height:50px;
-    margin:auto auto 15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:14px;
-    color:white;
-    background:rgba(255,255,255,.12);
-    font-size:20px
-}
+        .visual:hover .visual-box {
+            transform: translateY(-10px) scale(1.03)
+        }
 
-.visual-box h3{
-    color:white;
-    font-size:18px;
-    margin-bottom:6px
-}
+        .visual-box-icon {
+            width: 50px;
+            height: 50px;
+            margin: auto auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            color: white;
+            background: rgba(255, 255, 255, .12);
+            font-size: 20px
+        }
 
-.visual-box p{
-    color:rgba(255,255,255,.65);
-    font-size:10px
-}
+        .visual-box h3 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 6px
+        }
 
-/* VALUES */
+        .visual-box p {
+            color: rgba(255, 255, 255, .65);
+            font-size: 10px
+        }
 
-.values-heading{
-    text-align:center;
-    margin-bottom:40px
-}
+        /* VALUES */
 
-.values-heading h2{
-    font-size:34px;
-    color:#153b5c;
-    margin-bottom:10px
-}
+        .values-heading {
+            text-align: center;
+            margin-bottom: 40px
+        }
 
-.values-heading p{
-    color:#71869b;
-    font-size:13px
-}
+        .values-heading h2 {
+            font-size: 34px;
+            color: #153b5c;
+            margin-bottom: 10px
+        }
 
-.values{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px
-}
+        .values-heading p {
+            color: #71869b;
+            font-size: 13px
+        }
 
-.value{
-    padding:30px;
-    background:white;
-    border:1px solid rgba(44,105,160,.11);
-    border-radius:17px;
-    transition:.4s
-}
+        .values {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px
+        }
 
-.value:hover{
-    transform:translateY(-9px);
-    box-shadow:0 25px 50px rgba(30,90,140,.10);
-    border-color:#9cc6e7
-}
+        .value {
+            padding: 30px;
+            background: white;
+            border: 1px solid rgba(44, 105, 160, .11);
+            border-radius: 17px;
+            transition: .4s
+        }
 
-.value-icon{
-    width:45px;height:45px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:12px;
-    color:#1261a6;
-    background:#e4f3ff;
-    margin-bottom:18px;
-    transition:.4s
-}
+        .value:hover {
+            transform: translateY(-9px);
+            box-shadow: 0 25px 50px rgba(30, 90, 140, .10);
+            border-color: #9cc6e7
+        }
 
-.value:hover .value-icon{
-    transform:rotate(-7deg) scale(1.1)
-}
+        .value-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            color: #1261a6;
+            background: #e4f3ff;
+            margin-bottom: 18px;
+            transition: .4s
+        }
 
-.value h3{
-    color:#234e70;
-    font-size:16px;
-    margin-bottom:9px
-}
+        .value:hover .value-icon {
+            transform: rotate(-7deg) scale(1.1)
+        }
 
-.value p{
-    color:#71869b;
-    font-size:12px;
-    line-height:1.7
-}
+        .value h3 {
+            color: #234e70;
+            font-size: 16px;
+            margin-bottom: 9px
+        }
 
-@media(max-width:900px){
-    .nav-links{display:none}
-    .navbar{padding:0 5%}
-    .about-hero,.content{padding-left:5%;padding-right:5%}
-    .intro{grid-template-columns:1fr}
-    .values{grid-template-columns:1fr}
-}
+        .value p {
+            color: #71869b;
+            font-size: 12px;
+            line-height: 1.7
+        }
 
-@media(max-width:600px){
-    .about-hero h1{font-size:40px}
-}
-</style>
+        @media(max-width:900px) {
+            .nav-links {
+                display: none
+            }
+
+            .navbar {
+                padding: 0 5%
+            }
+
+            .about-hero,
+            .content {
+                padding-left: 5%;
+                padding-right: 5%
+            }
+
+            .intro {
+                grid-template-columns: 1fr
+            }
+
+            .values {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:600px) {
+            .about-hero h1 {
+                font-size: 40px
+            }
+        }
+
+        /* ---------------------------------------------------------------- */
+
+        .nav-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 156px;
+            padding: 7px 10px 7px 7px;
+            border: 1px solid rgba(18, 97, 166, 0.12);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.72);
+            box-shadow: 0 8px 25px rgba(21, 78, 121, 0.07);
+            overflow: hidden;
+            transition:
+                transform .35s ease,
+                box-shadow .35s ease,
+                border-color .35s ease,
+                background .35s ease;
+            animation: profileNavIn .7s .15s ease both;
+        }
+
+        .nav-profile::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            left: -120%;
+            width: 80%;
+            background: linear-gradient(100deg,
+                    transparent,
+                    rgba(57, 185, 232, .16),
+                    rgba(255, 255, 255, .55),
+                    transparent);
+            transform: skewX(-20deg);
+            transition: left .7s ease;
+        }
+
+        .nav-profile:hover::before {
+            left: 135%;
+        }
+
+        .nav-profile:hover {
+            transform: translateY(-3px);
+            border-color: rgba(30, 130, 215, .28);
+            background: rgba(255, 255, 255, .96);
+            box-shadow:
+                0 14px 32px rgba(21, 78, 121, .13),
+                0 0 0 4px rgba(57, 185, 232, .05);
+        }
+
+        .nav-profile-avatar {
+            position: relative;
+            z-index: 1;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 11px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            background: linear-gradient(135deg,
+                    #0b4f8a,
+                    #1684d7,
+                    #39b9e8);
+            box-shadow:
+                0 7px 18px rgba(18, 97, 166, .24),
+                inset 0 1px 0 rgba(255, 255, 255, .35);
+            transition: transform .4s cubic-bezier(.2, .8, .2, 1), box-shadow .4s ease;
+        }
+
+        .nav-profile:hover .nav-profile-avatar {
+            transform: rotate(-7deg) scale(1.09);
+            box-shadow:
+                0 10px 24px rgba(18, 97, 166, .34),
+                0 0 0 5px rgba(57, 185, 232, .08);
+        }
+
+        .nav-profile-info {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .nav-profile-info strong {
+            color: #173f62;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .nav-profile-info small {
+            color: #8195a8;
+            font-size: 8px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .nav-profile-arrow {
+            position: relative;
+            z-index: 1;
+            margin-left: auto;
+            color: #5281a7;
+            font-size: 14px;
+            line-height: 1;
+            transition: transform .3s ease, color .3s ease;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: #9ccef7;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2788d7;
+        }
+
+        /* ---------------------------------------------------------------- */
+    </style>
 </head>
 
 <body>
 
-<header class="navbar">
+    <header class="navbar">
 
-    <a href="index.html" class="logo">
-        <div class="logo-icon">✦</div>
-        <span>SCCMS</span>
-    </a>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">✦</div>
+            <span>SCCMS</span>
+        </a>
 
-    <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="complaints.html">Complaints</a></li>
-        <li><a href="track-complaint.html">Track Complaint</a></li>
-        <li><a href="about.html" class="active">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-    </ul>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="complaints.html">Complaints</a></li>
+            <li><a href="track-complaint.html">Track Complaint</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a href="submit-complaint.html" class="nav-cta">
+            Submit Complaint &nbsp;&nbsp;↗ 
+        </a>
+        <a href="dashboard.html" class="nav-profile" aria-label="Open your SCCMS profile">
+            <span class="nav-profile-avatar">S</span>
+            <span class="nav-profile-info">
+                <strong>Your Profile</strong>
+                <small>Student Dashboard</small>
+            </span>
+            <span class="nav-profile-arrow">R</span>
+        </a>
 
-    <a href="submit-complaint.html" class="nav-cta">
-        Submit Complaint ↗
-    </a>
+    </header>
 
-</header>
+    <section class="about-hero">
 
-<section class="about-hero">
+        <span class="label">ABOUT SCCMS</span>
 
-    <span class="label">ABOUT SCCMS</span>
+        <h1>
+            Making campus
+            <span>problem-solving smarter.</span>
+        </h1>
 
-    <h1>
-        Making campus
-        <span>problem-solving smarter.</span>
-    </h1>
+        <p>
+            SCCMS — Smart College Complaint Management System —
+            is designed to create a simple, transparent and
+            accountable way for students to raise concerns and
+            follow them until resolution.
+        </p>
 
-    <p>
-        SCCMS — Smart College Complaint Management System —
-        is designed to create a simple, transparent and
-        accountable way for students to raise concerns and
-        follow them until resolution.
-    </p>
+    </section>
 
-</section>
+    <main class="content">
 
-<main class="content">
+        <section class="intro">
 
-    <section class="intro">
+            <div>
 
-        <div>
+                <span class="label">OUR PURPOSE</span>
 
-            <span class="label">OUR PURPOSE</span>
+                <h2>
+                    Turning complaints into action.
+                </h2>
 
-            <h2>
-                Turning complaints into action.
-            </h2>
+                <p>
+                    College complaints often get delayed because
+                    students don't know where to submit them or
+                    how to follow up.
+                </p>
 
-            <p>
-                College complaints often get delayed because
-                students don't know where to submit them or
-                how to follow up.
-            </p>
+                <p>
+                    SCCMS brings the complete process into one
+                    structured platform — from submission and
+                    assignment to tracking and resolution.
+                </p>
 
-            <p>
-                SCCMS brings the complete process into one
-                structured platform — from submission and
-                assignment to tracking and resolution.
-            </p>
-
-        </div>
+            </div>
 
 
-        <div class="visual">
+            <div class="visual">
 
-            <div class="visual-center">
+                <div class="visual-center">
 
-                <div class="visual-box">
+                    <div class="visual-box">
 
-                    <div class="visual-box-icon">
-                        ✦
+                        <div class="visual-box-icon">
+                            ✦
+                        </div>
+
+                        <h3>SCCMS</h3>
+
+                        <p>
+                            Smart Complaint Management
+                        </p>
+
                     </div>
 
-                    <h3>SCCMS</h3>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section>
+
+            <div class="values-heading">
+
+                <span class="label">WHAT MATTERS</span>
+
+                <h2>Built on three principles.</h2>
+
+                <p>
+                    Every part of SCCMS focuses on making
+                    complaint management better.
+                </p>
+
+            </div>
+
+
+            <div class="values">
+
+                <div class="value">
+
+                    <div class="value-icon">◷</div>
+
+                    <h3>Transparency</h3>
 
                     <p>
-                        Smart Complaint Management
+                        Students can see where their complaint
+                        stands instead of being left wondering
+                        about its progress.
+                    </p>
+
+                </div>
+
+
+                <div class="value">
+
+                    <div class="value-icon">⚡</div>
+
+                    <h3>Efficiency</h3>
+
+                    <p>
+                        Complaints are organized and directed to
+                        the appropriate department for faster
+                        action.
+                    </p>
+
+                </div>
+
+
+                <div class="value">
+
+                    <div class="value-icon">✓</div>
+
+                    <h3>Accountability</h3>
+
+                    <p>
+                        A structured complaint lifecycle creates
+                        greater responsibility and visibility
+                        throughout the process.
                     </p>
 
                 </div>
 
             </div>
 
-        </div>
+        </section>
 
-    </section>
-
-
-    <section>
-
-        <div class="values-heading">
-
-            <span class="label">WHAT MATTERS</span>
-
-            <h2>Built on three principles.</h2>
-
-            <p>
-                Every part of SCCMS focuses on making
-                complaint management better.
-            </p>
-
-        </div>
-
-
-        <div class="values">
-
-            <div class="value">
-
-                <div class="value-icon">◷</div>
-
-                <h3>Transparency</h3>
-
-                <p>
-                    Students can see where their complaint
-                    stands instead of being left wondering
-                    about its progress.
-                </p>
-
-            </div>
-
-
-            <div class="value">
-
-                <div class="value-icon">⚡</div>
-
-                <h3>Efficiency</h3>
-
-                <p>
-                    Complaints are organized and directed to
-                    the appropriate department for faster
-                    action.
-                </p>
-
-            </div>
-
-
-            <div class="value">
-
-                <div class="value-icon">✓</div>
-
-                <h3>Accountability</h3>
-
-                <p>
-                    A structured complaint lifecycle creates
-                    greater responsibility and visibility
-                    throughout the process.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-</main>
+    </main>
 
 </body>
+
 </html>
