@@ -1,0 +1,3223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SCCMS | Smart College Complaint Management System</title>
+
+    <style>
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: #f6faff;
+            color: #102a43;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #eef5fc;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8db9e6;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4c8ed0;
+        }
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+
+        :root {
+            --navy: #071d35;
+            --dark-blue: #0b3159;
+            --blue: #1261a6;
+            --bright-blue: #1e82d7;
+            --cyan: #39b9e8;
+
+            --text: #102a43;
+            --muted: #657d96;
+
+            --white: #ffffff;
+            --bg: #f6faff;
+
+            --border: rgba(44, 105, 160, 0.13);
+
+            --shadow:
+                0 20px 60px rgba(21, 78, 121, 0.10);
+        }
+
+        /* =========================================================
+           NAVBAR
+        ========================================================= */
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 78px;
+
+            display: flex;
+            align-items: center;
+            gap: 28px;
+
+            padding: 0 7%;
+
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(30, 100, 160, 0.08);
+
+            z-index: 1000;
+
+            transition: 0.35s ease;
+        }
+
+        .navbar:hover {
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        /* LOGO */
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            font-size: 22px;
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+
+            color: var(--navy);
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 11px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b4f8a,
+                    #1684d7
+                );
+
+            box-shadow:
+                0 8px 22px rgba(18, 97, 166, 0.28);
+
+            transition: 0.4s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(-8deg) scale(1.08);
+            box-shadow:
+                0 12px 30px rgba(18, 97, 166, 0.4);
+        }
+
+        .logo span {
+            color: var(--blue);
+        }
+
+        /* NAV LINKS */
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 34px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            position: relative;
+
+            color: #4e6882;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            padding: 10px 0;
+
+            transition: 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: "";
+
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+
+            width: 0;
+            height: 2px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--blue),
+                    var(--cyan)
+                );
+
+            transform: translateX(-50%);
+
+            transition: 0.35s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--blue);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links .active::after {
+            width: 100%;
+        }
+
+        .nav-links .active {
+            color: var(--blue);
+        }
+
+        /* NAV CTA */
+
+        .nav-cta {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 12px 20px;
+
+            border-radius: 10px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0d5594,
+                    #1679c9
+                );
+
+            font-size: 13px;
+            font-weight: 700;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 10px 25px rgba(18, 97, 166, 0.23);
+
+            transition: 0.35s ease;
+        }
+
+        .nav-cta::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -100%;
+
+            width: 70%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.25),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition: 0.6s ease;
+        }
+
+        .nav-cta:hover::before {
+            left: 140%;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 16px 32px rgba(18, 97, 166, 0.32);
+        }
+
+
+        /* =========================================================
+           NAV ACTIONS + PROFILE
+        ========================================================= */
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-left: auto;
+        }
+
+        .nav-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 156px;
+            padding: 7px 10px 7px 7px;
+            border: 1px solid rgba(18, 97, 166, 0.12);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.72);
+            box-shadow: 0 8px 25px rgba(21,78,121,0.07);
+            overflow: hidden;
+            transition:
+                transform .35s ease,
+                box-shadow .35s ease,
+                border-color .35s ease,
+                background .35s ease;
+            animation: profileNavIn .7s .15s ease both;
+        }
+
+        .nav-profile::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            left: -120%;
+            width: 80%;
+            background: linear-gradient(
+                100deg,
+                transparent,
+                rgba(57,185,232,.16),
+                rgba(255,255,255,.55),
+                transparent
+            );
+            transform: skewX(-20deg);
+            transition: left .7s ease;
+        }
+
+        .nav-profile:hover::before {
+            left: 135%;
+        }
+
+        .nav-profile:hover {
+            transform: translateY(-3px);
+            border-color: rgba(30,130,215,.28);
+            background: rgba(255,255,255,.96);
+            box-shadow:
+                0 14px 32px rgba(21,78,121,.13),
+                0 0 0 4px rgba(57,185,232,.05);
+        }
+
+        .nav-profile-avatar {
+            position: relative;
+            z-index: 1;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 11px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            background: linear-gradient(
+                135deg,
+                #0b4f8a,
+                #1684d7,
+                #39b9e8
+            );
+            box-shadow:
+                0 7px 18px rgba(18,97,166,.24),
+                inset 0 1px 0 rgba(255,255,255,.35);
+            transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease;
+        }
+
+        .nav-profile:hover .nav-profile-avatar {
+            transform: rotate(-7deg) scale(1.09);
+            box-shadow:
+                0 10px 24px rgba(18,97,166,.34),
+                0 0 0 5px rgba(57,185,232,.08);
+        }
+
+        .nav-profile-info {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .nav-profile-info strong {
+            color: #173f62;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .nav-profile-info small {
+            color: #8195a8;
+            font-size: 8px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .nav-profile-arrow {
+            position: relative;
+            z-index: 1;
+            margin-left: auto;
+            color: #5281a7;
+            font-size: 14px;
+            line-height: 1;
+            transition: transform .3s ease, color .3s ease;
+        }
+
+        .nav-profile:hover .nav-profile-arrow {
+            color: var(--blue);
+            transform: translateY(2px);
+        }
+
+        @keyframes profileNavIn {
+            from {
+                opacity: 0;
+                transform: translateY(-12px) scale(.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            position: relative;
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+
+            padding:
+                150px 7%
+                90px;
+
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 80% 20%,
+                    rgba(56, 175, 231, 0.14),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 15% 80%,
+                    rgba(36, 117, 197, 0.10),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #f9fcff 0%,
+                    #eef7ff 100%
+                );
+        }
+
+        /* BACKGROUND GRID */
+
+        .grid {
+            position: absolute;
+
+            inset: 0;
+
+            opacity: 0.32;
+
+            background-image:
+                linear-gradient(
+                    rgba(18, 97, 166, 0.045) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(18, 97, 166, 0.045) 1px,
+                    transparent 1px
+                );
+
+            background-size: 50px 50px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent
+                );
+        }
+
+        /* FLOATING ORBS */
+
+        .orb {
+            position: absolute;
+
+            border-radius: 50%;
+
+            filter: blur(1px);
+
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 250px;
+            height: 250px;
+
+            right: -80px;
+            top: 100px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(30, 130, 215, 0.18),
+                    transparent 68%
+                );
+
+            animation: floatOrb 7s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 190px;
+            height: 190px;
+
+            left: -60px;
+            bottom: 70px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(57, 185, 232, 0.14),
+                    transparent 68%
+                );
+
+            animation:
+                floatOrb 9s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+
+            50% {
+                transform:
+                    translateY(-25px)
+                    translateX(15px);
+            }
+        }
+
+        /* HERO CONTENT */
+
+        .hero-content {
+            position: relative;
+
+            width: 54%;
+
+            z-index: 5;
+
+            animation:
+                heroReveal 0.9s ease forwards;
+        }
+
+        @keyframes heroReveal {
+
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* BADGE */
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 8px 13px;
+
+            margin-bottom: 22px;
+
+            border:
+                1px solid
+                rgba(30, 130, 215, 0.16);
+
+            border-radius: 30px;
+
+            color: #1261a6;
+
+            background:
+                rgba(255,255,255,0.72);
+
+            box-shadow:
+                0 8px 25px rgba(30, 100, 160, 0.06);
+
+            font-size: 12px;
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #24a9df;
+
+            box-shadow:
+                0 0 0 5px
+                rgba(36,169,223,0.10);
+
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0% {
+                box-shadow:
+                    0 0 0 0
+                    rgba(36,169,223,0.35);
+            }
+
+            70% {
+                box-shadow:
+                    0 0 0 8px
+                    rgba(36,169,223,0);
+            }
+
+            100% {
+                box-shadow:
+                    0 0 0 0
+                    rgba(36,169,223,0);
+            }
+        }
+
+        /* HEADING */
+
+        .hero h1 {
+            max-width: 760px;
+
+            font-size: clamp(45px, 5vw, 70px);
+
+            line-height: 1.04;
+
+            letter-spacing: -3px;
+
+            color: var(--navy);
+
+            margin-bottom: 24px;
+        }
+
+        .gradient-text {
+            display: inline-block;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #0b4f8a,
+                    #1484d4,
+                    #2ab2df
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+
+            background-size: 200% auto;
+
+            animation:
+                gradientMove 5s ease infinite;
+        }
+
+        @keyframes gradientMove {
+
+            0% {
+                background-position: 0% center;
+            }
+
+            50% {
+                background-position: 100% center;
+            }
+
+            100% {
+                background-position: 0% center;
+            }
+        }
+
+        .hero-description {
+            max-width: 590px;
+
+            color: #637c95;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+
+            margin-bottom: 32px;
+        }
+
+        /* HERO BUTTONS */
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            margin-bottom: 40px;
+        }
+
+        .primary-btn {
+            position: relative;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 15px 22px;
+
+            color: white;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b5596,
+                    #1781d2
+                );
+
+            font-size: 14px;
+            font-weight: 700;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 13px 28px
+                rgba(18, 97, 166, 0.24);
+
+            transition: 0.35s ease;
+        }
+
+        .primary-btn::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -100%;
+
+            width: 70%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.25),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition: 0.65s ease;
+        }
+
+        .primary-btn:hover::before {
+            left: 140%;
+        }
+
+        .primary-btn:hover {
+            transform:
+                translateY(-5px)
+                scale(1.02);
+
+            box-shadow:
+                0 20px 38px
+                rgba(18, 97, 166, 0.34);
+        }
+
+        .arrow {
+            transition: 0.3s ease;
+        }
+
+        .primary-btn:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        .secondary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 14px 20px;
+
+            color: #1d527f;
+
+            border:
+                1px solid
+                rgba(38, 111, 170, 0.18);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.72);
+
+            font-size: 14px;
+            font-weight: 700;
+
+            transition: 0.35s ease;
+        }
+
+        .secondary-btn:hover {
+            transform: translateY(-5px);
+
+            color: #0d5e9f;
+
+            border-color:
+                rgba(38,111,170,0.35);
+
+            background: white;
+
+            box-shadow:
+                0 15px 35px
+                rgba(30, 90, 140, 0.10);
+        }
+
+        /* TRUST */
+
+        .trust-line {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            color: #7890a8;
+
+            font-size: 12px;
+        }
+
+        .trust-line::before {
+            content: "";
+
+            width: 32px;
+            height: 1px;
+
+            background: #9cb8d0;
+        }
+
+        /* =========================================================
+           DASHBOARD VISUAL
+        ========================================================= */
+
+        .hero-visual {
+            position: absolute;
+
+            right: 5.5%;
+            top: 50%;
+
+            width: 440px;
+
+            transform:
+                translateY(-50%);
+
+            z-index: 4;
+
+            animation:
+                dashboardReveal 1s
+                0.2s
+                ease
+                forwards;
+
+            opacity: 0;
+        }
+
+        @keyframes dashboardReveal {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(-45%)
+                    translateX(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(-50%)
+                    translateX(0);
+            }
+        }
+
+        .dashboard {
+            position: relative;
+
+            padding: 22px;
+
+            border:
+                1px solid
+                rgba(67, 130, 180, 0.16);
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,0.72);
+
+            backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 35px 80px
+                rgba(28, 88, 136, 0.14);
+
+            transition: 0.45s ease;
+        }
+
+        .dashboard:hover {
+            transform:
+                translateY(-10px)
+                rotateX(2deg);
+
+            box-shadow:
+                0 45px 90px
+                rgba(28, 88, 136, 0.20);
+        }
+
+        /* DASHBOARD TOP */
+
+        .dashboard-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding-bottom: 18px;
+
+            border-bottom:
+                1px solid
+                rgba(55, 110, 160, 0.09);
+        }
+
+        .dashboard-title {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .dashboard-icon {
+            width: 37px;
+            height: 37px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0d5a99,
+                    #1d91d6
+                );
+        }
+
+        .dashboard-title h3 {
+            font-size: 13px;
+            color: #183c60;
+        }
+
+        .dashboard-title p {
+            margin-top: 3px;
+
+            font-size: 10px;
+            color: #8298ac;
+        }
+
+        .live {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            color: #1683b5;
+
+            background: #eaf8ff;
+
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .live-dot {
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: #24a9df;
+        }
+
+        /* STAT GRID */
+
+        .stat-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-top: 18px;
+        }
+
+        .stat-card {
+            padding: 15px 12px;
+
+            border:
+                1px solid
+                rgba(46, 112, 167, 0.09);
+
+            border-radius: 13px;
+
+            background:
+                rgba(247,251,255,0.85);
+
+            transition: 0.35s ease;
+
+            cursor: default;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+
+            background: white;
+
+            border-color:
+                rgba(42,132,202,0.25);
+
+            box-shadow:
+                0 12px 25px
+                rgba(30,100,150,0.09);
+        }
+
+        .stat-card span {
+            color: #8094a8;
+
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .stat-number {
+            display: block;
+
+            margin-top: 7px;
+
+            color: #154c7b;
+
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .stat-change {
+            display: block;
+
+            margin-top: 4px;
+
+            color: #2d9dc7;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        /* CHART */
+
+        .chart-card {
+            margin-top: 13px;
+
+            padding: 17px;
+
+            border:
+                1px solid
+                rgba(46, 112, 167, 0.09);
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,0.75);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+        .chart-header h4 {
+            color: #315575;
+            font-size: 11px;
+        }
+
+        .chart-header span {
+            color: #8499ad;
+            font-size: 9px;
+        }
+
+        .chart {
+            height: 105px;
+
+            position: relative;
+
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+
+            padding:
+                10px 5px
+                0;
+        }
+
+        .chart::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent 0,
+                    transparent 25px,
+                    rgba(62,120,165,0.06) 26px
+                );
+        }
+
+        .bar {
+            position: relative;
+
+            flex: 1;
+
+            max-width: 28px;
+
+            border-radius:
+                6px 6px 3px 3px;
+
+            background:
+                linear-gradient(
+                    to top,
+                    #1464a8,
+                    #45b9e2
+                );
+
+            transform-origin: bottom;
+
+            animation:
+                barGrow
+                1.2s
+                ease
+                forwards;
+
+            transition: 0.3s ease;
+        }
+
+        .bar:hover {
+            filter: brightness(1.12);
+
+            transform:
+                scaleX(1.12);
+        }
+
+        @keyframes barGrow {
+
+            from {
+                transform: scaleY(0);
+            }
+
+            to {
+                transform: scaleY(1);
+            }
+        }
+
+        .bar:nth-child(1) {
+            height: 48%;
+        }
+
+        .bar:nth-child(2) {
+            height: 65%;
+            animation-delay: .1s;
+        }
+
+        .bar:nth-child(3) {
+            height: 54%;
+            animation-delay: .2s;
+        }
+
+        .bar:nth-child(4) {
+            height: 78%;
+            animation-delay: .3s;
+        }
+
+        .bar:nth-child(5) {
+            height: 68%;
+            animation-delay: .4s;
+        }
+
+        .bar:nth-child(6) {
+            height: 88%;
+            animation-delay: .5s;
+        }
+
+        .bar:nth-child(7) {
+            height: 94%;
+            animation-delay: .6s;
+        }
+
+        /* RECENT COMPLAINT */
+
+        .recent {
+            margin-top: 13px;
+
+            padding: 15px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f3f9ff,
+                    #ffffff
+                );
+
+            border:
+                1px solid
+                rgba(46,112,167,0.08);
+        }
+
+        .recent-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+        .recent-top h4 {
+            font-size: 10px;
+            color: #55718c;
+        }
+
+        .view {
+            color: #1975b8;
+            font-size: 9px;
+            font-weight: 700;
+
+            transition: 0.25s ease;
+        }
+
+        .view:hover {
+            color: #0b4f8a;
+            transform: translateX(3px);
+        }
+
+        .complaint-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 10px 0;
+
+            border-top:
+                1px solid
+                rgba(55,110,160,0.07);
+        }
+
+        .complaint-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .complaint-icon {
+            width: 27px;
+            height: 27px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background: #e8f4ff;
+
+            color: #1874ba;
+
+            font-size: 11px;
+        }
+
+        .complaint-name strong {
+            display: block;
+
+            color: #41627e;
+
+            font-size: 9px;
+        }
+
+        .complaint-name small {
+            color: #91a2b2;
+            font-size: 8px;
+        }
+
+        .pending {
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            color: #2875a7;
+
+            background: #e8f5ff;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        /* FLOATING MINI CARD */
+
+        .floating-card {
+            position: absolute;
+
+            right: -45px;
+            bottom: -35px;
+
+            width: 145px;
+
+            padding: 14px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.7);
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.88);
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 20px 40px
+                rgba(26,87,130,0.14);
+
+            animation:
+                floatingCard
+                4s
+                ease-in-out
+                infinite;
+        }
+
+        @keyframes floatingCard {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .floating-card-top {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            margin-bottom: 10px;
+        }
+
+        .check {
+            width: 24px;
+            height: 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1681c6,
+                    #39b9e8
+                );
+
+            font-size: 11px;
+        }
+
+        .floating-card span {
+            color: #5c758d;
+
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .floating-card h4 {
+            color: #194c72;
+
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           FEATURES
+        ========================================================= */
+
+        .features {
+            position: relative;
+
+            padding: 100px 7%;
+
+            background: white;
+        }
+
+        .section-heading {
+            max-width: 650px;
+
+            margin: 0 auto 55px;
+
+            text-align: center;
+        }
+
+        .section-label {
+            display: inline-block;
+
+            margin-bottom: 12px;
+
+            color: #1774b8;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 1.5px;
+        }
+
+        .section-heading h2 {
+            color: #102a43;
+
+            font-size: 38px;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 14px;
+        }
+
+        .section-heading p {
+            color: #71869b;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+        }
+
+        .feature-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+        .feature-card {
+            position: relative;
+
+            padding: 30px;
+
+            border:
+                1px solid
+                rgba(36,105,160,0.10);
+
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #f7fbff
+                );
+
+            overflow: hidden;
+
+            transition:
+                transform 0.4s ease,
+                box-shadow 0.4s ease,
+                border-color 0.4s ease;
+        }
+
+        .feature-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: -80px;
+            right: -80px;
+
+            width: 170px;
+            height: 170px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(37,145,210,0.10),
+                    transparent 68%
+                );
+
+            transition: 0.5s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+
+            border-color:
+                rgba(36,117,180,0.25);
+
+            box-shadow:
+                0 25px 55px
+                rgba(26,91,135,0.11);
+        }
+
+        .feature-card:hover::before {
+            transform: scale(1.4);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 20px;
+
+            border-radius: 13px;
+
+            color: #1261a6;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e4f3ff,
+                    #d5edff
+                );
+
+            transition: 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform:
+                rotate(-7deg)
+                scale(1.08);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #cceaff,
+                    #b9e5ff
+                );
+
+            box-shadow:
+                0 10px 25px
+                rgba(24,121,190,0.13);
+        }
+
+        .feature-card h3 {
+            color: #173f62;
+
+            font-size: 17px;
+
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #71869b;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+
+
+        /* =========================================================
+           HOME ENHANCEMENTS
+        ========================================================= */
+
+        .campus-flow {
+            position: relative;
+            padding: 105px 7%;
+            background:
+                linear-gradient(180deg, #f8fcff 0%, #ffffff 100%);
+            overflow: hidden;
+        }
+
+        .campus-flow::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            left: -220px;
+            top: 40px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                rgba(57,185,232,.12),
+                transparent 68%
+            );
+            animation: sectionOrb 8s ease-in-out infinite alternate;
+        }
+
+        .flow-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .flow-card {
+            position: relative;
+            min-height: 230px;
+            padding: 28px 24px;
+            border: 1px solid rgba(36,105,160,.10);
+            border-radius: 20px;
+            background: rgba(255,255,255,.78);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 40px rgba(20,82,125,.055);
+            overflow: hidden;
+            transition:
+                transform .45s cubic-bezier(.2,.8,.2,1),
+                box-shadow .45s ease,
+                border-color .45s ease;
+            animation: cardRise .8s ease both;
+        }
+
+        .flow-card:nth-child(2) { animation-delay: .08s; }
+        .flow-card:nth-child(3) { animation-delay: .16s; }
+        .flow-card:nth-child(4) { animation-delay: .24s; }
+
+        .flow-card::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0b4f8a, #1684d7, #39b9e8);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .45s ease;
+        }
+
+        .flow-card:hover {
+            transform: translateY(-11px);
+            border-color: rgba(36,117,180,.25);
+            box-shadow:
+                0 28px 60px rgba(26,91,135,.12);
+        }
+
+        .flow-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .flow-number {
+            width: 43px;
+            height: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+            border-radius: 13px;
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            background: linear-gradient(
+                135deg,
+                #0b4f8a,
+                #1684d7,
+                #39b9e8
+            );
+            box-shadow: 0 10px 24px rgba(18,97,166,.20);
+            transition: transform .4s ease;
+        }
+
+        .flow-card:hover .flow-number {
+            transform: rotate(-7deg) scale(1.1);
+        }
+
+        .flow-card h3 {
+            color: #173f62;
+            font-size: 16px;
+            margin-bottom: 9px;
+        }
+
+        .flow-card p {
+            color: #71869b;
+            font-size: 12px;
+            line-height: 1.75;
+        }
+
+        .support-section {
+            position: relative;
+            padding: 95px 7%;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .support-panel {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            align-items: center;
+            gap: 65px;
+            padding: 65px;
+            border-radius: 28px;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    135deg,
+                    #f3faff,
+                    #ffffff 55%,
+                    #edf8ff
+                );
+            border: 1px solid rgba(36,105,160,.09);
+            box-shadow: 0 25px 70px rgba(20,82,125,.08);
+        }
+
+        .support-panel::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            right: -80px;
+            top: -100px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                rgba(57,185,232,.18),
+                transparent 68%
+            );
+            animation: supportFloat 7s ease-in-out infinite alternate;
+        }
+
+        .support-copy {
+            position: relative;
+            z-index: 2;
+        }
+
+        .support-copy h2 {
+            color: #102a43;
+            font-size: 34px;
+            letter-spacing: -1.2px;
+            margin-bottom: 15px;
+        }
+
+        .support-copy h2 span {
+            color: #1684d7;
+        }
+
+        .support-copy p {
+            max-width: 570px;
+            color: #71869b;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .support-points {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .support-point {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 13px;
+            border-radius: 12px;
+            background: rgba(255,255,255,.82);
+            border: 1px solid rgba(36,105,160,.08);
+            color: #4d6b84;
+            font-size: 11px;
+            transition: transform .35s ease, box-shadow .35s ease;
+        }
+
+        .support-point:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(20,82,125,.08);
+        }
+
+        .support-point i {
+            width: 23px;
+            height: 23px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 8px;
+            color: #1684d7;
+            background: #e7f5ff;
+            font-style: normal;
+            font-weight: 800;
+        }
+
+        .support-visual {
+            position: relative;
+            z-index: 2;
+            min-height: 290px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 900px;
+        }
+
+        .support-dashboard {
+            position: relative;
+            width: min(100%, 380px);
+            padding: 24px;
+            border: 1px solid rgba(36,105,160,.11);
+            border-radius: 22px;
+            background: rgba(255,255,255,.86);
+            box-shadow: 0 25px 55px rgba(21,78,121,.12);
+            transform: rotateY(-7deg) rotateX(3deg);
+            transition: transform .55s cubic-bezier(.2,.8,.2,1);
+            animation: dashboardFloat 5s ease-in-out infinite;
+        }
+
+        .support-visual:hover .support-dashboard {
+            transform: rotateY(0) rotateX(0) translateY(-8px);
+        }
+
+        .dashboard-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-top strong {
+            color: #173f62;
+            font-size: 13px;
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #24a9df;
+            box-shadow: 0 0 0 5px rgba(36,169,223,.10);
+            animation: pulse 1.8s infinite;
+        }
+
+        .status-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 13px;
+            margin-top: 10px;
+            border-radius: 12px;
+            background: #f7fbff;
+            border: 1px solid rgba(36,105,160,.07);
+            transition: transform .3s ease, background .3s ease;
+        }
+
+        .status-row:hover {
+            transform: translateX(5px);
+            background: #eef8ff;
+        }
+
+        .status-row span:first-child {
+            color: #71869b;
+            font-size: 10px;
+        }
+
+        .status-badge {
+            padding: 5px 8px;
+            border-radius: 20px;
+            color: #1683b5;
+            background: #eaf8ff;
+            font-size: 8px;
+            font-weight: 800;
+        }
+
+        .trust-section {
+            padding: 85px 7%;
+            background: #ffffff;
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .trust-card {
+            padding: 27px;
+            border-radius: 18px;
+            background: #ffffff;
+            border: 1px solid rgba(36,105,160,.09);
+            box-shadow: 0 14px 38px rgba(20,82,125,.05);
+            transition: transform .4s ease, box-shadow .4s ease;
+        }
+
+        .trust-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(20,82,125,.11);
+        }
+
+        .trust-card-icon {
+            width: 43px;
+            height: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 17px;
+            border-radius: 12px;
+            color: #1261a6;
+            background: linear-gradient(135deg,#e4f3ff,#d5edff);
+            transition: transform .4s ease;
+        }
+
+        .trust-card:hover .trust-card-icon {
+            transform: rotate(7deg) scale(1.08);
+        }
+
+        .trust-card h3 {
+            color: #173f62;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .trust-card p {
+            color: #71869b;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        @keyframes cardRise {
+            from { opacity: 0; transform: translateY(22px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes sectionOrb {
+            from { transform: translate3d(0,0,0) scale(1); }
+            to { transform: translate3d(45px,20px,0) scale(1.15); }
+        }
+
+        @keyframes supportFloat {
+            from { transform: translate(0,0) scale(1); }
+            to { transform: translate(-30px,30px) scale(1.15); }
+        }
+
+        @keyframes dashboardFloat {
+            0%, 100% { transform: rotateY(-7deg) rotateX(3deg) translateY(0); }
+            50% { transform: rotateY(-4deg) rotateX(2deg) translateY(-7px); }
+        }
+
+        @media (max-width: 1000px) {
+            .flow-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .support-panel {
+                grid-template-columns: 1fr;
+                gap: 35px;
+                padding: 45px;
+            }
+
+            .support-visual {
+                min-height: 250px;
+            }
+
+            .trust-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .campus-flow,
+            .support-section,
+            .trust-section {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .flow-grid,
+            .support-points {
+                grid-template-columns: 1fr;
+            }
+
+            .support-panel {
+                padding: 30px 22px;
+                border-radius: 22px;
+            }
+
+            .support-copy h2 {
+                font-size: 29px;
+            }
+
+            .support-dashboard {
+                transform: none;
+            }
+        }
+
+        /* =========================================================
+           CTA SECTION
+        ========================================================= */
+
+        .cta-section {
+            padding: 80px 7%;
+            background: #ffffff;
+        }
+
+        .cta {
+            position: relative;
+
+            padding: 55px;
+
+            border-radius: 25px;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    125deg,
+                    #082e52,
+                    #0b4d80,
+                    #1076b5
+                );
+
+            box-shadow:
+                0 30px 70px
+                rgba(14,76,122,0.18);
+        }
+
+        .cta::before {
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+            height: 300px;
+
+            right: -80px;
+            top: -140px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(61,196,235,0.18);
+
+            filter: blur(4px);
+        }
+
+        .cta::after {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            left: 45%;
+            bottom: -130px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.05);
+        }
+
+        .cta-content {
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 650px;
+        }
+
+        .cta h2 {
+            color: white;
+
+            font-size: 34px;
+
+            letter-spacing: -1px;
+
+            margin-bottom: 12px;
+        }
+
+        .cta p {
+            color: rgba(255,255,255,0.72);
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            margin-bottom: 25px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 13px 20px;
+
+            border-radius: 9px;
+
+            color: #0b4f80;
+
+            background: white;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            transition: 0.35s ease;
+        }
+
+        .cta-btn:hover {
+            transform:
+                translateY(-4px)
+                scale(1.02);
+
+            box-shadow:
+                0 15px 30px
+                rgba(0,0,0,0.15);
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        footer {
+            padding: 35px 7%;
+
+            background: #071d35;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-logo {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .footer-logo span {
+            color: #41b9e7;
+        }
+
+        footer p {
+            color: rgba(255,255,255,0.52);
+
+            font-size: 11px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.55);
+
+            font-size: 11px;
+
+            transition: 0.25s ease;
+        }
+
+        .footer-links a:hover {
+            color: #52c6ed;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+
+        @media (max-width: 1100px) {
+            .nav-actions {
+                gap: 7px;
+            }
+
+            .nav-profile {
+                min-width: 142px;
+            }
+
+            .nav-profile-info small {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1100px) {
+
+            .hero-visual {
+                right: 2%;
+                width: 400px;
+            }
+
+            .hero-content {
+                width: 58%;
+            }
+
+            .nav-links {
+                gap: 20px;
+                margin-left: 22px;
+            }
+        }
+
+
+        @media (max-width: 900px) {
+            .nav-actions {
+                gap: 7px;
+            }
+
+            .nav-profile {
+                min-width: auto;
+                padding-right: 8px;
+            }
+
+            .nav-profile-info {
+                display: none;
+            }
+
+            .nav-profile-arrow {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .nav-links {
+                display: none;
+                margin-left: 0;
+            }
+
+            .hero {
+                padding:
+                    130px 5%
+                    80px;
+            }
+
+            .hero-content {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .trust-line {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .features,
+            .cta-section {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                max-width: 550px;
+                width: 100%;
+                margin: auto;
+            }
+
+            footer {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+        }
+
+
+        @media (max-width: 550px) {
+            .nav-actions {
+                gap: 5px;
+            }
+
+            .nav-profile {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                padding: 2px;
+                justify-content: center;
+                border-radius: 12px;
+            }
+
+            .nav-profile-avatar {
+                width: 34px;
+                height: 34px;
+            }
+        
+        @media (max-width: 550px) {
+
+            .navbar {
+                height: 68px;
+            }
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .logo-icon {
+                width: 34px;
+                height: 34px;
+            }
+
+            .nav-cta {
+                padding: 10px 13px;
+                font-size: 11px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+                letter-spacing: -2px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .primary-btn,
+            .secondary-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-heading h2 {
+                font-size: 30px;
+            }
+
+            .cta {
+                padding: 35px 25px;
+            }
+
+            .cta h2 {
+                font-size: 27px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 18px;
+                text-align: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         NAVBAR
+    ========================================================== -->
+
+    <header class="navbar">
+
+        <a href="index.html" class="logo">
+
+            <div class="logo-icon">
+                ✦
+            </div>
+
+            <span>SCCMS</span>
+
+        </a>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="index.html" class="active">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="complaints.html">
+                    Complaints
+                </a>
+            </li>
+
+            <li>
+                <a href="track-complaint.html">
+                    Track Complaint
+                </a>
+            </li>
+
+            <!-- <li>
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+            </li> -->
+
+            <li>
+                <a href="about.html">
+                    About
+                </a>
+            </li>
+
+            <li>
+                <a href="contact.html">
+                    Contact
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="nav-actions">
+            <a href="submit-complaint.html" class="nav-cta">
+                Submit Complaint 
+                <span>↗</span>
+            </a>
+
+            <a href="dashboard.html" class="nav-profile" aria-label="Open your SCCMS profile">
+                <span class="nav-profile-avatar">S</span>
+                <span class="nav-profile-info">
+                    <strong>Your Profile</strong>
+                    <small>Student Dashboard</small>
+                </span>
+                <span class="nav-profile-arrow">R</span>
+            </a>
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         HERO
+    ========================================================== -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="grid"></div>
+
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+
+
+            <!-- HERO TEXT -->
+
+            <div class="hero-content">
+
+                <div class="hero-badge">
+
+                    <span class="status-dot"></span>
+
+                    SMART COLLEGE COMPLAINT MANAGEMENT SYSTEM
+
+                </div>
+
+
+                <h1>
+
+                    Speak Up.
+                    <br>
+
+                    <span class="gradient-text">
+                        Get It Resolved.
+                    </span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    SCCMS makes college complaint management
+                    simple, transparent and accountable.
+                    Submit an issue, follow its progress and
+                    stay informed until it gets resolved.
+
+                </p>
+
+
+                <div class="hero-actions">
+
+                    <a
+                        href="submit-complaint.html"
+                        class="primary-btn"
+                    >
+
+                        Submit Complaint
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="track-complaint.html"
+                        class="secondary-btn"
+                    >
+
+                        Track Complaint
+
+                        <span>
+                            ↗
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="trust-line">
+
+                    Designed for a smarter,
+                    more responsive campus
+
+                </div>
+
+            </div>
+
+
+            <!-- DASHBOARD -->
+
+            <div class="hero-visual">
+
+                <div class="dashboard">
+
+
+                    <!-- DASHBOARD HEADER -->
+
+                    <div class="dashboard-top">
+
+                        <div class="dashboard-title">
+
+                            <div class="dashboard-icon">
+                                ◈
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Complaint Overview
+                                </h3>
+
+                                <p>
+                                    Campus activity
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="live">
+
+                            <span class="live-dot"></span>
+
+                            LIVE
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATS -->
+
+                    <div class="stat-grid">
+
+                        <div class="stat-card">
+
+                            <span>
+                                TOTAL
+                            </span>
+
+                            <strong class="stat-number">
+                                128
+                            </strong>
+
+                            <small class="stat-change">
+                                ↑ 12% this month
+                            </small>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <span>
+                                PENDING
+                            </span>
+
+                            <strong class="stat-number">
+                                24
+                            </strong>
+
+                            <small class="stat-change">
+                                Needs attention
+                            </small>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <span>
+                                RESOLVED
+                            </span>
+
+                            <strong class="stat-number">
+                                86
+                            </strong>
+
+                            <small class="stat-change">
+                                ↑ 18 this week
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CHART -->
+
+                    <div class="chart-card">
+
+                        <div class="chart-header">
+
+                            <h4>
+                                Complaint Activity
+                            </h4>
+
+                            <span>
+                                Last 7 days
+                            </span>
+
+                        </div>
+
+
+                        <div class="chart">
+
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RECENT COMPLAINTS -->
+
+                    <div class="recent">
+
+                        <div class="recent-top">
+
+                            <h4>
+                                Recent complaints
+                            </h4>
+
+                            <a
+                                href="complaints.html"
+                                class="view"
+                            >
+                                View all →
+                            </a>
+
+                        </div>
+
+
+                        <div class="complaint-row">
+
+                            <div class="complaint-name">
+
+                                <div class="complaint-icon">
+                                    !
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Classroom Projector
+                                    </strong>
+
+                                    <small>
+                                        SCCMS-1024
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <span class="pending">
+                                Pending
+                            </span>
+
+                        </div>
+
+
+                        <div class="complaint-row">
+
+                            <div class="complaint-name">
+
+                                <div class="complaint-icon">
+                                    Wi
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Wi-Fi Connectivity
+                                    </strong>
+
+                                    <small>
+                                        SCCMS-1022
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <span class="pending">
+                                Resolved
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FLOATING CARD -->
+
+                <div class="floating-card">
+
+                    <div class="floating-card-top">
+
+                        <div class="check">
+                            ✓
+                        </div>
+
+                        <span>
+                            STATUS UPDATED
+                        </span>
+
+                    </div>
+
+                    <h4>
+                        Complaint resolved
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             FEATURES
+        ====================================================== -->
+
+        <section class="features">
+
+            <div class="section-heading">
+
+                <span class="section-label">
+                    WHY SCCMS
+                </span>
+
+                <h2>
+                    Built around your campus experience.
+                </h2>
+
+                <p>
+                    A streamlined system that connects students,
+                    administration and complaint resolution in
+                    one place.
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+
+                <!-- CARD 1 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ↗
+                    </div>
+
+                    <h3>
+                        Easy Complaint Submission
+                    </h3>
+
+                    <p>
+                        Submit a complaint in just a few steps
+                        without unnecessary paperwork or
+                        complicated processes.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 2 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ◷
+                    </div>
+
+                    <h3>
+                        Real-Time Tracking
+                    </h3>
+
+                    <p>
+                        Track the current status of your complaint
+                        and know whether it is pending, in progress
+                        or resolved.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 3 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+                    <h3>
+                        Transparent Resolution
+                    </h3>
+
+                    <p>
+                        Every complaint follows a clear process,
+                        making campus issue resolution more
+                        accountable and transparent.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             HOW SCCMS WORKS
+        ====================================================== -->
+
+        <section class="campus-flow">
+
+            <div class="section-heading">
+                <span class="section-label">
+                    HOW SCCMS WORKS
+                </span>
+
+                <h2>
+                    From complaint to resolution,
+                    <span class="gradient-text">without the confusion.</span>
+                </h2>
+
+                <p>
+                    A simple digital workflow keeps every important step
+                    organized, visible and easy to follow.
+                </p>
+            </div>
+
+            <div class="flow-grid">
+
+                <div class="flow-card">
+                    <div class="flow-number">01</div>
+                    <h3>Submit Your Issue</h3>
+                    <p>
+                        Tell SCCMS what happened with a clear complaint
+                        and the information needed by the concerned department.
+                    </p>
+                </div>
+
+                <div class="flow-card">
+                    <div class="flow-number">02</div>
+                    <h3>Complaint Review</h3>
+                    <p>
+                        Your complaint moves into the system where it can
+                        be reviewed and directed to the appropriate department.
+                    </p>
+                </div>
+
+                <div class="flow-card">
+                    <div class="flow-number">03</div>
+                    <h3>Track Progress</h3>
+                    <p>
+                        Follow the current status of your complaint instead
+                        of repeatedly asking where the issue stands.
+                    </p>
+                </div>
+
+                <div class="flow-card">
+                    <div class="flow-number">04</div>
+                    <h3>Resolution</h3>
+                    <p>
+                        Once the issue is handled, the updated status gives
+                        you a clearer view of the final outcome.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SMART CAMPUS SUPPORT
+        ====================================================== -->
+
+        <section class="support-section">
+
+            <div class="support-panel">
+
+                <div class="support-copy">
+
+                    <span class="section-label">
+                        SMART CAMPUS SUPPORT
+                    </span>
+
+                    <h2>
+                        Everything important,
+                        <span>in one workflow.</span>
+                    </h2>
+
+                    <p>
+                        SCCMS brings complaint submission, progress tracking
+                        and student access together in a focused experience
+                        designed around everyday campus needs.
+                    </p>
+
+                    <div class="support-points">
+
+                        <div class="support-point">
+                            <i>✓</i>
+                            Simple digital submission
+                        </div>
+
+                        <div class="support-point">
+                            <i>◷</i>
+                            Clear complaint status
+                        </div>
+
+                        <div class="support-point">
+                            <i>↗</i>
+                            Easy dashboard access
+                        </div>
+
+                        <div class="support-point">
+                            <i>◎</i>
+                            Organized resolution flow
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="support-visual">
+
+                    <div class="support-dashboard">
+
+                        <div class="dashboard-top">
+                            <strong>Complaint Overview</strong>
+                            <span class="live-dot"></span>
+                        </div>
+
+                        <div class="status-row">
+                            <span>Complaint submitted</span>
+                            <span class="status-badge">DONE</span>
+                        </div>
+
+                        <div class="status-row">
+                            <span>Department review</span>
+                            <span class="status-badge">ACTIVE</span>
+                        </div>
+
+                        <div class="status-row">
+                            <span>Resolution update</span>
+                            <span class="status-badge">TRACKING</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             STUDENT EXPERIENCE
+        ====================================================== -->
+
+        <section class="trust-section">
+
+            <div class="section-heading">
+
+                <span class="section-label">
+                    THE SCCMS EXPERIENCE
+                </span>
+
+                <h2>
+                    Designed to keep students
+                    <span class="gradient-text">in control.</span>
+                </h2>
+
+                <p>
+                    Less uncertainty, fewer unnecessary steps and a cleaner
+                    way to stay connected with your complaint.
+                </p>
+
+            </div>
+
+
+            <div class="trust-grid">
+
+                <div class="trust-card">
+                    <div class="trust-card-icon">◉</div>
+
+                    <h3>One Place for Your Activity</h3>
+
+                    <p>
+                        Keep your complaint-related activity connected through
+                        your SCCMS profile and student dashboard.
+                    </p>
+                </div>
+
+                <div class="trust-card">
+                    <div class="trust-card-icon">↗</div>
+
+                    <h3>Clear & Accessible</h3>
+
+                    <p>
+                        Important actions and complaint information are kept
+                        easy to find without unnecessary visual clutter.
+                    </p>
+                </div>
+
+                <div class="trust-card">
+                    <div class="trust-card-icon">✓</div>
+
+                    <h3>Built for Accountability</h3>
+
+                    <p>
+                        A structured complaint journey makes it easier to
+                        understand what stage an issue has reached.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CTA
+        ====================================================== -->
+
+        <section class="cta-section">
+
+            <div class="cta">
+
+                <div class="cta-content">
+
+                    <h2>
+                        Have an issue on campus?
+                    </h2>
+
+                    <p>
+                        Don't let it stay unheard. Submit your
+                        complaint through SCCMS and let the right
+                        department take care of it.
+                    </p>
+
+                    <a
+                        href="submit-complaint.html"
+                        class="cta-btn"
+                    >
+
+                        Submit a Complaint
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
+    <footer>
+
+        <div class="footer-logo">
+            SC<span>CMS</span>
+        </div>
+
+        <p>
+            © 2026 Smart College Complaint Management System
+        </p>
+
+        <div class="footer-links">
+
+            <a href="about.html">
+                About
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
+
+            <a href="complaints.html">
+                Complaints
+            </a>
+
+        </div>
+
+    </footer>
+
+</body>
+</html>
