@@ -1,0 +1,5390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SCCMS | Pending Complaints</title>
+
+    <style>
+        /* =========================================================
+           SCCMS — PENDING COMPLAINTS
+           PREMIUM LIGHT BLUE ADMIN DASHBOARD
+        ========================================================= */
+
+        :root {
+            --primary: #1874ba;
+            --primary-dark: #125c94;
+            --primary-light: #3d94d1;
+            --primary-soft: #eaf5fc;
+
+            --blue-1: #f7fbfe;
+            --blue-2: #eef7fc;
+            --blue-3: #dceefa;
+            --blue-4: #c5e2f4;
+
+            --text-dark: #12344d;
+            --text-medium: #527087;
+            --text-light: #7890a1;
+
+            --white: #ffffff;
+            --border: #dbeaf4;
+
+            --shadow-sm: 0 4px 15px rgba(24, 116, 186, 0.08);
+            --shadow-md: 0 10px 30px rgba(24, 116, 186, 0.12);
+            --shadow-lg: 0 20px 50px rgba(24, 116, 186, 0.16);
+
+            --sidebar-width: 270px;
+            --topbar-height: 78px;
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 22px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(circle at 85% 5%,
+                    rgba(61, 148, 209, 0.08),
+                    transparent 28%),
+                radial-gradient(circle at 10% 80%,
+                    rgba(24, 116, 186, 0.06),
+                    transparent 30%),
+                var(--blue-1);
+
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+
+            background:
+                linear-gradient(90deg,
+                    rgba(24, 116, 186, 0.015) 1px,
+                    transparent 1px),
+                linear-gradient(rgba(24, 116, 186, 0.015) 1px,
+                    transparent 1px);
+
+            background-size: 42px 42px;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* =========================================================
+           BACKGROUND DECORATION
+        ========================================================= */
+
+        .background {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(2px);
+            opacity: 0.32;
+            animation: floatingOrb 16s ease-in-out infinite;
+        }
+
+        .orb.one {
+            width: 280px;
+            height: 280px;
+            background: rgba(61, 148, 209, 0.08);
+            top: 8%;
+            left: 24%;
+        }
+
+        .orb.two {
+            width: 220px;
+            height: 220px;
+            background: rgba(24, 116, 186, 0.07);
+            right: 7%;
+            top: 35%;
+            animation-delay: -5s;
+        }
+
+        .orb.three {
+            width: 330px;
+            height: 330px;
+            background: rgba(197, 226, 244, 0.38);
+            bottom: -140px;
+            left: 42%;
+            animation-delay: -9s;
+        }
+
+        @keyframes floatingOrb {
+
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate3d(35px, -25px, 0) scale(1.08);
+            }
+        }
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: var(--sidebar-width);
+            height: 100vh;
+
+            z-index: 1000;
+
+            background:
+                linear-gradient(180deg,
+                    #ffffff 0%,
+                    #f8fcff 65%,
+                    #f3f9fd 100%);
+
+            border-right: 1px solid var(--border);
+
+            display: flex;
+            flex-direction: column;
+
+            box-shadow:
+                10px 0 35px rgba(24, 116, 186, 0.06);
+
+            transition:
+                transform 0.4s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .logo-area {
+            height: 88px;
+            padding: 18px 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            border-bottom: 1px solid var(--blue-2);
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 14px;
+
+            display: grid;
+            place-items: center;
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-dark),
+                    var(--primary),
+                    var(--primary-light));
+
+            color: white;
+
+            font-size: 21px;
+            font-weight: 800;
+
+            box-shadow:
+                0 9px 25px rgba(24, 116, 186, 0.22);
+
+            transition:
+                transform 0.35s ease,
+                box-shadow 0.35s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-3px) rotate(-3deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .brand h2 {
+            color: var(--text-dark);
+            font-size: 18px;
+            letter-spacing: 0.5px;
+        }
+
+        .brand span {
+            display: block;
+            margin-top: 4px;
+
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .sidebar-menu {
+            padding: 22px 14px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .sidebar-menu::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-menu::-webkit-scrollbar-thumb {
+            background: var(--blue-4);
+            border-radius: 20px;
+        }
+
+        .menu-title {
+            padding: 0 12px 11px;
+
+            color: var(--text-light);
+
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .nav-item {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 11px 12px;
+            margin-bottom: 6px;
+
+            border-radius: 12px;
+
+            color: var(--text-medium);
+
+            text-decoration: none;
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease,
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .nav-item::before {
+            content: "";
+
+            position: absolute;
+            left: 0;
+            top: 9px;
+            bottom: 9px;
+
+            width: 3px;
+
+            border-radius: 5px;
+
+            background: var(--primary);
+
+            transform: scaleY(0);
+
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--blue-2);
+            color: var(--primary-dark);
+            transform: translateX(4px);
+        }
+
+        .nav-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item.active {
+            background:
+                linear-gradient(100deg,
+                    var(--primary-soft),
+                    #f5fbff);
+
+            color: var(--primary-dark);
+
+            box-shadow:
+                inset 0 0 0 1px rgba(24, 116, 186, 0.08),
+                0 6px 18px rgba(24, 116, 186, 0.07);
+        }
+
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 9px;
+
+            background: var(--blue-2);
+            color: var(--text-medium);
+
+            font-size: 15px;
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            background: var(--white);
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .nav-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .notification-count {
+            margin-left: auto;
+
+            min-width: 22px;
+            height: 22px;
+
+            padding: 0 6px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 20px;
+
+            background: var(--primary-soft);
+            color: var(--primary);
+
+            font-size: 9px;
+            font-weight: 800;
+
+            border: 1px solid var(--blue-3);
+        }
+
+        .sidebar-footer {
+            padding: 15px;
+
+            border-top: 1px solid var(--blue-2);
+        }
+
+        .admin-mini-card {
+            padding: 15px;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-soft),
+                    #f8fcff);
+
+            border: 1px solid var(--blue-3);
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-mini-card::after {
+            content: "";
+
+            position: absolute;
+            width: 80px;
+            height: 80px;
+
+            right: -30px;
+            top: -30px;
+
+            border-radius: 50%;
+
+            background: rgba(61, 148, 209, 0.08);
+        }
+
+        .admin-mini-card strong {
+            color: var(--text-dark);
+            font-size: 12px;
+        }
+
+        .admin-mini-card p {
+            color: var(--text-light);
+            font-size: 9px;
+            margin-top: 5px;
+        }
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        /* =========================================================
+           TOPBAR
+        ========================================================= */
+
+        .topbar {
+            height: var(--topbar-height);
+
+            padding: 0 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            position: sticky;
+            top: 0;
+            z-index: 500;
+
+            background:
+                rgba(255, 255, 255, 0.86);
+
+            backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(219, 234, 244, 0.9);
+
+            box-shadow:
+                0 5px 20px rgba(24, 116, 186, 0.035);
+        }
+
+        .top-context {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .context-mark {
+            width: 34px;
+            height: 34px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 10px;
+
+            background: var(--primary-soft);
+            color: var(--primary);
+
+            font-size: 14px;
+            font-weight: 800;
+
+            border: 1px solid var(--blue-3);
+        }
+
+        .context-title {
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        #liveClock {
+            color: var(--text-light);
+            font-size: 9px;
+            margin-top: 3px;
+        }
+
+        .mobile-menu {
+            display: none;
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 11px;
+
+            border: 1px solid var(--border);
+
+            background: var(--white);
+            color: var(--primary);
+
+            box-shadow: var(--shadow-sm);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-icon {
+            width: 40px;
+            height: 40px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
+
+            border: 1px solid var(--border);
+
+            background: var(--white);
+            color: var(--text-medium);
+
+            position: relative;
+
+            transition:
+                transform 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease,
+                background 0.3s ease;
+        }
+
+        .top-icon:hover {
+            transform: translateY(-3px);
+
+            background: var(--primary-soft);
+            color: var(--primary);
+
+            border-color: var(--blue-4);
+
+            box-shadow: var(--shadow-md);
+        }
+
+        .notification-dot {
+            position: absolute;
+
+            right: 5px;
+            top: 5px;
+
+            width: 7px;
+            height: 7px;
+
+            background: var(--primary);
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 0 4px rgba(24, 116, 186, 0.08);
+
+            animation: notificationPulse 1.8s infinite;
+        }
+
+        @keyframes notificationPulse {
+            50% {
+                transform: scale(1.35);
+                opacity: 0.65;
+            }
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            margin-left: 8px;
+            padding-left: 15px;
+
+            border-left: 1px solid var(--border);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-dark),
+                    var(--primary-light));
+
+            color: white;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            box-shadow:
+                0 6px 18px rgba(24, 116, 186, 0.2);
+        }
+
+        .profile-text strong {
+            display: block;
+
+            color: var(--text-dark);
+
+            font-size: 11px;
+        }
+
+        .profile-text span {
+            display: block;
+
+            color: var(--text-light);
+
+            font-size: 9px;
+
+            margin-top: 3px;
+        }
+
+        /* =========================================================
+           CONTENT
+        ========================================================= */
+
+        .content {
+            padding: 30px 32px 35px;
+
+            max-width: 1700px;
+            margin: auto;
+
+            animation: contentReveal 0.65s ease both;
+        }
+
+        @keyframes contentReveal {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .heading-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .page-heading h1 {
+            color: var(--text-dark);
+
+            font-size: clamp(25px, 3vw, 34px);
+            line-height: 1.15;
+
+            letter-spacing: -1px;
+        }
+
+        .page-heading p {
+            color: var(--text-medium);
+
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .heading-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 9px 13px;
+
+            border-radius: 10px;
+
+            background: var(--white);
+            border: 1px solid var(--border);
+
+            color: var(--text-medium);
+
+            font-size: 10px;
+            font-weight: 600;
+
+            box-shadow: var(--shadow-sm);
+        }
+
+        .heading-status i {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+            box-shadow: 0 0 0 4px rgba(24, 116, 186, 0.08);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            margin-top: 13px;
+
+            font-size: 10px;
+            color: var(--text-light);
+        }
+
+        .breadcrumb span:last-child {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           STATISTICS
+        ========================================================= */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 17px;
+
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            position: relative;
+
+            min-height: 155px;
+
+            padding: 21px;
+
+            background: var(--white);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-md);
+
+            box-shadow: var(--shadow-sm);
+
+            overflow: hidden;
+
+            transition:
+                transform 0.35s cubic-bezier(.2, .8, .2, 1),
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
+
+            animation: cardEntrance 0.65s ease both;
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: .04s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: .10s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: .16s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: .22s;
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 4px;
+            height: 100%;
+
+            background:
+                linear-gradient(180deg,
+                    var(--primary-light),
+                    var(--primary));
+        }
+
+        .stat-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 145px;
+            height: 145px;
+
+            right: -85px;
+            top: -85px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                    rgba(61, 148, 209, 0.12),
+                    transparent 70%);
+
+            transition: transform 0.5s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+
+            border-color: var(--blue-4);
+
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card:hover::after {
+            transform: scale(1.25);
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            color: var(--text-medium);
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            width: 43px;
+            height: 43px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(145deg,
+                    var(--blue-2),
+                    var(--primary-soft));
+
+            border: 1px solid var(--blue-3);
+
+            color: var(--primary);
+
+            font-size: 17px;
+
+            transition:
+                transform 0.35s ease,
+                background 0.35s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: translateY(-3px) rotate(3deg);
+
+            background:
+                linear-gradient(145deg,
+                    var(--primary-soft),
+                    var(--blue-3));
+        }
+
+        .stat-value {
+            margin-top: 15px;
+
+            color: var(--text-dark);
+
+            font-size: 29px;
+            font-weight: 800;
+
+            letter-spacing: -1px;
+        }
+
+        .stat-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-top: 7px;
+        }
+
+        .stat-change {
+            color: var(--primary);
+
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .mini-bars {
+            display: flex;
+            align-items: end;
+            gap: 3px;
+
+            height: 23px;
+        }
+
+        .mini-bars span {
+            width: 4px;
+
+            border-radius: 5px;
+
+            background:
+                linear-gradient(180deg,
+                    var(--primary-light),
+                    var(--primary));
+
+            animation: barDance 1.7s ease-in-out infinite;
+        }
+
+        .mini-bars span:nth-child(1) {
+            height: 8px;
+        }
+
+        .mini-bars span:nth-child(2) {
+            height: 14px;
+            animation-delay: .1s;
+        }
+
+        .mini-bars span:nth-child(3) {
+            height: 10px;
+            animation-delay: .2s;
+        }
+
+        .mini-bars span:nth-child(4) {
+            height: 18px;
+            animation-delay: .3s;
+        }
+
+        .mini-bars span:nth-child(5) {
+            height: 23px;
+            animation-delay: .4s;
+        }
+
+        @keyframes barDance {
+            50% {
+                transform: scaleY(.55);
+                opacity: .65;
+            }
+        }
+
+        /* =========================================================
+           PANELS
+        ========================================================= */
+
+        .charts-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.1fr) minmax(350px, .9fr);
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            position: relative;
+
+            background: var(--white);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-lg);
+
+            box-shadow: var(--shadow-sm);
+
+            overflow: hidden;
+
+            transition:
+                box-shadow 0.35s ease,
+                transform 0.35s ease,
+                border-color 0.35s ease;
+        }
+
+        .panel:hover {
+            border-color: var(--blue-4);
+            box-shadow: var(--shadow-md);
+        }
+
+        .panel::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            top: 0;
+
+            height: 3px;
+
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    var(--primary-light),
+                    var(--primary),
+                    transparent);
+
+            opacity: .7;
+        }
+
+        .panel-header {
+            padding: 22px 24px 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid var(--blue-2);
+        }
+
+        .panel-title h3 {
+            color: var(--text-dark);
+
+            font-size: 14px;
+            font-weight: 750;
+        }
+
+        .panel-title p {
+            color: var(--text-light);
+
+            font-size: 9px;
+
+            margin-top: 5px;
+        }
+
+        .chart-select,
+        .tool-select {
+            appearance: none;
+
+            color: var(--text-medium);
+
+            background:
+                linear-gradient(145deg,
+                    #ffffff,
+                    var(--blue-1));
+
+            border: 1px solid var(--border);
+
+            border-radius: 9px;
+
+            padding: 8px 28px 8px 10px;
+
+            outline: none;
+
+            font-size: 9px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                border-color .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .chart-select:focus,
+        .tool-select:focus {
+            border-color: var(--blue-4);
+
+            box-shadow:
+                0 0 0 4px rgba(24, 116, 186, 0.06);
+        }
+
+        .chart-select option,
+        .tool-select option {
+            background: white;
+            color: var(--text-dark);
+        }
+
+        /* =========================================================
+           NIGHTINGALE CHART
+        ========================================================= */
+
+        .nightingale-wrapper {
+            min-height: 385px;
+
+            position: relative;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #nightingaleCanvas {
+            width: 100%;
+            max-width: 520px;
+            height: 360px;
+
+            cursor: default;
+        }
+
+        .chart-center-label {
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: 112px;
+            height: 112px;
+
+            border-radius: 50%;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            pointer-events: none;
+
+            background:
+                radial-gradient(circle at 35% 30%,
+                    #ffffff,
+                    var(--blue-2));
+
+            border: 1px solid var(--blue-3);
+
+            box-shadow:
+                0 15px 35px rgba(24, 116, 186, 0.10),
+                inset 0 0 20px rgba(24, 116, 186, 0.035);
+        }
+
+        .chart-center-label strong {
+            color: var(--text-dark);
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .chart-center-label span {
+            color: var(--text-light);
+
+            font-size: 9px;
+            font-weight: 600;
+
+            margin-top: 3px;
+        }
+
+        .chart-legend {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 9px;
+
+            padding: 0 23px 22px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 9px;
+
+            border-radius: 9px;
+
+            background: var(--blue-1);
+
+            border: 1px solid transparent;
+
+            color: var(--text-medium);
+
+            font-size: 9px;
+
+            transition:
+                background .25s ease,
+                border-color .25s ease;
+        }
+
+        .legend-item:hover {
+            background: var(--blue-2);
+            border-color: var(--blue-3);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-light),
+                    var(--primary));
+        }
+
+        .legend-value {
+            margin-left: auto;
+
+            color: var(--text-dark);
+
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           PRIORITY
+        ========================================================= */
+
+        .priority-chart {
+            padding: 25px;
+
+            min-height: 385px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .priority-row {
+            margin: 16px 0;
+        }
+
+        .priority-info {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+
+            font-size: 10px;
+        }
+
+        .priority-info span:first-child {
+            color: var(--text-medium);
+            font-weight: 600;
+        }
+
+        .priority-info span:last-child {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .progress {
+            height: 8px;
+
+            border-radius: 20px;
+
+            background: var(--blue-2);
+
+            overflow: hidden;
+
+            border: 1px solid var(--blue-3);
+        }
+
+        .progress-fill {
+            height: 100%;
+
+            width: var(--width);
+
+            border-radius: inherit;
+
+            background:
+                linear-gradient(90deg,
+                    var(--primary-light),
+                    var(--primary));
+
+            box-shadow:
+                0 3px 10px rgba(24, 116, 186, 0.16);
+
+            animation: progressReveal 1s cubic-bezier(.2, .8, .2, 1) both;
+            transform-origin: left;
+        }
+
+        @keyframes progressReveal {
+            from {
+                width: 0;
+            }
+        }
+
+        .priority-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-top: 25px;
+            padding: 17px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-soft),
+                    var(--blue-1));
+
+            border: 1px solid var(--blue-3);
+        }
+
+        .priority-summary strong {
+            display: block;
+
+            color: var(--text-dark);
+
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .priority-summary span {
+            display: block;
+
+            color: var(--text-light);
+
+            font-size: 9px;
+
+            margin-top: 3px;
+        }
+
+        /* =========================================================
+           FILTER TABS
+        ========================================================= */
+
+        .filter-tabs {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+        .filter-tab {
+            position: relative;
+
+            min-height: 76px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 13px;
+
+            border-radius: 15px;
+
+            background: var(--white);
+
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow-sm);
+
+            color: var(--text-medium);
+
+            text-align: left;
+
+            overflow: hidden;
+
+            transition:
+                transform .3s cubic-bezier(.2, .8, .2, 1),
+                border-color .3s ease,
+                box-shadow .3s ease,
+                background .3s ease;
+        }
+
+        .filter-tab::after {
+            content: "";
+
+            position: absolute;
+
+            right: -40px;
+            bottom: -40px;
+
+            width: 100px;
+            height: 100px;
+
+            border-radius: 50%;
+
+            background: rgba(24, 116, 186, 0.045);
+
+            transition: transform .4s ease;
+        }
+
+        .filter-tab:hover {
+            transform: translateY(-4px);
+
+            border-color: var(--blue-4);
+
+            box-shadow: var(--shadow-md);
+        }
+
+        .filter-tab:hover::after {
+            transform: scale(1.3);
+        }
+
+        .filter-tab.active {
+            background:
+                linear-gradient(135deg,
+                    var(--primary-soft),
+                    #ffffff);
+
+            border-color: var(--blue-4);
+
+            box-shadow:
+                var(--shadow-md);
+        }
+
+        .filter-icon {
+            width: 38px;
+            height: 38px;
+
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
+
+            background: var(--blue-2);
+            color: var(--primary);
+
+            border: 1px solid var(--blue-3);
+
+            font-size: 14px;
+            font-weight: 800;
+
+            transition:
+                transform .3s ease,
+                background .3s ease;
+        }
+
+        .filter-tab:hover .filter-icon,
+        .filter-tab.active .filter-icon {
+            background: var(--white);
+            transform: scale(1.06);
+        }
+
+        .filter-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        .filter-text strong {
+            display: block;
+
+            color: var(--text-dark);
+
+            font-size: 10px;
+            font-weight: 750;
+        }
+
+        .filter-text span {
+            display: block;
+
+            color: var(--text-light);
+
+            font-size: 8px;
+
+            margin-top: 4px;
+        }
+
+        /* =========================================================
+           TABLE PANEL
+        ========================================================= */
+
+        .table-panel {
+            border-radius: var(--radius-lg);
+        }
+
+        .table-toolbar {
+            padding: 17px 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            border-bottom: 1px solid var(--blue-2);
+        }
+
+        .search-box {
+            position: relative;
+
+            width: min(390px, 100%);
+        }
+
+        .search-icon {
+            position: absolute;
+
+            left: 13px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: var(--text-light);
+
+            font-size: 14px;
+
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+
+            height: 39px;
+
+            padding: 0 13px 0 36px;
+
+            border-radius: 10px;
+
+            background: var(--blue-1);
+
+            border: 1px solid var(--border);
+
+            outline: none;
+
+            color: var(--text-dark);
+
+            font-size: 10px;
+
+            transition:
+                background .25s ease,
+                border-color .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-light);
+        }
+
+        .search-box input:focus {
+            background: var(--white);
+
+            border-color: var(--blue-4);
+
+            box-shadow:
+                0 0 0 4px rgba(24, 116, 186, 0.055);
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .tool-select {
+            height: 39px;
+        }
+
+        .tool-btn {
+            height: 39px;
+
+            padding: 0 14px;
+
+            border-radius: 10px;
+
+            border: 1px solid var(--blue-3);
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-soft),
+                    #ffffff);
+
+            color: var(--primary-dark);
+
+            font-size: 9px;
+            font-weight: 750;
+
+            transition:
+                transform .3s ease,
+                background .3s ease,
+                color .3s ease,
+                box-shadow .3s ease;
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-2px);
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-dark),
+                    var(--primary));
+
+            color: white;
+
+            box-shadow:
+                0 8px 20px rgba(24, 116, 186, 0.18);
+        }
+
+        /* =========================================================
+           TABLE
+        ========================================================= */
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        .table-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .table-scroll::-webkit-scrollbar-track {
+            background: var(--blue-1);
+        }
+
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: var(--blue-4);
+            border-radius: 20px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 920px;
+
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--blue-1);
+        }
+
+        th {
+            padding: 13px 15px;
+
+            color: var(--text-light);
+
+            font-size: 8px;
+            font-weight: 800;
+
+            text-transform: uppercase;
+            letter-spacing: .7px;
+
+            text-align: left;
+
+            border-bottom: 1px solid var(--border);
+
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 15px;
+
+            color: var(--text-medium);
+
+            font-size: 9px;
+
+            border-bottom: 1px solid var(--blue-2);
+
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            position: relative;
+
+            transition:
+                background .25s ease,
+                transform .25s ease;
+        }
+
+        tbody tr:hover {
+            background: #fbfdff;
+        }
+
+        tbody tr:hover td:first-child {
+            box-shadow: inset 3px 0 0 var(--primary-light);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .checkbox {
+            width: 14px;
+            height: 14px;
+
+            accent-color: var(--primary);
+
+            cursor: pointer;
+        }
+
+        .complaint-id {
+            color: var(--primary) !important;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .complaint-title {
+            display: block;
+
+            color: var(--text-dark);
+
+            font-size: 10px;
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .complaint-desc {
+            display: block;
+
+            max-width: 220px;
+
+            color: var(--text-light);
+
+            font-size: 8px;
+
+            margin-top: 4px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .badge,
+        .priority {
+            display: inline-flex;
+            align-items: center;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+
+            font-size: 8px;
+            font-weight: 750;
+
+            white-space: nowrap;
+        }
+
+        .badge {
+            background: var(--blue-2);
+
+            border: 1px solid var(--blue-3);
+
+            color: var(--primary-dark);
+        }
+
+        .priority {
+            background: var(--blue-1);
+
+            border: 1px solid var(--blue-3);
+
+            color: var(--primary);
+        }
+
+        .priority.high {
+            border-color: rgba(24, 116, 186, .35);
+            background: var(--primary-soft);
+            color: var(--primary-dark);
+        }
+
+        .priority.medium {
+            border-color: rgba(61, 148, 209, .30);
+            background: #f1f8fd;
+            color: var(--primary);
+        }
+
+        .priority.low {
+            border-color: rgba(120, 144, 161, .25);
+            background: #f5f9fb;
+            color: var(--text-medium);
+        }
+
+        .assignee {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: var(--text-medium);
+
+            font-size: 9px;
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+        .assignee-avatar {
+            width: 29px;
+            height: 29px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-dark),
+                    var(--primary-light));
+
+            color: white;
+
+            font-size: 8px;
+            font-weight: 800;
+
+            box-shadow:
+                0 5px 12px rgba(24, 116, 186, .16);
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn {
+            width: 31px;
+            height: 31px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 9px;
+
+            background: var(--blue-1);
+
+            border: 1px solid var(--border);
+
+            color: var(--primary);
+
+            font-size: 11px;
+
+            transition:
+                transform .28s ease,
+                background .28s ease,
+                color .28s ease,
+                box-shadow .28s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-dark),
+                    var(--primary));
+
+            color: white;
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 8px 18px rgba(24, 116, 186, .18);
+        }
+
+        /* =========================================================
+           TABLE FOOTER
+        ========================================================= */
+
+        .table-footer {
+            padding: 15px 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            border-top: 1px solid var(--blue-2);
+        }
+
+        .showing {
+            color: var(--text-light);
+
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .page-btn {
+            min-width: 29px;
+            height: 29px;
+
+            padding: 0 7px;
+
+            border-radius: 8px;
+
+            background: var(--white);
+
+            border: 1px solid var(--border);
+
+            color: var(--text-medium);
+
+            font-size: 9px;
+            font-weight: 700;
+
+            transition:
+                transform .25s ease,
+                background .25s ease,
+                color .25s ease,
+                border-color .25s ease;
+        }
+
+        .page-btn:hover {
+            transform: translateY(-2px);
+
+            background: var(--primary-soft);
+
+            border-color: var(--blue-4);
+
+            color: var(--primary-dark);
+        }
+
+        .page-btn.active {
+            background:
+                linear-gradient(135deg,
+                    var(--primary-dark),
+                    var(--primary));
+
+            color: white;
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 6px 16px rgba(24, 116, 186, .17);
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        footer {
+            margin-top: 25px;
+            padding: 20px 3px 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            color: var(--text-light);
+
+            font-size: 8px;
+
+            border-top: 1px solid var(--border);
+        }
+
+        footer span:last-child {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        .toast-container {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            z-index: 3000;
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            min-width: 280px;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 13px 16px;
+
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, .96);
+
+            border: 1px solid var(--blue-3);
+
+            color: var(--text-dark);
+
+            box-shadow: var(--shadow-lg);
+
+            font-size: 10px;
+            font-weight: 600;
+
+            animation:
+                toastIn .4s cubic-bezier(.2, .8, .2, 1) both;
+        }
+
+        .toast.removing {
+            animation:
+                toastOut .4s ease both;
+        }
+
+        .toast-dot {
+            width: 8px;
+            height: 8px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(25px) scale(.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes toastOut {
+            to {
+                opacity: 0;
+                transform: translateX(25px) scale(.96);
+            }
+        }
+
+        /* =========================================================
+           SCROLL TOP
+        ========================================================= */
+
+        .scroll-top {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            width: 42px;
+            height: 42px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 12px;
+
+            border: none;
+
+            background:
+                linear-gradient(135deg,
+                    var(--primary-dark),
+                    var(--primary));
+
+            color: white;
+
+            font-size: 16px;
+
+            box-shadow:
+                0 10px 25px rgba(24, 116, 186, .22);
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform: translateY(15px);
+
+            transition:
+                opacity .3s ease,
+                visibility .3s ease,
+                transform .3s ease;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* =========================================================
+           RIPPLE
+        ========================================================= */
+
+        .ripple {
+            position: absolute;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, .45);
+
+            transform: scale(0);
+
+            pointer-events: none;
+
+            animation: rippleAnimation .6s ease-out;
+        }
+
+        @keyframes rippleAnimation {
+            to {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1200px) {
+            :root {
+                --sidebar-width: 245px;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .topbar {
+                padding: 0 25px;
+            }
+
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+                box-shadow:
+                    15px 0 50px rgba(18, 52, 77, .16);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: grid;
+            }
+
+            .top-context {
+                gap: 8px;
+            }
+
+            .context-mark {
+                display: none;
+            }
+
+            .filter-tabs {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 650px) {
+            .topbar {
+                height: 70px;
+                padding: 0 16px;
+            }
+
+            .profile-text {
+                display: none;
+            }
+
+            .profile {
+                padding-left: 8px;
+            }
+
+            .top-actions {
+                gap: 6px;
+            }
+
+            .top-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .avatar {
+                width: 36px;
+                height: 36px;
+            }
+
+            .content {
+                padding: 22px 15px 28px;
+            }
+
+            .heading-top {
+                flex-direction: column;
+            }
+
+            .heading-status {
+                align-self: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                grid-template-columns: 1fr;
+            }
+
+            .table-toolbar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .toolbar-right {
+                width: 100%;
+            }
+
+            .tool-select,
+            .tool-btn {
+                flex: 1;
+            }
+
+            .chart-legend {
+                grid-template-columns: 1fr;
+            }
+
+            .nightingale-wrapper {
+                min-height: 330px;
+            }
+
+            #nightingaleCanvas {
+                height: 310px;
+            }
+
+            .priority-chart {
+                min-height: 330px;
+            }
+
+            .table-footer {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .pagination {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 3px;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 7px;
+            }
+
+            .toast-container {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+            }
+
+            .toast {
+                min-width: 0;
+                width: 100%;
+            }
+
+            .scroll-top {
+                right: 16px;
+                bottom: 16px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .page-heading h1 {
+                font-size: 25px;
+            }
+
+            .stat-card {
+                min-height: 145px;
+            }
+
+            .panel-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .chart-select {
+                width: 100%;
+            }
+
+            .pagination .page-btn:nth-child(5) {
+                display: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         BACKGROUND
+    ========================================================= -->
+
+    <div class="background">
+        <div class="orb one"></div>
+        <div class="orb two"></div>
+        <div class="orb three"></div>
+    </div>
+
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================= -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="logo-area">
+
+            <div class="logo">
+                S
+            </div>
+
+            <div class="brand">
+                <h2>SCCMS</h2>
+                <span>Admin Control Center</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <div class="menu-title">
+                Main Menu
+            </div>
+
+
+            <a href="dashboard.html" class="nav-item">
+
+                <span class="nav-icon">⌂</span>
+
+                <span class="nav-text">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="all-complaints.html" class="nav-item">
+
+                <span class="nav-icon">▣</span>
+
+                <span class="nav-text">
+                    All Complaints
+                </span>
+
+            </a>
+
+
+            <a href="pending.html" class="nav-item active">
+
+                <span class="nav-icon">◷</span>
+
+                <span class="nav-text">
+                    Pending
+                </span>
+
+                <span class="notification-count">
+                    8
+                </span>
+
+            </a>
+
+
+            <a href="in-progress.html" class="nav-item">
+
+                <span class="nav-icon">◌</span>
+
+                <span class="nav-text">
+                    In Progress
+                </span>
+
+            </a>
+
+
+            <a href="resolved.html" class="nav-item">
+
+                <span class="nav-icon">✓</span>
+
+                <span class="nav-text">
+                    Resolved
+                </span>
+
+            </a>
+
+
+            <a href="rejected.html" class="nav-item">
+
+                <span class="nav-icon">×</span>
+
+                <span class="nav-text">
+                    Rejected
+                </span>
+
+            </a>
+
+
+            <div class="menu-title" style="margin-top:22px;">
+                Management
+            </div>
+
+
+            <a href="reports.html" class="nav-item">
+
+                <span class="nav-icon">▤</span>
+
+                <span class="nav-text">
+                    Reports
+                </span>
+
+            </a>
+
+
+            <a href="#" class="nav-item">
+
+                <span class="nav-icon">▥</span>
+
+                <span class="nav-text">
+                    Analytics
+                </span>
+
+            </a>
+
+
+            <a href="#" class="nav-item">
+
+                <span class="nav-icon">♧</span>
+
+                <span class="nav-text">
+                    Notifications
+                </span>
+
+                <span class="notification-count">
+                    5
+                </span>
+
+            </a>
+
+
+            <a href="#" class="nav-item">
+
+                <span class="nav-icon">⚙</span>
+
+                <span class="nav-text">
+                    Settings
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="admin-mini-card">
+
+                <strong>
+                    SCCMS Admin
+                </strong>
+
+                <p>
+                    Powerful • Secure • Smart
+                </p>
+
+                <p>
+                    System Version 2.0.0
+                </p>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================= -->
+
+    <main class="main">
+
+
+        <!-- =====================================================
+             TOPBAR
+        ===================================================== -->
+
+        <header class="topbar">
+
+            <div class="top-context">
+
+                <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">
+                    ☰
+                </button>
+
+
+                <div class="context-mark">
+                    ▣
+                </div>
+
+
+                <div>
+
+                    <div class="context-title">
+                        Complaint Management
+                    </div>
+
+                    <div id="liveClock">
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button class="top-icon" id="notificationBtn" aria-label="Notifications">
+                    ♧
+
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <button class="top-icon" id="messageBtn" aria-label="Messages">
+                    ✉
+                </button>
+
+
+                <div class="profile">
+
+                    <div class="avatar">
+                        AU
+                    </div>
+
+                    <div class="profile-text">
+
+                        <strong>
+                            Admin User
+                        </strong>
+
+                        <span>
+                            Super Admin
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             CONTENT
+        ===================================================== -->
+
+        <section class="content">
+
+
+            <!-- PAGE HEADING -->
+
+            <div class="page-heading">
+
+                <div class="heading-top">
+
+                    <div>
+
+                        <h1>
+                            Pending Complaints
+                        </h1>
+
+                        <p>
+                            Monitor, prioritize and manage unresolved complaints.
+                        </p>
+
+                    </div>
+
+
+                    <div class="heading-status">
+
+                        <i></i>
+
+                        Live complaint queue
+
+                    </div>
+
+                </div>
+
+
+                <div class="breadcrumb">
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                    <span>
+                        ›
+                    </span>
+
+                    <span>
+                        Pending Complaints
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================= -->
+
+            <div class="stats-grid">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span class="stat-label">
+                            Total Pending
+                        </span>
+
+                        <div class="stat-icon">
+                            ◷
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-value counter" data-target="128">
+                        0
+                    </div>
+
+
+                    <div class="stat-bottom">
+
+                        <span class="stat-change">
+                            ↑ 12% from last week
+                        </span>
+
+
+                        <div class="mini-bars">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span class="stat-label">
+                            High Priority
+                        </span>
+
+                        <div class="stat-icon">
+                            !
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-value counter" data-target="34">
+                        0
+                    </div>
+
+
+                    <div class="stat-bottom">
+
+                        <span class="stat-change">
+                            ↑ 8% from last week
+                        </span>
+
+
+                        <div class="mini-bars">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span class="stat-label">
+                            Medium Priority
+                        </span>
+
+                        <div class="stat-icon">
+                            ◈
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-value counter" data-target="76">
+                        0
+                    </div>
+
+
+                    <div class="stat-bottom">
+
+                        <span class="stat-change">
+                            ↑ 15% from last week
+                        </span>
+
+
+                        <div class="mini-bars">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <span class="stat-label">
+                            Avg. Pending Time
+                        </span>
+
+                        <div class="stat-icon">
+                            ◴
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-value" id="daysCounter">
+                        0
+                    </div>
+
+
+                    <div class="stat-bottom">
+
+                        <span class="stat-change">
+                            ↓ 5% from last week
+                        </span>
+
+
+                        <div class="mini-bars">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CHARTS
+            ================================================= -->
+
+            <div class="charts-grid">
+
+
+                <!-- NIGHTINGALE -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <h3>
+                                Pending by Category
+                            </h3>
+
+                            <p>
+                                3D Nightingale / Polar Area Analysis
+                            </p>
+
+                        </div>
+
+
+                        <select class="chart-select" id="chartPeriod">
+
+                            <option>
+                                This Week
+                            </option>
+
+                            <option>
+                                This Month
+                            </option>
+
+                            <option>
+                                This Year
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="nightingale-wrapper">
+
+                        <canvas id="nightingaleCanvas"></canvas>
+
+
+                        <div class="chart-center-label">
+
+                            <strong>
+                                128
+                            </strong>
+
+                            <span>
+                                Pending
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-legend">
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot"></span>
+
+                            <span>
+                                Infrastructure
+                            </span>
+
+                            <span class="legend-value">
+                                32
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot"></span>
+
+                            <span>
+                                Cleanliness
+                            </span>
+
+                            <span class="legend-value">
+                                28
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot"></span>
+
+                            <span>
+                                Maintenance
+                            </span>
+
+                            <span class="legend-value">
+                                24
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot"></span>
+
+                            <span>
+                                Academics
+                            </span>
+
+                            <span class="legend-value">
+                                20
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot"></span>
+
+                            <span>
+                                Hostel
+                            </span>
+
+                            <span class="legend-value">
+                                14
+                            </span>
+
+                        </div>
+
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot"></span>
+
+                            <span>
+                                Others
+                            </span>
+
+                            <span class="legend-value">
+                                10
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRIORITY -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <h3>
+                                Pending by Priority
+                            </h3>
+
+                            <p>
+                                Priority distribution overview
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="priority-chart">
+
+
+                        <div class="priority-row">
+
+                            <div class="priority-info">
+
+                                <span>
+                                    High Priority
+                                </span>
+
+                                <span>
+                                    34 / 128
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <div class="progress-fill" style="--width:26.5%;"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="priority-row">
+
+                            <div class="priority-info">
+
+                                <span>
+                                    Medium Priority
+                                </span>
+
+                                <span>
+                                    76 / 128
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <div class="progress-fill" style="--width:59.4%;"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="priority-row">
+
+                            <div class="priority-info">
+
+                                <span>
+                                    Low Priority
+                                </span>
+
+                                <span>
+                                    18 / 128
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <div class="progress-fill" style="--width:14.1%;"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="priority-summary">
+
+                            <div>
+
+                                <strong>
+                                    128
+                                </strong>
+
+                                <span>
+                                    Total Pending
+                                </span>
+
+                            </div>
+
+
+                            <div style="text-align:right;">
+
+                                <strong>
+                                    3.4
+                                </strong>
+
+                                <span>
+                                    Average Days
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FILTER TABS
+            ================================================= -->
+
+            <div class="filter-tabs">
+
+
+                <button class="filter-tab active" data-filter="all">
+
+                    <div class="filter-icon">
+                        ▣
+                    </div>
+
+                    <div class="filter-text">
+
+                        <strong>
+                            All Pending
+                        </strong>
+
+                        <span>
+                            128 complaints
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <button class="filter-tab" data-filter="high">
+
+                    <div class="filter-icon">
+                        ↑
+                    </div>
+
+                    <div class="filter-text">
+
+                        <strong>
+                            High Priority
+                        </strong>
+
+                        <span>
+                            34 complaints
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <button class="filter-tab" data-filter="medium">
+
+                    <div class="filter-icon">
+                        ◈
+                    </div>
+
+                    <div class="filter-text">
+
+                        <strong>
+                            Medium Priority
+                        </strong>
+
+                        <span>
+                            76 complaints
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <button class="filter-tab" data-filter="low">
+
+                    <div class="filter-icon">
+                        ↓
+                    </div>
+
+                    <div class="filter-text">
+
+                        <strong>
+                            Low Priority
+                        </strong>
+
+                        <span>
+                            18 complaints
+                        </span>
+
+                    </div>
+
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================= -->
+
+            <div class="panel table-panel">
+
+
+                <div class="table-toolbar">
+
+                    <div class="search-box">
+
+                        <span class="search-icon">
+                            ⌕
+                        </span>
+
+                        <input type="text" id="searchInput" placeholder="Search complaint ID, title, user...">
+
+                    </div>
+
+
+                    <div class="toolbar-right">
+
+                        <select class="tool-select" id="sortSelect">
+
+                            <option value="newest">
+                                Newest First
+                            </option>
+
+                            <option value="oldest">
+                                Oldest First
+                            </option>
+
+                            <option value="priority">
+                                Priority
+                            </option>
+
+                        </select>
+
+
+                        <button class="tool-btn" id="refreshBtn">
+                            ↻ Refresh
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-scroll">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    <input type="checkbox" class="checkbox" id="selectAll">
+                                </th>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    Complaint
+                                </th>
+
+                                <th>
+                                    Category
+                                </th>
+
+                                <th>
+                                    Priority
+                                </th>
+
+                                <th>
+                                    Submitted
+                                </th>
+
+                                <th>
+                                    Assigned To
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="complaintBody">
+
+
+                            <tr data-priority="high" data-search="c1045 water leakage block a infrastructure">
+
+                                <td>
+                                    <input type="checkbox" class="checkbox row-check">
+                                </td>
+
+                                <td class="complaint-id">
+                                    #C-1045
+                                </td>
+
+                                <td>
+
+                                    <span class="complaint-title">
+                                        Water Leakage in Block A
+                                    </span>
+
+                                    <span class="complaint-desc">
+                                        There is a water leakage in Block A...
+                                    </span>
+
+                                </td>
+
+                                <td>
+                                    <span class="badge">
+                                        Infrastructure
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="priority high">
+                                        High
+                                    </span>
+                                </td>
+
+                                <td>
+                                    May 18, 2025<br>
+                                    10:24 AM
+                                </td>
+
+                                <td>
+
+                                    <div class="assignee">
+
+                                        <div class="assignee-avatar">
+                                            JD
+                                        </div>
+
+                                        John Doe
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="action-group">
+
+                                        <button class="action-btn view-btn" title="View">
+                                            ◉
+                                        </button>
+
+                                        <button class="action-btn assign-btn" title="Assign">
+                                            ♙
+                                        </button>
+
+                                        <button class="action-btn more-btn" title="More">
+                                            ⋯
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr data-priority="medium" data-search="c1044 broken window lab maintenance">
+
+                                <td>
+                                    <input type="checkbox" class="checkbox row-check">
+                                </td>
+
+                                <td class="complaint-id">
+                                    #C-1044
+                                </td>
+
+                                <td>
+
+                                    <span class="complaint-title">
+                                        Broken Window in Lab 3
+                                    </span>
+
+                                    <span class="complaint-desc">
+                                        The window in computer lab is broken...
+                                    </span>
+
+                                </td>
+
+                                <td>
+                                    <span class="badge">
+                                        Maintenance
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="priority medium">
+                                        Medium
+                                    </span>
+                                </td>
+
+                                <td>
+                                    May 18, 2025<br>
+                                    09:15 AM
+                                </td>
+
+                                <td>
+
+                                    <div class="assignee">
+
+                                        <div class="assignee-avatar">
+                                            JS
+                                        </div>
+
+                                        Jane Smith
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="action-group">
+
+                                        <button class="action-btn view-btn">
+                                            ◉
+                                        </button>
+
+                                        <button class="action-btn assign-btn">
+                                            ♙
+                                        </button>
+
+                                        <button class="action-btn more-btn">
+                                            ⋯
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr data-priority="high" data-search="c1043 hostel wifi not working hostel">
+
+                                <td>
+                                    <input type="checkbox" class="checkbox row-check">
+                                </td>
+
+                                <td class="complaint-id">
+                                    #C-1043
+                                </td>
+
+                                <td>
+
+                                    <span class="complaint-title">
+                                        Hostel Wi-Fi Not Working
+                                    </span>
+
+                                    <span class="complaint-desc">
+                                        Wi-Fi is not working in hostel...
+                                    </span>
+
+                                </td>
+
+                                <td>
+                                    <span class="badge">
+                                        Hostel
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="priority high">
+                                        High
+                                    </span>
+                                </td>
+
+                                <td>
+                                    May 18, 2025<br>
+                                    08:45 AM
+                                </td>
+
+                                <td>
+
+                                    <div class="assignee">
+
+                                        <div class="assignee-avatar">
+                                            ML
+                                        </div>
+
+                                        Michael Lee
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="action-group">
+
+                                        <button class="action-btn view-btn">
+                                            ◉
+                                        </button>
+
+                                        <button class="action-btn assign-btn">
+                                            ♙
+                                        </button>
+
+                                        <button class="action-btn more-btn">
+                                            ⋯
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr data-priority="medium" data-search="c1042 classroom projector issue academics">
+
+                                <td>
+                                    <input type="checkbox" class="checkbox row-check">
+                                </td>
+
+                                <td class="complaint-id">
+                                    #C-1042
+                                </td>
+
+                                <td>
+
+                                    <span class="complaint-title">
+                                        Classroom Projector Issue
+                                    </span>
+
+                                    <span class="complaint-desc">
+                                        Projector is not working in classroom...
+                                    </span>
+
+                                </td>
+
+                                <td>
+                                    <span class="badge">
+                                        Academics
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="priority medium">
+                                        Medium
+                                    </span>
+                                </td>
+
+                                <td>
+                                    May 17, 2025<br>
+                                    04:30 PM
+                                </td>
+
+                                <td>
+
+                                    <div class="assignee">
+
+                                        <div class="assignee-avatar">
+                                            ED
+                                        </div>
+
+                                        Emily Davis
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="action-group">
+
+                                        <button class="action-btn view-btn">
+                                            ◉
+                                        </button>
+
+                                        <button class="action-btn assign-btn">
+                                            ♙
+                                        </button>
+
+                                        <button class="action-btn more-btn">
+                                            ⋯
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr data-priority="low" data-search="c1041 garbage not collected cleanliness">
+
+                                <td>
+                                    <input type="checkbox" class="checkbox row-check">
+                                </td>
+
+                                <td class="complaint-id">
+                                    #C-1041
+                                </td>
+
+                                <td>
+
+                                    <span class="complaint-title">
+                                        Garbage Not Collected
+                                    </span>
+
+                                    <span class="complaint-desc">
+                                        Garbage is not collected regularly...
+                                    </span>
+
+                                </td>
+
+                                <td>
+                                    <span class="badge">
+                                        Cleanliness
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="priority low">
+                                        Low
+                                    </span>
+                                </td>
+
+                                <td>
+                                    May 17, 2025<br>
+                                    03:10 PM
+                                </td>
+
+                                <td>
+
+                                    <div class="assignee">
+
+                                        <div class="assignee-avatar">
+                                            DB
+                                        </div>
+
+                                        David Brown
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="action-group">
+
+                                        <button class="action-btn view-btn">
+                                            ◉
+                                        </button>
+
+                                        <button class="action-btn assign-btn">
+                                            ♙
+                                        </button>
+
+                                        <button class="action-btn more-btn">
+                                            ⋯
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr data-priority="medium" data-search="c1040 ac not cooling properly infrastructure">
+
+                                <td>
+                                    <input type="checkbox" class="checkbox row-check">
+                                </td>
+
+                                <td class="complaint-id">
+                                    #C-1040
+                                </td>
+
+                                <td>
+
+                                    <span class="complaint-title">
+                                        AC Not Cooling Properly
+                                    </span>
+
+                                    <span class="complaint-desc">
+                                        AC in seminar hall is not cooling...
+                                    </span>
+
+                                </td>
+
+                                <td>
+                                    <span class="badge">
+                                        Infrastructure
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="priority medium">
+                                        Medium
+                                    </span>
+                                </td>
+
+                                <td>
+                                    May 17, 2025<br>
+                                    02:05 PM
+                                </td>
+
+                                <td>
+
+                                    <div class="assignee">
+
+                                        <div class="assignee-avatar">
+                                            SW
+                                        </div>
+
+                                        Sarah Wilson
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="action-group">
+
+                                        <button class="action-btn view-btn">
+                                            ◉
+                                        </button>
+
+                                        <button class="action-btn assign-btn">
+                                            ♙
+                                        </button>
+
+                                        <button class="action-btn more-btn">
+                                            ⋯
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- TABLE FOOTER -->
+
+                <div class="table-footer">
+
+                    <div class="showing" id="showingText">
+                        Showing 1 to 6 of 128 entries
+                    </div>
+
+
+                    <div class="pagination">
+
+                        <button class="page-btn">
+                            «
+                        </button>
+
+                        <button class="page-btn active">
+                            1
+                        </button>
+
+                        <button class="page-btn">
+                            2
+                        </button>
+
+                        <button class="page-btn">
+                            3
+                        </button>
+
+                        <button class="page-btn">
+                            ...
+                        </button>
+
+                        <button class="page-btn">
+                            22
+                        </button>
+
+                        <button class="page-btn">
+                            »
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <footer>
+
+                <span>
+                    © 2026 SCCMS Admin Panel. All rights reserved.
+                </span>
+
+                <span>
+                    Smart • Secure • Simple
+                </span>
+
+            </footer>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         TOAST
+    ========================================================= -->
+
+    <div class="toast-container" id="toastContainer"></div>
+
+
+    <!-- =========================================================
+         SCROLL TOP
+    ========================================================= -->
+
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        ↑
+    </button>
+
+
+    <!-- =========================================================
+         INTERNAL JAVASCRIPT
+    ========================================================= -->
+
+    <script>
+
+        /* =========================================================
+           LIVE CLOCK
+        ========================================================= */
+
+        function updateClock() {
+
+            const now = new Date();
+
+            const options = {
+                weekday: "short",
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            };
+
+            document.getElementById("liveClock")
+                .textContent =
+                now.toLocaleString(
+                    "en-IN",
+                    options
+                );
+        }
+
+        updateClock();
+
+        setInterval(
+            updateClock,
+            1000
+        );
+
+
+        /* =========================================================
+           COUNTER ANIMATION
+        ========================================================= */
+
+        const counters =
+            document.querySelectorAll(
+                ".counter"
+            );
+
+        counters.forEach(counter => {
+
+            const target =
+                Number(
+                    counter.dataset.target
+                );
+
+            let current = 0;
+
+            const increment =
+                Math.max(
+                    1,
+                    Math.ceil(
+                        target / 60
+                    )
+                );
+
+            const timer =
+                setInterval(() => {
+
+                    current += increment;
+
+                    if (current >= target) {
+
+                        current = target;
+
+                        clearInterval(timer);
+
+                    }
+
+                    counter.textContent =
+                        current.toLocaleString();
+
+                }, 25);
+
+        });
+
+
+        /* =========================================================
+           DAYS COUNTER
+        ========================================================= */
+
+        let days = 0;
+
+        const daysElement =
+            document.getElementById(
+                "daysCounter"
+            );
+
+        const daysTimer =
+            setInterval(() => {
+
+                days += 0.1;
+
+                if (days >= 3.4) {
+
+                    days = 3.4;
+
+                    clearInterval(
+                        daysTimer
+                    );
+
+                }
+
+                daysElement.textContent =
+                    days.toFixed(1) +
+                    " Days";
+
+            }, 40);
+
+
+        /* =========================================================
+           NIGHTINGALE 3D CHART
+        ========================================================= */
+
+        const canvas =
+            document.getElementById(
+                "nightingaleCanvas"
+            );
+
+        const ctx =
+            canvas.getContext("2d");
+
+
+        const chartData = [
+
+            {
+                label: "Infrastructure",
+                value: 32
+            },
+
+            {
+                label: "Cleanliness",
+                value: 28
+            },
+
+            {
+                label: "Maintenance",
+                value: 24
+            },
+
+            {
+                label: "Academics",
+                value: 20
+            },
+
+            {
+                label: "Hostel",
+                value: 14
+            },
+
+            {
+                label: "Others",
+                value: 10
+            }
+
+        ];
+
+
+        let hoveredSlice = -1;
+
+        let chartRotation = 0;
+
+        let chartProgress = 0;
+
+
+        function resizeCanvas() {
+
+            const rect =
+                canvas.getBoundingClientRect();
+
+            const dpr =
+                window.devicePixelRatio || 1;
+
+            canvas.width =
+                rect.width * dpr;
+
+            canvas.height =
+                rect.height * dpr;
+
+            ctx.setTransform(
+                dpr,
+                0,
+                0,
+                dpr,
+                0,
+                0
+            );
+
+            drawNightingale();
+
+        }
+
+
+        function drawNightingale() {
+
+            const width =
+                canvas.clientWidth;
+
+            const height =
+                canvas.clientHeight;
+
+            ctx.clearRect(
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            const centerX =
+                width / 2;
+
+            const centerY =
+                height / 2 + 7;
+
+
+            const baseRadius =
+                Math.min(
+                    width,
+                    height
+                ) * 0.27;
+
+
+            const maxValue =
+                Math.max(
+                    ...chartData.map(
+                        item => item.value
+                    )
+                );
+
+
+            const depth = 15;
+
+
+            const segmentAngle =
+                (
+                    Math.PI * 2
+                ) /
+                chartData.length;
+
+
+            /* -----------------------------------------
+               SOFT BACKGROUND RINGS
+            ----------------------------------------- */
+
+            for (
+                let r = baseRadius * .45;
+                r <= baseRadius * 1.45;
+                r += baseRadius * .23
+            ) {
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    centerX,
+                    centerY,
+                    r,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.strokeStyle =
+                    "rgba(24,116,186,.08)";
+
+                ctx.lineWidth = 1;
+
+                ctx.stroke();
+
+            }
+
+
+            /* -----------------------------------------
+               DATA SLICES
+            ----------------------------------------- */
+
+            chartData.forEach(
+                (item, index) => {
+
+                    const startAngle =
+                        chartRotation +
+                        index *
+                        segmentAngle -
+                        Math.PI / 2;
+
+
+                    const endAngle =
+                        startAngle +
+                        segmentAngle -
+                        0.045;
+
+
+                    const normalized =
+                        item.value /
+                        maxValue;
+
+
+                    const radius =
+                        baseRadius *
+                        (
+                            .58 +
+                            normalized *
+                            .72
+                        ) *
+                        chartProgress;
+
+
+                    const isHovered =
+                        hoveredSlice === index;
+
+
+                    const hoverOffset =
+                        isHovered
+                            ? 8
+                            : 0;
+
+
+                    const middleAngle =
+                        (
+                            startAngle +
+                            endAngle
+                        ) / 2;
+
+
+                    const offsetX =
+                        Math.cos(
+                            middleAngle
+                        ) *
+                        hoverOffset;
+
+
+                    const offsetY =
+                        Math.sin(
+                            middleAngle
+                        ) *
+                        hoverOffset;
+
+
+                    /* ------------------------------
+                       3D EXTRUSION
+                    ------------------------------ */
+
+                    for (
+                        let z = depth;
+                        z >= 1;
+                        z -= 2
+                    ) {
+
+                        ctx.beginPath();
+
+                        ctx.moveTo(
+                            centerX +
+                            offsetX,
+                            centerY +
+                            offsetY +
+                            z
+                        );
+
+                        ctx.arc(
+                            centerX +
+                            offsetX,
+                            centerY +
+                            offsetY +
+                            z,
+                            radius,
+                            startAngle,
+                            endAngle
+                        );
+
+                        ctx.lineTo(
+                            centerX +
+                            offsetX,
+                            centerY +
+                            offsetY +
+                            z
+                        );
+
+                        ctx.closePath();
+
+
+                        const sideGradient =
+                            ctx.createLinearGradient(
+                                0,
+                                centerY,
+                                0,
+                                centerY + depth
+                            );
+
+
+                        sideGradient.addColorStop(
+                            0,
+                            "#125c94"
+                        );
+
+                        sideGradient.addColorStop(
+                            1,
+                            "#3d94d1"
+                        );
+
+
+                        ctx.fillStyle =
+                            sideGradient;
+
+                        ctx.fill();
+
+                    }
+
+
+                    /* ------------------------------
+                       MAIN SLICE
+                    ------------------------------ */
+
+                    ctx.beginPath();
+
+                    ctx.moveTo(
+                        centerX + offsetX,
+                        centerY + offsetY
+                    );
+
+                    ctx.arc(
+                        centerX + offsetX,
+                        centerY + offsetY,
+                        radius,
+                        startAngle,
+                        endAngle
+                    );
+
+                    ctx.closePath();
+
+
+                    const gradient =
+                        ctx.createRadialGradient(
+                            centerX,
+                            centerY,
+                            10,
+                            centerX,
+                            centerY,
+                            radius
+                        );
+
+
+                    gradient.addColorStop(
+                        0,
+                        "#c5e2f4"
+                    );
+
+                    gradient.addColorStop(
+                        .28,
+                        "#3d94d1"
+                    );
+
+                    gradient.addColorStop(
+                        .68,
+                        "#1874ba"
+                    );
+
+                    gradient.addColorStop(
+                        1,
+                        "#125c94"
+                    );
+
+
+                    ctx.fillStyle =
+                        gradient;
+
+                    ctx.fill();
+
+
+                    ctx.strokeStyle =
+                        isHovered
+                            ? "#125c94"
+                            : "rgba(24,116,186,.35)";
+
+                    ctx.lineWidth =
+                        isHovered
+                            ? 2
+                            : 1;
+
+                    ctx.stroke();
+
+
+                    /* ------------------------------
+                       HIGHLIGHT
+                    ------------------------------ */
+
+                    ctx.beginPath();
+
+                    ctx.arc(
+                        centerX + offsetX,
+                        centerY + offsetY,
+                        Math.max(
+                            0,
+                            radius - 3
+                        ),
+                        startAngle + .05,
+                        endAngle - .05
+                    );
+
+                    ctx.strokeStyle =
+                        "rgba(255,255,255,.35)";
+
+                    ctx.lineWidth = 2;
+
+                    ctx.stroke();
+
+                }
+            );
+
+
+            /* -----------------------------------------
+               OUTER RING
+            ----------------------------------------- */
+
+            ctx.beginPath();
+
+            ctx.arc(
+                centerX,
+                centerY,
+                baseRadius * 1.52,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.strokeStyle =
+                "rgba(24,116,186,.14)";
+
+            ctx.lineWidth = 1;
+
+            ctx.stroke();
+
+
+            /* -----------------------------------------
+               SMALL FLOATING DOTS
+            ----------------------------------------- */
+
+            for (
+                let i = 0;
+                i < 10;
+                i++
+            ) {
+
+                const angle =
+                    chartRotation +
+                    i * .65;
+
+
+                const radius =
+                    baseRadius *
+                    (
+                        1.48 +
+                        (i % 3) * .08
+                    );
+
+
+                const x =
+                    centerX +
+                    Math.cos(angle) *
+                    radius;
+
+
+                const y =
+                    centerY +
+                    Math.sin(angle) *
+                    radius;
+
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    x,
+                    y,
+                    i % 2
+                        ? 1.7
+                        : 1.2,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fillStyle =
+                    "#3d94d1";
+
+                ctx.fill();
+
+            }
+
+        }
+
+
+        function animateChart() {
+
+            chartProgress +=
+                (
+                    1 -
+                    chartProgress
+                ) * .045;
+
+
+            chartRotation +=
+                .00045;
+
+
+            drawNightingale();
+
+
+            requestAnimationFrame(
+                animateChart
+            );
+
+        }
+
+
+        resizeCanvas();
+
+        window.addEventListener(
+            "resize",
+            resizeCanvas
+        );
+
+        animateChart();
+
+
+        /* =========================================================
+           CHART HOVER
+        ========================================================= */
+
+        canvas.addEventListener(
+            "mousemove",
+            event => {
+
+                const rect =
+                    canvas.getBoundingClientRect();
+
+
+                const x =
+                    event.clientX -
+                    rect.left;
+
+
+                const y =
+                    event.clientY -
+                    rect.top;
+
+
+                const centerX =
+                    rect.width / 2;
+
+
+                const centerY =
+                    rect.height / 2 + 7;
+
+
+                let angle =
+                    Math.atan2(
+                        y - centerY,
+                        x - centerX
+                    );
+
+
+                angle -=
+                    chartRotation;
+
+
+                angle +=
+                    Math.PI / 2;
+
+
+                if (angle < 0) {
+                    angle +=
+                        Math.PI * 2;
+                }
+
+
+                const index =
+                    Math.floor(
+                        angle /
+                        (
+                            Math.PI * 2 /
+                            chartData.length
+                        )
+                    );
+
+
+                const distance =
+                    Math.sqrt(
+                        Math.pow(
+                            x - centerX,
+                            2
+                        ) +
+                        Math.pow(
+                            y - centerY,
+                            2
+                        )
+                    );
+
+
+                hoveredSlice =
+                    distance < 220
+                        ? index
+                        : -1;
+
+
+                canvas.style.cursor =
+                    hoveredSlice >= 0
+                        ? "pointer"
+                        : "default";
+
+            }
+        );
+
+
+        canvas.addEventListener(
+            "mouseleave",
+            () => {
+
+                hoveredSlice = -1;
+
+            }
+        );
+
+
+        /* =========================================================
+           SEARCH
+        ========================================================= */
+
+        const searchInput =
+            document.getElementById(
+                "searchInput"
+            );
+
+
+        const rows =
+            document.querySelectorAll(
+                "#complaintBody tr"
+            );
+
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                const query =
+                    this.value
+                        .toLowerCase()
+                        .trim();
+
+
+                let visible = 0;
+
+
+                rows.forEach(row => {
+
+                    const searchData =
+                        row.dataset.search
+                            .toLowerCase();
+
+
+                    const matches =
+                        searchData.includes(
+                            query
+                        );
+
+
+                    row.style.display =
+                        matches
+                            ? ""
+                            : "none";
+
+
+                    if (matches) {
+                        visible++;
+                    }
+
+                });
+
+
+                document.getElementById(
+                    "showingText"
+                ).textContent =
+                    query
+                        ? `Showing ${visible} matching entries`
+                        : "Showing 1 to 6 of 128 entries";
+
+            }
+        );
+
+
+        /* =========================================================
+           FILTER TABS
+        ========================================================= */
+
+        const filterTabs =
+            document.querySelectorAll(
+                ".filter-tab"
+            );
+
+
+        filterTabs.forEach(tab => {
+
+            tab.addEventListener(
+                "click",
+                () => {
+
+                    filterTabs.forEach(
+                        item =>
+                            item.classList.remove(
+                                "active"
+                            )
+                    );
+
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    const filter =
+                        tab.dataset.filter;
+
+
+                    let visible = 0;
+
+
+                    rows.forEach(row => {
+
+                        const priority =
+                            row.dataset.priority;
+
+
+                        const show =
+                            filter === "all" ||
+                            priority === filter;
+
+
+                        row.style.display =
+                            show
+                                ? ""
+                                : "none";
+
+
+                        if (show) {
+                            visible++;
+                        }
+
+                    });
+
+
+                    document.getElementById(
+                        "showingText"
+                    ).textContent =
+                        filter === "all"
+                            ? "Showing 1 to 6 of 128 entries"
+                            : `Showing ${visible} filtered entries`;
+
+                }
+            );
+
+        });
+
+
+        /* =========================================================
+           SORTING
+        ========================================================= */
+
+        const sortSelect =
+            document.getElementById(
+                "sortSelect"
+            );
+
+
+        sortSelect.addEventListener(
+            "change",
+            () => {
+
+                const tbody =
+                    document.getElementById(
+                        "complaintBody"
+                    );
+
+
+                const rowArray =
+                    Array.from(rows);
+
+
+                if (
+                    sortSelect.value ===
+                    "priority"
+                ) {
+
+                    const order = {
+                        high: 1,
+                        medium: 2,
+                        low: 3
+                    };
+
+
+                    rowArray.sort(
+                        (a, b) =>
+                            order[
+                            a.dataset.priority
+                            ] -
+                            order[
+                            b.dataset.priority
+                            ]
+                    );
+
+                }
+
+
+                if (
+                    sortSelect.value ===
+                    "newest"
+                ) {
+
+                    rowArray.reverse();
+
+                }
+
+
+                if (
+                    sortSelect.value ===
+                    "oldest"
+                ) {
+
+                    rowArray.sort(
+                        (a, b) =>
+                            b.dataset.search.localeCompare(
+                                a.dataset.search
+                            )
+                    );
+
+                }
+
+
+                rowArray.forEach(
+                    row =>
+                        tbody.appendChild(row)
+                );
+
+
+                showToast(
+                    "Complaints sorted successfully."
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           SELECT ALL
+        ========================================================= */
+
+        const selectAll =
+            document.getElementById(
+                "selectAll"
+            );
+
+
+        selectAll.addEventListener(
+            "change",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".row-check"
+                    )
+                    .forEach(
+                        checkbox =>
+                            checkbox.checked =
+                            selectAll.checked
+                    );
+
+            }
+        );
+
+
+        /* =========================================================
+           ROW CHECKBOX STATE
+        ========================================================= */
+
+        document
+            .querySelectorAll(
+                ".row-check"
+            )
+            .forEach(
+                checkbox => {
+
+                    checkbox.addEventListener(
+                        "change",
+                        () => {
+
+                            const all =
+                                document.querySelectorAll(
+                                    ".row-check"
+                                );
+
+
+                            const checked =
+                                document.querySelectorAll(
+                                    ".row-check:checked"
+                                );
+
+
+                            selectAll.checked =
+                                all.length ===
+                                checked.length;
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           ACTION BUTTONS
+        ========================================================= */
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target.closest(
+                        ".view-btn"
+                    )
+                ) {
+
+                    showToast(
+                        "Opening complaint details..."
+                    );
+
+                }
+
+
+                if (
+                    event.target.closest(
+                        ".assign-btn"
+                    )
+                ) {
+
+                    showToast(
+                        "Assignment panel opened."
+                    );
+
+                }
+
+
+                if (
+                    event.target.closest(
+                        ".more-btn"
+                    )
+                ) {
+
+                    showToast(
+                        "More complaint actions available."
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           REFRESH
+        ========================================================= */
+
+        document
+            .getElementById(
+                "refreshBtn"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    const button = this;
+
+                    button.style.transform =
+                        "rotate(360deg)";
+
+
+                    setTimeout(() => {
+
+                        button.style.transform =
+                            "";
+
+                    }, 450);
+
+
+                    showToast(
+                        "Pending complaints refreshed."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           NOTIFICATIONS
+        ========================================================= */
+
+        document
+            .getElementById(
+                "notificationBtn"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    showToast(
+                        "You have 5 new notifications."
+                    );
+
+                }
+            );
+
+
+        document
+            .getElementById(
+                "messageBtn"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    showToast(
+                        "No unread messages."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           TOAST SYSTEM
+        ========================================================= */
+
+        function showToast(message) {
+
+            const container =
+                document.getElementById(
+                    "toastContainer"
+                );
+
+
+            const toast =
+                document.createElement(
+                    "div"
+                );
+
+
+            toast.className =
+                "toast";
+
+
+            toast.innerHTML = `
+                <span class="toast-dot"></span>
+                <span>${message}</span>
+            `;
+
+
+            container.appendChild(
+                toast
+            );
+
+
+            setTimeout(() => {
+
+                toast.classList.add(
+                    "removing"
+                );
+
+
+                setTimeout(() => {
+
+                    toast.remove();
+
+                }, 400);
+
+            }, 2500);
+
+        }
+
+
+        /* =========================================================
+           RIPPLE EFFECT
+        ========================================================= */
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                const button =
+                    event.target.closest(
+                        "button"
+                    );
+
+
+                if (!button) return;
+
+
+                const rect =
+                    button.getBoundingClientRect();
+
+
+                const ripple =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                ripple.className =
+                    "ripple";
+
+
+                const size =
+                    Math.max(
+                        rect.width,
+                        rect.height
+                    );
+
+
+                ripple.style.width =
+                    size + "px";
+
+
+                ripple.style.height =
+                    size + "px";
+
+
+                ripple.style.left =
+                    event.clientX -
+                    rect.left -
+                    size / 2 +
+                    "px";
+
+
+                ripple.style.top =
+                    event.clientY -
+                    rect.top -
+                    size / 2 +
+                    "px";
+
+
+                button.appendChild(
+                    ripple
+                );
+
+
+                setTimeout(
+                    () => ripple.remove(),
+                    600
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           MOBILE SIDEBAR
+        ========================================================= */
+
+        const sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+
+        const mobileMenu =
+            document.getElementById(
+                "mobileMenu"
+            );
+
+
+        mobileMenu.addEventListener(
+            "click",
+            () => {
+
+                sidebar.classList.toggle(
+                    "open"
+                );
+
+            }
+        );
+
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    window.innerWidth <= 900 &&
+                    sidebar.classList.contains(
+                        "open"
+                    ) &&
+                    !sidebar.contains(
+                        event.target
+                    ) &&
+                    !mobileMenu.contains(
+                        event.target
+                    )
+                ) {
+
+                    sidebar.classList.remove(
+                        "open"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           CLOSE MOBILE SIDEBAR AFTER NAVIGATION
+        ========================================================= */
+
+        document
+            .querySelectorAll(
+                ".nav-item"
+            )
+            .forEach(item => {
+
+                item.addEventListener(
+                    "click",
+                    () => {
+
+                        if (
+                            window.innerWidth <=
+                            900
+                        ) {
+
+                            sidebar.classList.remove(
+                                "open"
+                            );
+
+                        }
+
+                    }
+                );
+
+            });
+
+
+        /* =========================================================
+           PAGINATION
+        ========================================================= */
+
+        document
+            .querySelectorAll(
+                ".page-btn"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        if (
+                            button.textContent
+                                .trim() ===
+                            "..."
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        document
+                            .querySelectorAll(
+                                ".page-btn"
+                            )
+                            .forEach(
+                                btn =>
+                                    btn.classList.remove(
+                                        "active"
+                                    )
+                            );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        showToast(
+                            `Page ${button.textContent.trim()} selected.`
+                        );
+
+                    }
+                );
+
+            });
+
+
+        /* =========================================================
+           SCROLL TO TOP
+        ========================================================= */
+
+        const scrollTop =
+            document.getElementById(
+                "scrollTop"
+            );
+
+
+        window.addEventListener(
+            "scroll",
+            () => {
+
+                if (
+                    window.scrollY >
+                    400
+                ) {
+
+                    scrollTop.classList.add(
+                        "visible"
+                    );
+
+                } else {
+
+                    scrollTop.classList.remove(
+                        "visible"
+                    );
+
+                }
+
+            }
+        );
+
+
+        scrollTop.addEventListener(
+            "click",
+            () => {
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            }
+        );
+
+
+        /* =========================================================
+           CHART PERIOD
+        ========================================================= */
+
+        document
+            .getElementById(
+                "chartPeriod"
+            )
+            .addEventListener(
+                "change",
+                event => {
+
+                    showToast(
+                        `Chart updated to ${event.target.value}.`
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           PAGE LOAD
+        ========================================================= */
+
+        window.addEventListener(
+            "load",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".stat-card"
+                    )
+                    .forEach(
+                        (card, index) => {
+
+                            card.style.animationDelay =
+                                `${index * .08}s`;
+
+                        }
+                    );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

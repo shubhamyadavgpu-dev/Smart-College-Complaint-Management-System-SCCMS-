@@ -1,0 +1,3023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SCCMS | Students</title>
+
+    <style>
+        /* =========================================================
+           SCCMS - STUDENT MANAGEMENT PAGE
+           Premium Blue UI
+           Primary Color: #1874ba
+        ========================================================= */
+
+        :root {
+            --primary: #1874ba;
+            --primary-dark: #125f99;
+            --primary-deep: #0b4775;
+            --primary-light: #4b9bd2;
+
+            --blue-50: #f5faff;
+            --blue-100: #eaf5fc;
+            --blue-200: #d8ebf8;
+            --blue-300: #b9dbef;
+
+            --text: #164b70;
+            --text-light: #6b91aa;
+
+            --white: #ffffff;
+
+            --border: rgba(24, 116, 186, 0.13);
+
+            --shadow:
+                0 20px 55px rgba(24, 116, 186, 0.12);
+
+            --shadow-small:
+                0 10px 30px rgba(24, 116, 186, 0.09);
+
+            --radius: 22px;
+
+            --transition:
+                .35s cubic-bezier(.2,.8,.2,1);
+        }
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 5% 5%,
+                    rgba(24,116,186,.09),
+                    transparent 25%
+                ),
+
+                radial-gradient(
+                    circle at 95% 25%,
+                    rgba(75,155,210,.09),
+                    transparent 25%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #f8fcff,
+                    #edf7fd
+                );
+
+            overflow-x: hidden;
+        }
+
+
+        /* =========================================================
+           ANIMATED BACKGROUND
+        ========================================================= */
+
+        .background {
+            position: fixed;
+            inset: 0;
+
+            overflow: hidden;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+        .orb {
+            position: absolute;
+
+            border-radius: 50%;
+
+            opacity: .10;
+
+            filter: blur(3px);
+
+            animation:
+                floatingOrb
+                12s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+        .orb-one {
+            width: 280px;
+            height: 280px;
+
+            left: -120px;
+            top: 8%;
+
+            background: var(--primary);
+        }
+
+        .orb-two {
+            width: 210px;
+            height: 210px;
+
+            right: -80px;
+            top: 40%;
+
+            background: var(--primary-light);
+
+            animation-delay: 2s;
+        }
+
+        .orb-three {
+            width: 160px;
+            height: 160px;
+
+            left: 40%;
+            bottom: -80px;
+
+            background: var(--primary-dark);
+
+            animation-delay: 4s;
+        }
+
+
+        @keyframes floatingOrb {
+
+            0% {
+                transform:
+                    translate(0,0)
+                    scale(1);
+            }
+
+            100% {
+                transform:
+                    translate(55px,-40px)
+                    scale(1.15);
+            }
+        }
+
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .page {
+            width: min(1500px, 94%);
+
+            margin: auto;
+
+            padding:
+                30px
+                0
+                70px;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .page-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+
+            animation:
+                headerReveal
+                .8s
+                ease
+                both;
+        }
+
+
+        .eyebrow {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: var(--primary);
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+
+        .eyebrow::before {
+
+            content: "";
+
+            width: 27px;
+
+            height: 3px;
+
+            border-radius: 20px;
+
+            background: var(--primary);
+
+            animation:
+                lineGrow
+                1s
+                ease
+                both;
+        }
+
+
+        h1 {
+
+            font-size:
+                clamp(32px,4vw,52px);
+
+            line-height: 1;
+
+            letter-spacing: -2px;
+
+            color: var(--primary-deep);
+        }
+
+
+        .subtitle {
+
+            margin-top: 10px;
+
+            color: var(--text-light);
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           HEADER BUTTON
+        ========================================================= */
+
+        .add-student {
+
+            border: none;
+
+            padding:
+                13px
+                20px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-dark)
+                );
+
+            color: white;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 12px 25px
+                rgba(24,116,186,.23);
+
+            transition: var(--transition);
+        }
+
+
+        .add-student:hover {
+
+            transform:
+                translateY(-5px)
+                scale(1.03);
+
+            box-shadow:
+                0 20px 35px
+                rgba(24,116,186,.30);
+        }
+
+
+        /* =========================================================
+           STAT CARDS
+        ========================================================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 18px;
+
+            margin-bottom: 24px;
+        }
+
+
+        .stat-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                rgba(255,255,255,.86);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
+
+            padding: 23px;
+
+            box-shadow:
+                var(--shadow-small);
+
+            backdrop-filter: blur(15px);
+
+            animation:
+                cardReveal
+                .8s
+                ease
+                both;
+
+            transition:
+                var(--transition);
+        }
+
+
+        .stat-card:nth-child(1) {
+            animation-delay: .10s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: .20s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: .30s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: .40s;
+        }
+
+
+        .stat-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 130px;
+            height: 130px;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+
+            opacity: .055;
+
+            right: -55px;
+            top: -55px;
+
+            transition: .6s;
+        }
+
+
+        .stat-card:hover {
+
+            transform:
+                translateY(-9px)
+                scale(1.015);
+
+            box-shadow:
+                0 25px 60px
+                rgba(24,116,186,.18);
+        }
+
+
+        .stat-card:hover::before {
+
+            transform: scale(1.7);
+        }
+
+
+        .stat-icon {
+
+            width: 46px;
+            height: 46px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 14px;
+
+            background:
+                var(--blue-100);
+
+            color: var(--primary);
+
+            font-size: 21px;
+
+            animation:
+                iconFloat
+                3s
+                ease-in-out
+                infinite;
+        }
+
+
+        .stat-label {
+
+            margin-top: 18px;
+
+            color: var(--text-light);
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .stat-number {
+
+            margin-top: 4px;
+
+            color: var(--primary-deep);
+
+            font-size: 31px;
+
+            font-weight: 900;
+        }
+
+
+        .stat-change {
+
+            display: inline-flex;
+
+            margin-top: 9px;
+
+            padding:
+                5px
+                9px;
+
+            border-radius: 20px;
+
+            background:
+                var(--blue-100);
+
+            color: var(--primary);
+
+            font-size: 10px;
+
+            font-weight: 800;
+        }
+
+
+        /* =========================================================
+           SEARCH + FILTER
+        ========================================================= */
+
+        .toolbar {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 24px;
+
+            padding: 15px;
+
+            background:
+                rgba(255,255,255,.86);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 19px;
+
+            box-shadow:
+                var(--shadow-small);
+
+            animation:
+                fadeUp
+                .8s
+                .4s
+                both;
+        }
+
+
+        .search-box {
+
+            flex: 1;
+
+            position: relative;
+        }
+
+
+        .search-box input {
+
+            width: 100%;
+
+            border:
+                1px solid var(--border);
+
+            outline: none;
+
+            border-radius: 13px;
+
+            padding:
+                12px
+                15px
+                12px
+                42px;
+
+            background:
+                var(--blue-50);
+
+            color: var(--text);
+
+            transition: .3s;
+        }
+
+
+        .search-box input:focus {
+
+            border-color:
+                var(--primary);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(24,116,186,.08);
+
+            background: white;
+        }
+
+
+        .search-icon {
+
+            position: absolute;
+
+            left: 15px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: var(--primary);
+
+            font-size: 17px;
+        }
+
+
+        .filter-select {
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--blue-50);
+
+            color: var(--primary-deep);
+
+            border-radius: 13px;
+
+            padding:
+                12px
+                14px;
+
+            outline: none;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           MAIN GRID
+        ========================================================= */
+
+        .main-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0,1.55fr)
+                minmax(310px,.8fr);
+
+            gap: 24px;
+
+            margin-bottom: 24px;
+        }
+
+
+        .panel {
+
+            background:
+                rgba(255,255,255,.88);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
+
+            box-shadow:
+                var(--shadow);
+
+            backdrop-filter: blur(15px);
+
+            animation:
+                fadeUp
+                .9s
+                .55s
+                both;
+        }
+
+
+        .panel-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                23px
+                24px
+                0;
+        }
+
+
+        .panel-title {
+
+            color: var(--primary-deep);
+
+            font-size: 19px;
+
+            font-weight: 900;
+        }
+
+
+        .panel-subtitle {
+
+            margin-top: 4px;
+
+            color: var(--text-light);
+
+            font-size: 11px;
+        }
+
+
+        /* =========================================================
+           STUDENT TABLE
+        ========================================================= */
+
+        .table-container {
+
+            overflow-x: auto;
+
+            padding:
+                18px
+                24px
+                12px;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 650px;
+        }
+
+
+        th {
+
+            padding:
+                12px
+                10px;
+
+            text-align: left;
+
+            color: var(--text-light);
+
+            font-size: 10px;
+
+            letter-spacing: .5px;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        td {
+
+            padding:
+                15px
+                10px;
+
+            color: var(--text);
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            border-bottom:
+                1px solid
+                rgba(24,116,186,.07);
+        }
+
+
+        tbody tr {
+
+            transition: .3s;
+        }
+
+
+        tbody tr:hover {
+
+            background:
+                var(--blue-50);
+
+            transform:
+                scale(1.008);
+        }
+
+
+        .student {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .avatar {
+
+            width: 36px;
+            height: 36px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 11px;
+
+            background:
+                var(--blue-100);
+
+            color: var(--primary);
+
+            font-weight: 900;
+
+            font-size: 11px;
+        }
+
+
+        .student-name {
+
+            font-weight: 800;
+        }
+
+
+        .student-email {
+
+            color: var(--text-light);
+
+            font-size: 9px;
+
+            margin-top: 2px;
+        }
+
+
+        .badge {
+
+            display: inline-flex;
+
+            padding:
+                5px
+                9px;
+
+            border-radius: 20px;
+
+            background:
+                var(--blue-100);
+
+            color: var(--primary);
+
+            font-size: 9px;
+
+            font-weight: 900;
+        }
+
+
+        .action-btn {
+
+            border: none;
+
+            width: 30px;
+            height: 30px;
+
+            border-radius: 9px;
+
+            background:
+                var(--blue-100);
+
+            color: var(--primary);
+
+            cursor: pointer;
+
+            transition: .3s;
+        }
+
+
+        .action-btn:hover {
+
+            background:
+                var(--primary);
+
+            color: white;
+
+            transform:
+                rotate(8deg)
+                scale(1.1);
+        }
+
+
+        /* =========================================================
+           3D DONUT CHART
+        ========================================================= */
+
+        .donut-panel {
+
+            min-height: 480px;
+
+            overflow: hidden;
+        }
+
+
+        .donut-area {
+
+            height: 310px;
+
+            display: grid;
+
+            place-items: center;
+
+            perspective: 1000px;
+
+            position: relative;
+        }
+
+
+        .donut {
+
+            width: 205px;
+
+            height: 205px;
+
+            border-radius: 50%;
+
+            position: relative;
+
+            transform:
+                rotateX(58deg)
+                rotateZ(-10deg);
+
+            background:
+                conic-gradient(
+                    var(--primary) 0deg 190deg,
+                    var(--primary-light) 190deg 280deg,
+                    var(--primary-dark) 280deg 360deg
+                );
+
+            box-shadow:
+
+                0 25px 35px
+                rgba(24,116,186,.25),
+
+                14px 14px 0
+                rgba(11,71,117,.16);
+
+            animation:
+                donutReveal
+                1.5s
+                cubic-bezier(.2,.8,.2,1)
+                both;
+
+            transition:
+                .6s;
+        }
+
+
+        .donut::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 40px;
+
+            border-radius: 50%;
+
+            background:
+                white;
+
+            box-shadow:
+                inset
+                0 0 20px
+                rgba(24,116,186,.08);
+        }
+
+
+        .donut::after {
+
+            content: "72%";
+
+            position: absolute;
+
+            inset: 0;
+
+            display: grid;
+
+            place-items: center;
+
+            color:
+                var(--primary-deep);
+
+            font-size: 30px;
+
+            font-weight: 900;
+
+            transform:
+                rotateX(-58deg)
+                rotateZ(10deg);
+        }
+
+
+        .donut:hover {
+
+            transform:
+                rotateX(52deg)
+                rotateZ(5deg)
+                scale(1.08);
+
+            box-shadow:
+                0 35px 50px
+                rgba(24,116,186,.32),
+
+                18px 18px 0
+                rgba(11,71,117,.17);
+        }
+
+
+        @keyframes donutReveal {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    rotateX(58deg)
+                    rotateZ(-10deg)
+                    scale(.3);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    rotateX(58deg)
+                    rotateZ(-10deg)
+                    scale(1);
+            }
+        }
+
+
+        .legend {
+
+            padding:
+                0
+                25px
+                25px;
+        }
+
+
+        .legend-item {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                11px
+                0;
+
+            border-bottom:
+                1px solid
+                rgba(24,116,186,.07);
+        }
+
+
+        .legend-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .legend-dot {
+
+            width: 10px;
+            height: 10px;
+
+            border-radius: 50%;
+
+            background:
+                var(--primary);
+        }
+
+
+        .legend-dot.two {
+            background:
+                var(--primary-light);
+        }
+
+
+        .legend-dot.three {
+            background:
+                var(--primary-dark);
+        }
+
+
+        .legend-value {
+
+            color:
+                var(--primary);
+
+            font-size: 11px;
+
+            font-weight: 900;
+        }
+
+
+        /* =========================================================
+           BOTTOM PANELS
+        ========================================================= */
+
+        .bottom-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr;
+
+            gap: 24px;
+        }
+
+
+        .activity-panel,
+        .course-panel {
+
+            padding-bottom: 20px;
+        }
+
+
+        .activity-list {
+
+            padding:
+                20px
+                24px;
+        }
+
+
+        .activity {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding:
+                13px
+                0;
+
+            border-bottom:
+                1px solid
+                rgba(24,116,186,.07);
+
+            transition: .3s;
+        }
+
+
+        .activity:hover {
+
+            transform:
+                translateX(8px);
+        }
+
+
+        .activity-icon {
+
+            width: 37px;
+            height: 37px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 11px;
+
+            background:
+                var(--blue-100);
+
+            color:
+                var(--primary);
+        }
+
+
+        .activity-info {
+
+            flex: 1;
+        }
+
+
+        .activity-info strong {
+
+            display: block;
+
+            font-size: 11px;
+        }
+
+
+        .activity-info span {
+
+            color:
+                var(--text-light);
+
+            font-size: 9px;
+        }
+
+
+        .activity-time {
+
+            color:
+                var(--text-light);
+
+            font-size: 9px;
+        }
+
+
+        /* =========================================================
+           COURSE BARS
+        ========================================================= */
+
+        .course-list {
+
+            padding:
+                20px
+                24px;
+        }
+
+
+        .course-item {
+
+            margin-bottom: 19px;
+        }
+
+
+        .course-head {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+
+        .course-head span:last-child {
+
+            color:
+                var(--primary);
+        }
+
+
+        .course-track {
+
+            height: 8px;
+
+            border-radius: 20px;
+
+            background:
+                var(--blue-100);
+
+            overflow: hidden;
+        }
+
+
+        .course-fill {
+
+            width: var(--width);
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary-dark),
+                    var(--primary-light)
+                );
+
+            transform:
+                translateX(-100%);
+
+            animation:
+                progressIn
+                1.3s
+                .8s
+                forwards;
+        }
+
+
+        /* =========================================================
+           ANIMATIONS
+        ========================================================= */
+
+        @keyframes headerReveal {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(-30px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(35px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        @keyframes cardReveal {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(45px)
+                    scale(.94);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+
+        @keyframes lineGrow {
+
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 27px;
+            }
+        }
+
+
+        @keyframes iconFloat {
+
+            0%,100% {
+                transform:
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    translateY(-5px);
+            }
+        }
+
+
+        @keyframes progressIn {
+
+            to {
+                transform:
+                    translateX(0);
+            }
+        }
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        .toast {
+
+            position: fixed;
+
+            right: 25px;
+
+            bottom: 25px;
+
+            padding:
+                13px
+                18px;
+
+            border-radius: 13px;
+
+            background:
+                var(--primary);
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 15px 35px
+                rgba(24,116,186,.25);
+
+            transform:
+                translateY(100px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: .4s;
+
+            z-index: 100;
+        }
+
+
+        .toast.show {
+
+            transform:
+                translateY(0);
+
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+
+            .main-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .donut-panel {
+
+                min-height: auto;
+            }
+
+
+            .bottom-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+
+        @media (max-width: 700px) {
+
+            .page {
+
+                width: 92%;
+
+                padding-top: 20px;
+            }
+
+
+            .page-header {
+
+                flex-direction: column;
+
+                align-items:
+                    flex-start;
+            }
+
+
+            .add-student {
+
+                width: 100%;
+            }
+
+
+            .stats {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .toolbar {
+
+                flex-direction: column;
+
+                align-items:
+                    stretch;
+            }
+
+
+            .filter-select {
+
+                width: 100%;
+            }
+
+
+            .panel-header {
+
+                padding-left: 18px;
+
+                padding-right: 18px;
+            }
+
+
+            .table-container {
+
+                padding-left: 18px;
+
+                padding-right: 18px;
+            }
+
+
+            .donut {
+
+                width: 175px;
+                height: 175px;
+            }
+
+
+            .donut::before {
+
+                inset: 34px;
+            }
+
+
+            .donut::after {
+
+                font-size: 26px;
+            }
+
+
+            .legend {
+
+                padding-left: 18px;
+
+                padding-right: 18px;
+            }
+
+
+            .activity-list,
+            .course-list {
+
+                padding-left: 18px;
+
+                padding-right: 18px;
+            }
+        }
+
+
+        @media (max-width: 420px) {
+
+            h1 {
+
+                font-size: 36px;
+            }
+
+
+            .stat-number {
+
+                font-size: 27px;
+            }
+
+
+            .donut {
+
+                width: 155px;
+                height: 155px;
+            }
+
+
+            .donut::before {
+
+                inset: 30px;
+            }
+        }
+
+
+        /* =========================================================
+           ACCESSIBILITY
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration:
+                    .01ms !important;
+
+                animation-iteration-count:
+                    1 !important;
+
+                transition-duration:
+                    .01ms !important;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         ANIMATED BACKGROUND
+    ========================================================== -->
+
+    <div class="background">
+
+        <div class="orb orb-one"></div>
+
+        <div class="orb orb-two"></div>
+
+        <div class="orb orb-three"></div>
+
+    </div>
+
+
+
+    <main class="page">
+
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <header class="page-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    STUDENT MANAGEMENT
+                </div>
+
+                <h1>
+                    Students
+                </h1>
+
+                <p class="subtitle">
+                    Manage student records, activity and complaint statistics.
+                </p>
+
+            </div>
+
+
+            <button
+                class="add-student"
+                onclick="addStudent()">
+
+                + Add Student
+
+            </button>
+
+        </header>
+
+
+
+        <!-- =====================================================
+             STATISTICS
+        ====================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ♙
+                </div>
+
+                <div class="stat-label">
+                    TOTAL STUDENTS
+                </div>
+
+                <div
+                    class="stat-number counter"
+                    data-target="2486">
+
+                    0
+
+                </div>
+
+                <div class="stat-change">
+                    +8.4% this month
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✓
+                </div>
+
+                <div class="stat-label">
+                    ACTIVE STUDENTS
+                </div>
+
+                <div
+                    class="stat-number counter"
+                    data-target="2318">
+
+                    0
+
+                </div>
+
+                <div class="stat-change">
+                    93.2% active
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ◫
+                </div>
+
+                <div class="stat-label">
+                    COMPLAINTS SUBMITTED
+                </div>
+
+                <div
+                    class="stat-number counter"
+                    data-target="1284">
+
+                    0
+
+                </div>
+
+                <div class="stat-change">
+                    +12.8% this month
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ★
+                </div>
+
+                <div class="stat-label">
+                    ACTIVE TODAY
+                </div>
+
+                <div
+                    class="stat-number counter"
+                    data-target="684">
+
+                    0
+
+                </div>
+
+                <div class="stat-change">
+                    27.5% of students
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             SEARCH TOOLBAR
+        ====================================================== -->
+
+        <section class="toolbar">
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+                <input
+                    type="text"
+                    id="studentSearch"
+                    placeholder="Search student by name, email or roll number..."
+                    onkeyup="searchStudents()">
+
+            </div>
+
+
+            <select
+                class="filter-select"
+                id="departmentFilter"
+                onchange="filterDepartment()">
+
+                <option value="all">
+                    All Departments
+                </option>
+
+                <option value="computer">
+                    Computer Science
+                </option>
+
+                <option value="management">
+                    Management
+                </option>
+
+                <option value="commerce">
+                    Commerce
+                </option>
+
+                <option value="arts">
+                    Arts
+                </option>
+
+            </select>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             MAIN GRID
+        ====================================================== -->
+
+        <section class="main-grid">
+
+
+            <!-- =================================================
+                 STUDENT TABLE
+            ================================================== -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Student Directory
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Recently registered students
+                        </div>
+
+                    </div>
+
+
+                    <span class="badge">
+                        2,486 RECORDS
+                    </span>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    STUDENT
+                                </th>
+
+                                <th>
+                                    ROLL NUMBER
+                                </th>
+
+                                <th>
+                                    DEPARTMENT
+                                </th>
+
+                                <th>
+                                    COMPLAINTS
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    ACTION
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="studentTable">
+
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="student">
+
+                                        <div class="avatar">
+                                            AS
+                                        </div>
+
+                                        <div>
+
+                                            <div class="student-name">
+                                                Aarav Sharma
+                                            </div>
+
+                                            <div class="student-email">
+                                                aarav@example.com
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    CS202401
+                                </td>
+
+
+                                <td>
+                                    Computer Science
+                                </td>
+
+
+                                <td>
+                                    12
+                                </td>
+
+
+                                <td>
+                                    <span class="badge">
+                                        Active
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="action-btn"
+                                        onclick="viewStudent('Aarav Sharma')">
+
+                                        →
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="student">
+
+                                        <div class="avatar">
+                                            PS
+                                        </div>
+
+                                        <div>
+
+                                            <div class="student-name">
+                                                Priya Singh
+                                            </div>
+
+                                            <div class="student-email">
+                                                priya@example.com
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    MG202418
+                                </td>
+
+
+                                <td>
+                                    Management
+                                </td>
+
+
+                                <td>
+                                    8
+                                </td>
+
+
+                                <td>
+                                    <span class="badge">
+                                        Active
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="action-btn"
+                                        onclick="viewStudent('Priya Singh')">
+
+                                        →
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="student">
+
+                                        <div class="avatar">
+                                            RK
+                                        </div>
+
+                                        <div>
+
+                                            <div class="student-name">
+                                                Rohan Kumar
+                                            </div>
+
+                                            <div class="student-email">
+                                                rohan@example.com
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    CO202409
+                                </td>
+
+
+                                <td>
+                                    Commerce
+                                </td>
+
+
+                                <td>
+                                    5
+                                </td>
+
+
+                                <td>
+                                    <span class="badge">
+                                        Active
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="action-btn"
+                                        onclick="viewStudent('Rohan Kumar')">
+
+                                        →
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="student">
+
+                                        <div class="avatar">
+                                            NV
+                                        </div>
+
+                                        <div>
+
+                                            <div class="student-name">
+                                                Neha Verma
+                                            </div>
+
+                                            <div class="student-email">
+                                                neha@example.com
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    AR202433
+                                </td>
+
+
+                                <td>
+                                    Arts
+                                </td>
+
+
+                                <td>
+                                    9
+                                </td>
+
+
+                                <td>
+                                    <span class="badge">
+                                        Active
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="action-btn"
+                                        onclick="viewStudent('Neha Verma')">
+
+                                        →
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="student">
+
+                                        <div class="avatar">
+                                            VK
+                                        </div>
+
+                                        <div>
+
+                                            <div class="student-name">
+                                                Vikram Kapoor
+                                            </div>
+
+                                            <div class="student-email">
+                                                vikram@example.com
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    CS202441
+                                </td>
+
+
+                                <td>
+                                    Computer Science
+                                </td>
+
+
+                                <td>
+                                    15
+                                </td>
+
+
+                                <td>
+                                    <span class="badge">
+                                        Active
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    <button
+                                        class="action-btn"
+                                        onclick="viewStudent('Vikram Kapoor')">
+
+                                        →
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 DONUT CHART
+            ================================================== -->
+
+            <div class="panel donut-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Student Activity
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Complaint participation
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="donut-area">
+
+                    <div class="donut"></div>
+
+                </div>
+
+                <div class="legend">
+
+
+                    <div class="legend-item">
+
+                        <div class="legend-left">
+
+                            <span class="legend-dot"></span>
+
+                            Active
+
+                        </div>
+
+                        <div class="legend-value">
+                            72%
+                        </div>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <div class="legend-left">
+
+                            <span class="legend-dot two"></span>
+
+                            Low Activity
+
+                        </div>
+
+                        <div class="legend-value">
+                            25%
+                        </div>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <div class="legend-left">
+
+                            <span class="legend-dot three"></span>
+
+                            Inactive
+
+                        </div>
+
+                        <div class="legend-value">
+                            3%
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             BOTTOM GRID
+        ====================================================== -->
+
+        <section class="bottom-grid">
+
+
+            <!-- =================================================
+                 RECENT ACTIVITY
+            ================================================== -->
+
+            <div class="panel activity-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Recent Student Activity
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Latest actions performed by students
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="activity-list">
+
+
+                    <div class="activity">
+
+                        <div class="activity-icon">
+                            +
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Aarav Sharma submitted a complaint
+                            </strong>
+
+                            <span>
+                                Computer Science
+                            </span>
+
+                        </div>
+
+                        <div class="activity-time">
+                            5 min ago
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="activity">
+
+                        <div class="activity-icon">
+                            ✓
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Priya Singh viewed complaint status
+                            </strong>
+
+                            <span>
+                                Management
+                            </span>
+
+                        </div>
+
+                        <div class="activity-time">
+                            18 min ago
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="activity">
+
+                        <div class="activity-icon">
+                            +
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Rohan Kumar submitted feedback
+                            </strong>
+
+                            <span>
+                                Commerce
+                            </span>
+
+                        </div>
+
+                        <div class="activity-time">
+                            34 min ago
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="activity">
+
+                        <div class="activity-icon">
+                            →
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                Neha Verma updated profile
+                            </strong>
+
+                            <span>
+                                Arts
+                            </span>
+
+                        </div>
+
+                        <div class="activity-time">
+                            1 hr ago
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 COURSE DISTRIBUTION
+            ================================================== -->
+
+            <div class="panel course-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <div class="panel-title">
+                            Student Distribution
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Students by department
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="course-list">
+
+
+                    <div class="course-item">
+
+                        <div class="course-head">
+
+                            <span>
+                                Computer Science
+                            </span>
+
+                            <span>
+                                42%
+                            </span>
+
+                        </div>
+
+                        <div class="course-track">
+
+                            <div
+                                class="course-fill"
+                                style="--width:42%;">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="course-item">
+
+                        <div class="course-head">
+
+                            <span>
+                                Management
+                            </span>
+
+                            <span>
+                                25%
+                            </span>
+
+                        </div>
+
+                        <div class="course-track">
+
+                            <div
+                                class="course-fill"
+                                style="--width:25%;">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="course-item">
+
+                        <div class="course-head">
+
+                            <span>
+                                Commerce
+                            </span>
+
+                            <span>
+                                19%
+                            </span>
+
+                        </div>
+
+                        <div class="course-track">
+
+                            <div
+                                class="course-fill"
+                                style="--width:19%;">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="course-item">
+
+                        <div class="course-head">
+
+                            <span>
+                                Arts
+                            </span>
+
+                            <span>
+                                14%
+                            </span>
+
+                        </div>
+
+                        <div class="course-track">
+
+                            <div
+                                class="course-fill"
+                                style="--width:14%;">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- TOAST -->
+
+    <div
+        class="toast"
+        id="toast">
+
+        Student action completed.
+
+    </div>
+
+
+
+    <script>
+
+        /* =========================================================
+           SCCMS STUDENT PAGE
+           INTERNAL JAVASCRIPT
+        ========================================================= */
+
+
+        /* =========================================================
+           COUNTER ANIMATION
+        ========================================================= */
+
+        function animateCounters() {
+
+            const counters =
+                document.querySelectorAll(".counter");
+
+
+            counters.forEach(counter => {
+
+                const target =
+                    Number(counter.dataset.target);
+
+                const duration =
+                    1700;
+
+                const start =
+                    performance.now();
+
+
+                function update(time) {
+
+                    const progress =
+                        Math.min(
+                            (time - start) / duration,
+                            1
+                        );
+
+
+                    const eased =
+                        1 -
+                        Math.pow(
+                            1 - progress,
+                            4
+                        );
+
+
+                    counter.textContent =
+                        Math.floor(
+                            target * eased
+                        ).toLocaleString();
+
+
+                    if (progress < 1) {
+
+                        requestAnimationFrame(update);
+
+                    } else {
+
+                        counter.textContent =
+                            target.toLocaleString();
+
+                    }
+
+                }
+
+
+                requestAnimationFrame(update);
+
+            });
+
+        }
+
+
+
+        /* =========================================================
+           SEARCH STUDENTS
+        ========================================================= */
+
+        function searchStudents() {
+
+            const input =
+                document
+                .getElementById("studentSearch")
+                .value
+                .toLowerCase();
+
+
+            const rows =
+                document.querySelectorAll(
+                    "#studentTable tr"
+                );
+
+
+            rows.forEach(row => {
+
+                const text =
+                    row.textContent.toLowerCase();
+
+
+                if (text.includes(input)) {
+
+                    row.style.display = "";
+
+                    row.animate(
+                        [
+                            {
+                                opacity: 0
+                            },
+                            {
+                                opacity: 1
+                            }
+                        ],
+                        {
+                            duration: 250
+                        }
+                    );
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+
+        /* =========================================================
+           DEPARTMENT FILTER
+        ========================================================= */
+
+        function filterDepartment() {
+
+            const value =
+                document
+                .getElementById("departmentFilter")
+                .value;
+
+
+            const rows =
+                document.querySelectorAll(
+                    "#studentTable tr"
+                );
+
+
+            rows.forEach(row => {
+
+                const department =
+                    row.children[2]
+                    .textContent
+                    .toLowerCase();
+
+
+                if (
+                    value === "all" ||
+                    department.includes(
+                        value === "computer"
+                            ? "computer"
+                            : value
+                    )
+                ) {
+
+                    row.style.display = "";
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+
+        /* =========================================================
+           ADD STUDENT
+        ========================================================= */
+
+        function addStudent() {
+
+            showToast(
+                "Add Student form will open here."
+            );
+
+        }
+
+
+
+        /* =========================================================
+           VIEW STUDENT
+        ========================================================= */
+
+        function viewStudent(name) {
+
+            showToast(
+                "Opening profile of " + name
+            );
+
+        }
+
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById("toast");
+
+
+            toast.textContent =
+                message;
+
+
+            toast.classList.add("show");
+
+
+            setTimeout(() => {
+
+                toast.classList.remove("show");
+
+            }, 2500);
+
+        }
+
+
+
+        /* =========================================================
+           STAT CARD 3D PARALLAX
+        ========================================================= */
+
+        document
+        .querySelectorAll(".stat-card")
+        .forEach(card => {
+
+
+            card.addEventListener(
+                "mousemove",
+                event => {
+
+                    const rect =
+                        card.getBoundingClientRect();
+
+
+                    const x =
+                        event.clientX -
+                        rect.left;
+
+
+                    const y =
+                        event.clientY -
+                        rect.top;
+
+
+                    const rotateX =
+                        ((y / rect.height) - .5)
+                        * -5;
+
+
+                    const rotateY =
+                        ((x / rect.width) - .5)
+                        * 5;
+
+
+                    card.style.transform =
+                        `perspective(800px)
+                         translateY(-9px)
+                         rotateX(${rotateX}deg)
+                         rotateY(${rotateY}deg)
+                         scale(1.015)`;
+
+                }
+            );
+
+
+            card.addEventListener(
+                "mouseleave",
+                () => {
+
+                    card.style.transform =
+                        "";
+
+                }
+            );
+
+        });
+
+
+
+        /* =========================================================
+           TABLE ROW RIPPLE
+        ========================================================= */
+
+        document
+        .querySelectorAll("tbody tr")
+        .forEach(row => {
+
+            row.addEventListener(
+                "click",
+                () => {
+
+                    row.animate(
+                        [
+                            {
+                                transform:
+                                    "scale(1)"
+                            },
+
+                            {
+                                transform:
+                                    "scale(.985)"
+                            },
+
+                            {
+                                transform:
+                                    "scale(1.008)"
+                            }
+                        ],
+                        {
+                            duration: 350
+                        }
+                    );
+
+                }
+            );
+
+        });
+
+
+
+        /* =========================================================
+           PAGE LOAD
+        ========================================================= */
+
+        window.addEventListener(
+            "load",
+            () => {
+
+                setTimeout(
+                    animateCounters,
+                    350
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

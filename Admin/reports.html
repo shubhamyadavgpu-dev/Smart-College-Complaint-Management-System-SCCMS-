@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCCMS | Reports</title>
+    <style>
+        /* =========================================================
+           SCCMS REPORTS PAGE
+           Color System: Blue shades around #1874ba
+        ========================================================= */
+        :root {
+            --primary: #1874ba;
+            --primary-dark: #125d96;
+            --primary-deep: #0b4775;
+            --primary-light: #3d91cf;
+            --blue-soft: #eaf5fc;
+            --blue-pale: #f5faff;
+            --blue-border: rgba(24, 116, 186, 0.15);
+
+            --text: #164b70;
+            --text-light: #6389a5;
+            --white: #ffffff;
+
+            --shadow: 0 20px 55px rgba(24, 116, 186, 0.13);
+            --shadow-small: 0 10px 30px rgba(24, 116, 186, 0.10);
+
+            --radius: 22px;
+            --transition: 0.35s cubic-bezier(.2,.8,.2,1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(24,116,186,.08), transparent 25%),
+                radial-gradient(circle at 90% 20%, rgba(61,145,207,.08), transparent 25%),
+                linear-gradient(135deg, #f7fbff, #edf7fd);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* =========================================================
+           ANIMATED BACKGROUND
+        ========================================================= */
+
+        .background {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(2px);
+            opacity: .13;
+            animation: floatOrb 12s ease-in-out infinite alternate;
+        }
+
+        .orb.one {
+            width: 260px;
+            height: 260px;
+            background: var(--primary);
+            top: 5%;
+            left: -100px;
+        }
+
+        .orb.two {
+            width: 200px;
+            height: 200px;
+            background: var(--primary-light);
+            right: -70px;
+            top: 35%;
+            animation-delay: 2s;
+        }
+
+        .orb.three {
+            width: 150px;
+            height: 150px;
+            background: var(--primary-dark);
+            bottom: 5%;
+            left: 40%;
+            animation-delay: 4s;
+        }
+
+        @keyframes floatOrb {
+            from {
+                transform: translate3d(0,0,0) scale(1);
+            }
+
+            to {
+                transform: translate3d(50px,-35px,0) scale(1.12);
+            }
+        }
+
+        /* =========================================================
+           PAGE WRAPPER
+        ========================================================= */
+
+        .page {
+            width: min(1500px, 94%);
+            margin: auto;
+            padding: 30px 0 60px;
+        }
+
+        /* =========================================================
+           TOP HEADER
+        ========================================================= */
+
+        .top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            animation: slideDown .8s ease both;
+        }
+
+        .heading-area {
+            position: relative;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 26px;
+            height: 3px;
+            border-radius: 20px;
+            background: var(--primary);
+            animation: growLine 1s ease both;
+        }
+
+        h1 {
+            font-size: clamp(32px, 4vw, 52px);
+            line-height: 1;
+            letter-spacing: -2px;
+            color: var(--primary-deep);
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            color: var(--text-light);
+            font-size: 15px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .header-btn {
+            border: 1px solid var(--blue-border);
+            background: rgba(255,255,255,.78);
+            color: var(--primary);
+            padding: 12px 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: var(--transition);
+            box-shadow: 0 8px 25px rgba(24,116,186,.07);
+        }
+
+        .header-btn:hover {
+            transform: translateY(-4px);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 14px 30px rgba(24,116,186,.22);
+        }
+
+        /* =========================================================
+           KPI CARDS
+        ========================================================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255,255,255,.82);
+            border: 1px solid var(--blue-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-small);
+            backdrop-filter: blur(15px);
+            transition: var(--transition);
+            animation: cardReveal .8s ease both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: .1s; }
+        .stat-card:nth-child(2) { animation-delay: .2s; }
+        .stat-card:nth-child(3) { animation-delay: .3s; }
+        .stat-card:nth-child(4) { animation-delay: .4s; }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: .06;
+            right: -50px;
+            top: -50px;
+            transition: .6s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-9px) scale(1.015);
+            box-shadow: 0 25px 60px rgba(24,116,186,.18);
+            border-color: rgba(24,116,186,.30);
+        }
+
+        .stat-card:hover::before {
+            transform: scale(1.7);
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: var(--blue-soft);
+            color: var(--primary);
+            font-size: 21px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        .stat-label {
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .stat-number {
+            font-size: 31px;
+            font-weight: 800;
+            color: var(--primary-deep);
+            margin-top: 4px;
+        }
+
+        .stat-growth {
+            display: inline-flex;
+            margin-top: 9px;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: var(--blue-soft);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           FILTER BAR
+        ========================================================= */
+
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: rgba(255,255,255,.82);
+            border: 1px solid var(--blue-border);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-small);
+            animation: fadeUp .8s .5s both;
+        }
+
+        .filter-left {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            border: none;
+            background: var(--blue-pale);
+            color: var(--text-light);
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(24,116,186,.22);
+        }
+
+        .date-box {
+            border: 1px solid var(--blue-border);
+            background: white;
+            color: var(--primary);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 700;
+            outline: none;
+        }
+
+        /* =========================================================
+           MAIN GRID
+        ========================================================= */
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(280px, .9fr);
+            gap: 24px;
+        }
+
+        .panel {
+            background: rgba(255,255,255,.88);
+            border: 1px solid var(--blue-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(15px);
+            animation: fadeUp .9s .6s both;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 25px 0;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-deep);
+        }
+
+        .panel-subtitle {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* =========================================================
+           3D COLUMN CHART
+        ========================================================= */
+
+        .chart-panel {
+            min-height: 490px;
+            overflow: hidden;
+        }
+
+        .chart-wrapper {
+            height: 385px;
+            margin: 20px 25px 25px;
+            position: relative;
+            perspective: 900px;
+        }
+
+        .chart-grid {
+            position: absolute;
+            inset: 15px 0 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .grid-line {
+            height: 1px;
+            width: 100%;
+            background: rgba(24,116,186,.10);
+            position: relative;
+        }
+
+        .grid-line span {
+            position: absolute;
+            left: -28px;
+            top: -8px;
+            font-size: 10px;
+            color: #79a1bb;
+        }
+
+        .columns {
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            bottom: 35px;
+            top: 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            gap: 15px;
+            transform: rotateX(1deg);
+        }
+
+        .column-group {
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            max-width: 80px;
+            position: relative;
+        }
+
+        .column-value {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 7px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: .5s;
+        }
+
+        .column-group:hover .column-value {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .column {
+            width: 45px;
+            height: var(--height);
+            max-height: 0;
+            position: relative;
+            border-radius: 7px 7px 2px 2px;
+            background: linear-gradient(
+                90deg,
+                #0f5e98 0%,
+                #1874ba 45%,
+                #55a1d5 100%
+            );
+            box-shadow:
+                8px 0 0 #0e629f,
+                13px 7px 0 rgba(14,98,159,.45),
+                0 15px 25px rgba(24,116,186,.20);
+
+            transform-origin: bottom;
+            animation: growColumn 1.4s cubic-bezier(.2,.8,.2,1) forwards;
+            animation-delay: var(--delay);
+            transition: .35s;
+        }
+
+        .column::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: -9px;
+            width: 45px;
+            height: 9px;
+            background: #4c9bd0;
+            transform: skewX(-42deg);
+            transform-origin: bottom;
+            border-radius: 5px 4px 0 0;
+        }
+
+        .column::after {
+            content: "";
+            position: absolute;
+            top: -2px;
+            right: -13px;
+            width: 13px;
+            height: 100%;
+            background: #0e629f;
+            transform: skewY(-42deg);
+            transform-origin: left;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .column-group:hover .column {
+            transform: translateY(-10px) scale(1.08);
+            filter: brightness(1.12);
+            box-shadow:
+                8px 0 0 #0e629f,
+                13px 7px 0 rgba(14,98,159,.45),
+                0 25px 35px rgba(24,116,186,.32);
+        }
+
+        .month {
+            margin-top: 14px;
+            font-size: 11px;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+
+        @keyframes growColumn {
+            from {
+                max-height: 0;
+                transform: scaleY(0);
+            }
+            to {
+                max-height: var(--height);
+                transform: scaleY(1);
+            }
+        }
+
+        /* =========================================================
+           SIDE PANEL
+        ========================================================= */
+
+        .side-panel {
+            padding-bottom: 20px;
+        }
+
+        .summary {
+            padding: 22px 25px;
+        }
+
+        .progress-item {
+            margin-bottom: 22px;
+        }
+
+        .progress-head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .progress-track {
+            height: 9px;
+            background: var(--blue-soft);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: var(--width);
+            background: linear-gradient(90deg, var(--primary-deep), var(--primary-light));
+            border-radius: 20px;
+            transform: translateX(-100%);
+            animation: progressIn 1.3s .8s forwards;
+        }
+
+        @keyframes progressIn {
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* =========================================================
+           MINI REPORT CARDS
+        ========================================================= */
+
+        .mini-reports {
+            padding: 0 25px 5px;
+        }
+
+        .mini-report {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 0;
+            border-bottom: 1px solid rgba(24,116,186,.08);
+            transition: .3s;
+        }
+
+        .mini-report:hover {
+            transform: translateX(7px);
+        }
+
+        .mini-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: var(--blue-soft);
+            color: var(--primary);
+        }
+
+        .mini-info {
+            flex: 1;
+        }
+
+        .mini-info strong {
+            display: block;
+            font-size: 12px;
+            color: var(--text);
+        }
+
+        .mini-info span {
+            font-size: 10px;
+            color: var(--text-light);
+        }
+
+        /* =========================================================
+           LOWER SECTION
+        ========================================================= */
+
+        .lower-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .table-panel,
+        .insight-panel {
+            padding-bottom: 15px;
+            animation: fadeUp 1s .8s both;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            padding: 18px 25px 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 550px;
+        }
+
+        th {
+            text-align: left;
+            padding: 13px 10px;
+            font-size: 11px;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--blue-border);
+        }
+
+        td {
+            padding: 15px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(24,116,186,.07);
+        }
+
+        tr {
+            transition: .3s;
+        }
+
+        tbody tr:hover {
+            background: var(--blue-pale);
+            transform: scale(1.01);
+        }
+
+        .status {
+            display: inline-flex;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: var(--blue-soft);
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           INSIGHT PANEL
+        ========================================================= */
+
+        .insight-content {
+            padding: 22px 25px;
+        }
+
+        .insight-card {
+            padding: 18px;
+            background: linear-gradient(
+                135deg,
+                rgba(24,116,186,.10),
+                rgba(61,145,207,.04)
+            );
+            border: 1px solid rgba(24,116,186,.10);
+            border-radius: 16px;
+            margin-bottom: 13px;
+            transition: .35s;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(24,116,186,.12);
+        }
+
+        .insight-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--primary-deep);
+        }
+
+        .insight-number {
+            font-size: 25px;
+            margin-top: 7px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .insight-text {
+            font-size: 10px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* =========================================================
+           ANIMATIONS
+        ========================================================= */
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardReveal {
+            from {
+                opacity: 0;
+                transform: translateY(45px) scale(.94);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes growLine {
+            from {
+                width: 0;
+            }
+            to {
+                width: 26px;
+            }
+        }
+
+        @keyframes iconFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .lower-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .page {
+                width: 92%;
+                padding-top: 20px;
+            }
+
+            .top-header {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-btn {
+                flex: 1;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .filter-left {
+                display: grid;
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+
+            .date-box {
+                width: 100%;
+            }
+
+            .chart-panel {
+                min-height: 430px;
+            }
+
+            .chart-wrapper {
+                margin-left: 35px;
+                margin-right: 15px;
+                height: 330px;
+            }
+
+            .columns {
+                gap: 4px;
+            }
+
+            .column {
+                width: 25px;
+            }
+
+            .column::before {
+                width: 25px;
+            }
+
+            .column::after {
+                width: 9px;
+                right: -9px;
+            }
+
+            .month {
+                font-size: 9px;
+            }
+
+            .panel-header {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+            .summary,
+            .mini-reports,
+            .insight-content,
+            .table-container {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            h1 {
+                font-size: 35px;
+            }
+
+            .stat-number {
+                font-size: 27px;
+            }
+
+            .chart-wrapper {
+                height: 290px;
+            }
+
+            .grid-line span {
+                left: -25px;
+                font-size: 8px;
+            }
+        }
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="background">
+        <div class="orb one"></div>
+        <div class="orb two"></div>
+        <div class="orb three"></div>
+    </div>
+    <main class="page">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <header class="top-header">
+            <div class="heading-area">
+                <div class="eyebrow">ADMIN ANALYTICS</div>
+
+                <h1>Reports</h1>
+
+                <p class="subtitle">
+                    Monitor complaint trends, resolution performance and campus activity.
+                </p>
+            </div>
+
+            <div class="header-actions">
+                <button class="header-btn" onclick="refreshReports()">
+                    ↻ Refresh
+                </button>
+
+                <button class="header-btn" onclick="exportReport()">
+                    ↓ Export
+                </button>
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             KPI CARDS
+        ====================================================== -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon">▣</div>
+                </div>
+
+                <div class="stat-label">TOTAL COMPLAINTS</div>
+
+                <div class="stat-number counter" data-target="1284">
+                    0
+                </div>
+
+                <div class="stat-growth">
+                    +12.8% this month
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon">✓</div>
+                </div>
+
+                <div class="stat-label">RESOLVED</div>
+
+                <div class="stat-number counter" data-target="934">
+                    0
+                </div>
+
+                <div class="stat-growth">
+                    +18.4% this month
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon">◷</div>
+                </div>
+
+                <div class="stat-label">PENDING</div>
+
+                <div class="stat-number counter" data-target="218">
+                    0
+                </div>
+
+                <div class="stat-growth">
+                    -8.2% this month
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon">↗</div>
+                </div>
+
+                <div class="stat-label">RESOLUTION RATE</div>
+
+                <div class="stat-number">
+                    <span class="counter" data-target="72">0</span>%
+                </div>
+
+                <div class="stat-growth">
+                    +6.7% improvement
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FILTER BAR
+        ====================================================== -->
+
+        <section class="filter-bar">
+
+            <div class="filter-left">
+
+                <button class="filter-btn active" onclick="changeFilter(this)">
+                    Overview
+                </button>
+
+                <button class="filter-btn" onclick="changeFilter(this)">
+                    Complaints
+                </button>
+
+                <button class="filter-btn" onclick="changeFilter(this)">
+                    Resolution
+                </button>
+
+                <button class="filter-btn" onclick="changeFilter(this)">
+                    Departments
+                </button>
+
+            </div>
+
+            <select class="date-box" onchange="changePeriod(this)">
+                <option>Last 12 Months</option>
+                <option>Last 6 Months</option>
+                <option>Last 30 Days</option>
+                <option>This Year</option>
+            </select>
+
+        </section>
+
+
+        <!-- =====================================================
+             MAIN ANALYTICS
+        ====================================================== -->
+
+        <section class="main-grid">
+
+            <!-- 3D COLUMN CHART -->
+
+            <div class="panel chart-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <div class="panel-title">
+                            Complaint Overview
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Monthly complaint volume
+                        </div>
+                    </div>
+
+                    <div class="status">
+                        LIVE DATA
+                    </div>
+
+                </div>
+
+
+                <div class="chart-wrapper">
+
+                    <div class="chart-grid">
+                        <div class="grid-line"><span>500</span></div>
+                        <div class="grid-line"><span>400</span></div>
+                        <div class="grid-line"><span>300</span></div>
+                        <div class="grid-line"><span>200</span></div>
+                        <div class="grid-line"><span>100</span></div>
+                        <div class="grid-line"><span>0</span></div>
+                    </div>
+
+
+                    <div class="columns">
+
+                        <div class="column-group">
+                            <div class="column-value">220</div>
+                            <div class="column"
+                                 style="--height:43%;--delay:.05s;"></div>
+                            <div class="month">JAN</div>
+                        </div>
+
+                        <div class="column-group">
+                            <div class="column-value">280</div>
+                            <div class="column"
+                                 style="--height:55%;--delay:.12s;"></div>
+                            <div class="month">FEB</div>
+                        </div>
+
+                        <div class="column-group">
+                            <div class="column-value">310</div>
+                            <div class="column"
+                                 style="--height:61%;--delay:.19s;"></div>
+                            <div class="month">MAR</div>
+                        </div>
+
+                        <div class="column-group">
+                            <div class="column-value">365</div>
+                            <div class="column"
+                                 style="--height:72%;--delay:.26s;"></div>
+                            <div class="month">APR</div>
+                        </div>
+
+                        <div class="column-group">
+                            <div class="column-value">410</div>
+                            <div class="column"
+                                 style="--height:81%;--delay:.33s;"></div>
+                            <div class="month">MAY</div>
+                        </div>
+
+                        <div class="column-group">
+                            <div class="column-value">450</div>
+                            <div class="column"
+                                 style="--height:89%;--delay:.40s;"></div>
+                            <div class="month">JUN</div>
+                        </div>
+
+                        <div class="column-group">
+                            <div class="column-value">390</div>
+                            <div class="column"
+                                 style="--height:77%;--delay:.47s;"></div>
+                            <div class="month">JUL</div>
+                        </div>
+
+                        <div class="column-group">
+                            <div class="column-value">430</div>
+                            <div class="column"
+                                 style="--height:85%;--delay:.54s;"></div>
+                            <div class="month">AUG</div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PERFORMANCE PANEL -->
+
+            <div class="panel side-panel">
+
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">
+                            Performance
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Current resolution metrics
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="summary">
+
+                    <div class="progress-item">
+                        <div class="progress-head">
+                            <span>Resolved Complaints</span>
+                            <span>72%</span>
+                        </div>
+
+                        <div class="progress-track">
+                            <div class="progress-fill"
+                                 style="--width:72%;"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="progress-item">
+                        <div class="progress-head">
+                            <span>In Progress</span>
+                            <span>17%</span>
+                        </div>
+
+                        <div class="progress-track">
+                            <div class="progress-fill"
+                                 style="--width:17%;"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="progress-item">
+                        <div class="progress-head">
+                            <span>Pending</span>
+                            <span>11%</span>
+                        </div>
+
+                        <div class="progress-track">
+                            <div class="progress-fill"
+                                 style="--width:11%;"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="mini-reports">
+
+                    <div class="mini-report">
+                        <div class="mini-icon">⚡</div>
+
+                        <div class="mini-info">
+                            <strong>Average Response</strong>
+                            <span>Improved this month</span>
+                        </div>
+
+                        <strong>4.2h</strong>
+                    </div>
+
+
+                    <div class="mini-report">
+                        <div class="mini-icon">✓</div>
+
+                        <div class="mini-info">
+                            <strong>Resolution Time</strong>
+                            <span>Average completion</span>
+                        </div>
+
+                        <strong>2.8d</strong>
+                    </div>
+
+
+                    <div class="mini-report">
+                        <div class="mini-icon">↗</div>
+
+                        <div class="mini-info">
+                            <strong>Satisfaction</strong>
+                            <span>Student feedback</span>
+                        </div>
+
+                        <strong>91%</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             LOWER GRID
+        ====================================================== -->
+
+        <section class="lower-grid">
+
+            <!-- DEPARTMENT REPORT -->
+
+            <div class="panel table-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <div class="panel-title">
+                            Department Reports
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Complaint distribution by department
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>DEPARTMENT</th>
+                                <th>TOTAL</th>
+                                <th>RESOLVED</th>
+                                <th>PENDING</th>
+                                <th>RATE</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Computer Science</td>
+                                <td>348</td>
+                                <td>281</td>
+                                <td>67</td>
+                                <td><span class="status">81%</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Administration</td>
+                                <td>236</td>
+                                <td>180</td>
+                                <td>56</td>
+                                <td><span class="status">76%</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Hostel</td>
+                                <td>194</td>
+                                <td>133</td>
+                                <td>61</td>
+                                <td><span class="status">68%</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Library</td>
+                                <td>152</td>
+                                <td>119</td>
+                                <td>33</td>
+                                <td><span class="status">78%</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Academic Affairs</td>
+                                <td>121</td>
+                                <td>94</td>
+                                <td>27</td>
+                                <td><span class="status">77%</span></td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- INSIGHTS -->
+
+            <div class="panel insight-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <div class="panel-title">
+                            Key Insights
+                        </div>
+
+                        <div class="panel-subtitle">
+                            Automatically generated analytics
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="insight-content">
+
+                    <div class="insight-card">
+
+                        <div class="insight-title">
+                            Highest Complaint Area
+                            <span>↗</span>
+                        </div>
+
+                        <div class="insight-number">
+                            Hostel
+                        </div>
+
+                        <div class="insight-text">
+                            194 complaints were recorded this period.
+                        </div>
+
+                    </div>
+
+
+                    <div class="insight-card">
+
+                        <div class="insight-title">
+                            Best Performing Department
+                            <span>★</span>
+                        </div>
+
+                        <div class="insight-number">
+                            CS
+                        </div>
+
+                        <div class="insight-text">
+                            Computer Science achieved an 81% resolution rate.
+                        </div>
+
+                    </div>
+
+
+                    <div class="insight-card">
+
+                        <div class="insight-title">
+                            Overall Trend
+                            <span>↑</span>
+                        </div>
+
+                        <div class="insight-number">
+                            +12.8%
+                        </div>
+
+                        <div class="insight-text">
+                            Complaint activity increased compared with the previous period.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        /* =========================================================
+           SCCMS REPORTS - INTERNAL JAVASCRIPT
+        ========================================================= */
+
+
+        /* ---------------------------------------------------------
+           ANIMATED COUNTERS
+        --------------------------------------------------------- */
+
+        function animateCounters() {
+
+            const counters = document.querySelectorAll(".counter");
+
+            counters.forEach(counter => {
+
+                const target = Number(counter.dataset.target);
+                let current = 0;
+
+                const duration = 1600;
+                const start = performance.now();
+
+                function update(time) {
+
+                    const progress = Math.min(
+                        (time - start) / duration,
+                        1
+                    );
+
+                    // Smooth ease-out
+                    const eased = 1 - Math.pow(1 - progress, 4);
+
+                    current = Math.floor(target * eased);
+
+                    counter.textContent =
+                        current.toLocaleString();
+
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    } else {
+                        counter.textContent =
+                            target.toLocaleString();
+                    }
+                }
+
+                requestAnimationFrame(update);
+
+            });
+
+        }
+
+
+        /* ---------------------------------------------------------
+           FILTER BUTTONS
+        --------------------------------------------------------- */
+
+        function changeFilter(button) {
+
+            document.querySelectorAll(".filter-btn")
+                .forEach(btn => btn.classList.remove("active"));
+
+            button.classList.add("active");
+
+            // Small visual feedback
+            button.animate(
+                [
+                    {
+                        transform: "scale(.92)"
+                    },
+                    {
+                        transform: "scale(1.05)"
+                    },
+                    {
+                        transform: "scale(1)"
+                    }
+                ],
+                {
+                    duration: 350,
+                    easing: "ease-out"
+                }
+            );
+        }
+
+
+        /* ---------------------------------------------------------
+           PERIOD CHANGE
+        --------------------------------------------------------- */
+
+        function changePeriod(select) {
+
+            select.animate(
+                [
+                    {
+                        transform: "scale(.97)"
+                    },
+                    {
+                        transform: "scale(1)"
+                    }
+                ],
+                {
+                    duration: 250
+                }
+            );
+
+            console.log(
+                "Report period:",
+                select.value
+            );
+        }
+
+
+        /* ---------------------------------------------------------
+           REFRESH REPORTS
+        --------------------------------------------------------- */
+
+        function refreshReports() {
+
+            const button =
+                document.querySelector(".header-btn");
+
+            button.textContent = "⟳ Loading...";
+
+            button.disabled = true;
+
+            setTimeout(() => {
+
+                // Restart counters
+                document.querySelectorAll(".counter")
+                    .forEach(counter => {
+
+                        counter.textContent = "0";
+
+                    });
+
+                animateCounters();
+
+                // Restart columns
+                document.querySelectorAll(".column")
+                    .forEach(column => {
+
+                        column.style.animation = "none";
+
+                        void column.offsetWidth;
+
+                        column.style.animation =
+                            `growColumn 1.4s cubic-bezier(.2,.8,.2,1) forwards`;
+
+                    });
+
+                button.textContent = "✓ Updated";
+
+                setTimeout(() => {
+
+                    button.textContent = "↻ Refresh";
+                    button.disabled = false;
+
+                }, 1000);
+
+            }, 700);
+
+        }
+
+
+        /* ---------------------------------------------------------
+           EXPORT REPORT
+        --------------------------------------------------------- */
+
+        function exportReport() {
+
+            const button =
+                document.querySelectorAll(".header-btn")[1];
+
+            button.textContent = "Preparing...";
+
+            button.animate(
+                [
+                    {
+                        transform: "translateY(0)"
+                    },
+                    {
+                        transform: "translateY(-5px)"
+                    },
+                    {
+                        transform: "translateY(0)"
+                    }
+                ],
+                {
+                    duration: 500
+                }
+            );
+
+            setTimeout(() => {
+
+                const reportData = `
+SCCMS ADMIN REPORT
+==================
+
+Total Complaints: 1284
+Resolved: 934
+Pending: 218
+Resolution Rate: 72%
+
+Best Performing Department:
+Computer Science - 81%
+
+Highest Complaint Area:
+Hostel - 194 complaints
+                `;
+
+                const blob =
+                    new Blob(
+                        [reportData],
+                        { type: "text/plain" }
+                    );
+
+                const url =
+                    URL.createObjectURL(blob);
+
+                const link =
+                    document.createElement("a");
+
+                link.href = url;
+                link.download = "SCCMS-Report.txt";
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                link.remove();
+
+                URL.revokeObjectURL(url);
+
+                button.textContent = "✓ Exported";
+
+                setTimeout(() => {
+                    button.textContent = "↓ Export";
+                }, 1200);
+
+            }, 700);
+        }
+
+
+        /* ---------------------------------------------------------
+           3D COLUMN HOVER INTERACTION
+        --------------------------------------------------------- */
+
+        document.querySelectorAll(".column-group")
+            .forEach(group => {
+
+                group.addEventListener("mousemove", event => {
+
+                    const rect =
+                        group.getBoundingClientRect();
+
+                    const x =
+                        event.clientX - rect.left;
+
+                    const center =
+                        rect.width / 2;
+
+                    const rotate =
+                        ((x - center) / center) * 7;
+
+                    const column =
+                        group.querySelector(".column");
+
+                    column.style.transform =
+                        `translateY(-10px)
+                         scale(1.08)
+                         rotateY(${rotate}deg)`;
+
+                });
+
+                group.addEventListener("mouseleave", () => {
+
+                    const column =
+                        group.querySelector(".column");
+
+                    column.style.transform = "";
+
+                });
+
+            });
+
+
+        /* ---------------------------------------------------------
+           PANEL MOUSE PARALLAX
+        --------------------------------------------------------- */
+
+        document.querySelectorAll(".stat-card")
+            .forEach(card => {
+
+                card.addEventListener("mousemove", event => {
+
+                    const rect =
+                        card.getBoundingClientRect();
+
+                    const x =
+                        event.clientX - rect.left;
+
+                    const y =
+                        event.clientY - rect.top;
+
+                    const rotateX =
+                        ((y / rect.height) - .5) * -5;
+
+                    const rotateY =
+                        ((x / rect.width) - .5) * 5;
+
+                    card.style.transform =
+                        `perspective(800px)
+                         translateY(-9px)
+                         rotateX(${rotateX}deg)
+                         rotateY(${rotateY}deg)
+                         scale(1.015)`;
+
+                });
+
+                card.addEventListener("mouseleave", () => {
+
+                    card.style.transform = "";
+
+                });
+
+            });
+
+
+        /* ---------------------------------------------------------
+           INITIAL PAGE LOAD
+        --------------------------------------------------------- */
+
+        window.addEventListener("load", () => {
+
+            setTimeout(() => {
+                animateCounters();
+            }, 500);
+
+        });
+
+    </script>
+
+</body>
+</html>
+```
